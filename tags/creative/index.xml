@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>creative on John&#39;s Site</title>
+    <link>https://johnardavies.github.io/tags/creative/</link>
+    <description>Recent content in creative on John&#39;s Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 31 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/creative/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Simulation Machine</title>
+      <link>https://johnardavies.github.io/posts/simulation_machine/</link>
+      <pubDate>Fri, 31 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/simulation_machine/</guid>
+      <description>The digital issue we don’t talk about and its implications for the creative economy</description>
+    </item>
+    
+    <item>
+      <title>Visions and Reality - Can blockchain allow us to rethink the creative industries?</title>
+      <link>https://johnardavies.github.io/posts/blockchain_creative/</link>
+      <pubDate>Fri, 21 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/blockchain_creative/</guid>
+      <description>What is the blockchain? What creative industry issues might it address? and what are some of the practical barriers?</description>
+    </item>
+    
+    <item>
+      <title>Optimal designs - how to avoid the pitfalls of grand landmark building projects?</title>
+      <link>https://johnardavies.github.io/posts/landmark_buildings/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/landmark_buildings/</guid>
+      <description>The Eiffel Tower, the Sydney Opera House, the London Garden Bridge.
+The recent demise of the proposed Garden Bridge across the Thames raises the question of when public support for radical buildings should occur. Unique buildings, by their nature, are hard to evaluate based on experience and their construction can turn out to be unexpectedly expensive. However, they have also resulted in some of the world’s most popular and distinctive buildings – central to many cities’ identity and tourism.</description>
+    </item>
+    
+    <item>
+      <title>Creative networks: why social media is getting connected?</title>
+      <link>https://johnardavies.github.io/posts/creative-social-networks/</link>
+      <pubDate>Tue, 16 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/creative-social-networks/</guid>
+      <description>Why are we seeing more networks in creative domains</description>
+    </item>
+    
+    <item>
+      <title>Fun Times: The UK&#39;s new business department</title>
+      <link>https://johnardavies.github.io/posts/fun_times/</link>
+      <pubDate>Fri, 12 Aug 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/fun_times/</guid>
+      <description>The digital rise of the Department for Culture, Media and Sport</description>
+    </item>
+    
+    <item>
+      <title>The edge of cool - places have it, then they lose it, but should we care?</title>
+      <link>https://johnardavies.github.io/posts/edge_of_cool/</link>
+      <pubDate>Mon, 13 Jun 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/edge_of_cool/</guid>
+      <description>Why we should care about creative and cultural displacement in cities</description>
+    </item>
+    
+    <item>
+      <title>HAL&#39;s revenge: The computer as 21st century reviewer</title>
+      <link>https://johnardavies.github.io/posts/hals_revenge/</link>
+      <pubDate>Wed, 23 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/hals_revenge/</guid>
+      <description>In the 21st century we will increasingly see computers assessing art</description>
+    </item>
+    
+    <item>
+      <title>The pin factory and the universal machine</title>
+      <link>https://johnardavies.github.io/posts/pin_factory/</link>
+      <pubDate>Sat, 23 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/pin_factory/</guid>
+      <description>A look at the future of 3D printing via the ideas of Adam Smith and Alan Turing</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>built environment on John&#39;s Site</title>
+    <link>https://johnardavies.github.io/categories/built-environment/</link>
+    <description>Recent content in built environment on John&#39;s Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 21 Nov 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/categories/built-environment/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Optimal designs - how to avoid the pitfalls of grand landmark building projects?</title>
+      <link>https://johnardavies.github.io/posts/landmark_buildings/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/landmark_buildings/</guid>
+      <description>The Eiffel Tower, the Sydney Opera House, the London Garden Bridge.
+The recent demise of the proposed Garden Bridge across the Thames raises the question of when public support for radical buildings should occur. Unique buildings, by their nature, are hard to evaluate based on experience and their construction can turn out to be unexpectedly expensive. However, they have also resulted in some of the world’s most popular and distinctive buildings – central to many cities’ identity and tourism.</description>
+    </item>
+    
+    <item>
+      <title>The edge of cool - places have it, then they lose it, but should we care?</title>
+      <link>https://johnardavies.github.io/posts/edge_of_cool/</link>
+      <pubDate>Mon, 13 Jun 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/edge_of_cool/</guid>
+      <description>Why we should care about creative and cultural displacement in cities</description>
+    </item>
+    
+  </channel>
+</rss>
