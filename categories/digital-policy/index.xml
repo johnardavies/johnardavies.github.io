@@ -46,7 +46,7 @@ Power to the people: Giving us control over our own data We should be empowered 
     </item>
     
     <item>
-      <title>Creative networks: why social media is getting connected?</title>
+      <title>Creative networks: why social media is getting creative</title>
       <link>https://johnardavies.github.io/posts/creative_social_networks/</link>
       <pubDate>Tue, 16 May 2017 00:00:00 +0000</pubDate>
       
@@ -74,22 +74,22 @@ Power to the people: Giving us control over our own data We should be empowered 
     
     <item>
       <title>Selling yourself: four issues and four implications about markets for personal data</title>
-      <link>https://johnardavies.github.io/posts/price_of_being_free/</link>
-      <pubDate>Wed, 17 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>https://johnardavies.github.io/posts/price_of_being_free/</guid>
-      <description>‘Something is free, if someone else pays’ - Anon.
-We get many free goods and services online via an opaque barter where, in exchange, companies access our data and try and sell us things. We say we care about our data[1], though if we could retain it, but pay for these products, would we? This option is not always available, but even if it was, it is not clear that we would take it.</description>
-    </item>
-    
-    <item>
-      <title>Selling yourself: four issues and four implications about markets for personal data</title>
       <link>https://johnardavies.github.io/posts/selling_yourself/</link>
       <pubDate>Wed, 17 Feb 2016 00:00:00 +0000</pubDate>
       
       <guid>https://johnardavies.github.io/posts/selling_yourself/</guid>
       <description>Establishing new markets where things can be priced and traded creates incentives for people and companies to work out how much something is worth to them and to trade and innovate accordingly. It is hoped that allowing us a greater ability to control access to our personal data, in exchange for services and money, could encourage similar benefits.[1]
 Part of this may involve the growth of Personal Information Management Services (PIMS).</description>
+    </item>
+    
+    <item>
+      <title>The Price of Being Free: We may care about our data, but do we value it?</title>
+      <link>https://johnardavies.github.io/posts/price_of_being_free/</link>
+      <pubDate>Mon, 07 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/price_of_being_free/</guid>
+      <description>‘Something is free, if someone else pays’ - Anon.
+We get many free goods and services online via an opaque barter where, in exchange, companies access our data and try and sell us things. We say we care about our data[1], though if we could retain it, but pay for these products, would we? This option is not always available, but even if it was, it is not clear that we would take it.</description>
     </item>
     
     <item>
@@ -118,8 +118,7 @@ We are told that the future of the UK economy lies in a better educated, and hen
       
       <guid>https://johnardavies.github.io/posts/sampling_society/</guid>
       <description>Social media data, such as that produced by Twitter and Facebook use, is opening up new ways to understand society, but how do people obtain this data, and what are the challenges in using it to learn about our lives?
-### API days
-While common knowledge in the tech-community, how social media data is accessed is arguably less well known elsewhere in business, public policy and the social sciences. Direct public access to the data of social media platforms (as opposed to obtaining it indirectly by scraping/extracting it off webpages, an act that’s prohibited by many platforms) is typically via their public Application Programming Interfaces (APIs).</description>
+Geotagged photos along the Thames in central London, John Davies. Image based on the locations of over a million geo-tagged photos on Flickr by 38,255 photographers or, at least, photo accounts.</description>
     </item>
     
     <item>
