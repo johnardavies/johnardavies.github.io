@@ -198,6 +198,15 @@ The new tracks Cities are carpeted with pictures, but these pictures are not pub
     </item>
     
     <item>
+      <title>Contact</title>
+      <link>https://johnardavies.github.io/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/contact/</guid>
+      <description>   var submitted=false;   target=&#34;hidden_iframe&#34; Name Email Subject Message  Send  </description>
+    </item>
+    
+    <item>
       <title>On the Waterfront: Thames estuary plans show changing attitudes to creative industries</title>
       <link>https://johnardavies.github.io/posts/on_the_waterfront/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -205,6 +214,15 @@ The new tracks Cities are carpeted with pictures, but these pictures are not pub
       <guid>https://johnardavies.github.io/posts/on_the_waterfront/</guid>
       <description>In the 1970s, London’s Docklands area stretched empty and derelict east of the city centre. The wharves that had provided employment for tens of thousands standing deserted for mile upon mile along the Thames. The shift to containers for shipping had made the docks too small and put them out of business.
 To fill this vacuum came what was then the largest regeneration scheme in Europe. The redevelopment of the docks, heavily underpinned by government tax breaks, was mainly focused on financial services, pre-digital media i.</description>
+    </item>
+    
+    <item>
+      <title>Thankyou</title>
+      <link>https://johnardavies.github.io/thankyou/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/thankyou/</guid>
+      <description></description>
     </item>
     
   </channel>
