@@ -1,0 +1,67 @@
+
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+
+forms {
+  max-width:420px;
+  margin:50px auto;
+}
+
+
+input[type=text], select {
+  width: 400px;;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  background: #add8e6;
+  border: 1px solid black;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=email], select {
+  width: 400px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  background: #add8e6; 
+  display: inline-block;
+  border: 1px solid black;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#text_box  {
+  width: 400px;
+  padding: 12px 20px;
+  background: #add8e6; 
+  border: 1px solid black;
+  display: inline-block;
+  border-radius: 4px;
+  box-sizing: border-box;  
+}
+
+
+
+[type="submit"] {
+font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+width: 420px;
+background:#CC6666;
+border-radius:5px;
+border:0;
+cursor:pointer;
+color:blue;
+font-size:24px;
+padding-top:10px;
+padding-bottom:10px;
+transition: all 0.3s;
+margin-top:-4px;
+font-weight:700;
+}
+[type="submit"]:hover { background:#CC4949; }
+
+.class1 {
+  border-radius: 5px;
+  color: #add8e6;
+  padding: 20px;
+}
