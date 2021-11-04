@@ -1,5 +1,4 @@
 
-
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
 
 
@@ -8,9 +7,10 @@ forms {
   margin:50px auto;
 }
 
-
+/* Sets the format for the text boxes*/
 input[type=text], select {
-  width: 400px;;
+  /* width of boxe */
+  width: 500px;;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -19,9 +19,9 @@ input[type=text], select {
   border-radius: 4px;
   box-sizing: border-box;
 }
-
+/* Sets the format for the email field */
 input[type=email], select {
-  width: 400px;
+  width: 500px;
   padding: 12px 20px;
   margin: 8px 0;
   background: #add8e6; 
@@ -31,8 +31,9 @@ input[type=email], select {
   box-sizing: border-box;
 }
 
+/* Sets the format for the text box */
 #text_box  {
-  width: 400px;
+  width: 500px;
   padding: 12px 20px;
   background: #add8e6; 
   border: 1px solid black;
@@ -42,24 +43,28 @@ input[type=email], select {
 }
 
 
-
+/* Sets the format for the submit buttom */
 [type="submit"] {
 font-family: 'Montserrat', Arial, Helvetica, sans-serif;
-width: 420px;
+/* Sets the button width */
+width: 500px;
 background:#CC6666;
 border-radius:5px;
 border:0;
 cursor:pointer;
+padding: 12px 20px;
 color:blue;
 font-size:24px;
-padding-top:10px;
-padding-bottom:10px;
 transition: all 0.3s;
-margin-top:-4px;
+/* Moves the button to the right to align with text fields */
+margin-left: 42px;
+/* Moves the button down the page */
+margin-top: 10px;
 font-weight:700;
 }
 [type="submit"]:hover { background:#CC4949; }
 
+/* Sets the colour of the background it is all put on d */
 .class1 {
   border-radius: 5px;
   color: #add8e6;
