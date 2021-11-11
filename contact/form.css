@@ -45,7 +45,7 @@ input[type=email], select {
 
 /* Sets the format for the submit buttom */
 [type="submit"] {
-font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+font-family: 'Arial';
 /* Sets the button width */
 width: 500px;
 background:#CC6666;
