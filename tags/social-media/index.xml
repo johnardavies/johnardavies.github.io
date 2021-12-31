@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>social media on John&#39;s Site</title>
+    <link>https://johnardavies.github.io/tags/social-media/</link>
+    <description>Recent content in social media on John&#39;s Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 Jun 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/social-media/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Street Style: Machine learning takes to the streets</title>
+      <link>https://johnardavies.github.io/posts/street_style/</link>
+      <pubDate>Sun, 02 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/street_style/</guid>
+      <description>Streets surround us, but, at first glance, there is no systematic data on what they look like. There are records of property transactions, land use and buildings protected due to architectural or historic significance (listed buildings and conservation areas), although none of these directly capture areas’ appearance.
+Buildings appearance is though part of planning decisions about the built environment. There is also greater recognition of the importance of areas having a sense of place, but it is not always clear what this means and how to measure it.</description>
+    </item>
+    
+    <item>
+      <title>An Affair of Style: how social media is affecting fashion</title>
+      <link>https://johnardavies.github.io/posts/fashion_socialmedia/</link>
+      <pubDate>Thu, 29 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/fashion_socialmedia/</guid>
+      <description>Styles, trends and brands Fashion has tensions. It’s about standing out. It’s about being noticed. It’s also about belonging and clothes as a signal of status, desirability and taste. There are many ways to stand out - not all of them are good. Although there are objective measures of quality, such as the technical skill and materials garments are constructed with, styles have a degree of subjectivity. At any one time specific looks may be in, and the reasons for this are not particularly clear.</description>
+    </item>
+    
+    <item>
+      <title>The virtual and the physical: The growth of social media data on places, and its implications</title>
+      <link>https://johnardavies.github.io/posts/virtual_physical/</link>
+      <pubDate>Wed, 12 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/virtual_physical/</guid>
+      <description>Geotagged Flickr photography in and around Hyde Park in London. Sights with visibly high levels of activity include the Serpentine, the museums in Exhibition Road. Image John Davies
+Into the city In the past, people walked the streets and left no trace. This is no longer true. We are creating large amounts of data about the places around us: how we move through them, and how they move us. One source of this data has been the growth in smart phone and social media use.</description>
+    </item>
+    
+    <item>
+      <title>Heritage in Space: Can social media data help us understand our relationship with historic buildings?</title>
+      <link>https://johnardavies.github.io/posts/heritage_in_space/</link>
+      <pubDate>Wed, 19 Feb 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/posts/heritage_in_space/</guid>
+      <description>Locations of geo-tagged photographs taken in central and inner London
+The new tracks Cities are carpeted with pictures, but these pictures are not public art or the work of a subversive street artist. They are the geo-tagged photos continuously being uploaded to sites like Flickr and Twitter. This is creating a new world to explore. A world which could change how we think about the built environment and its heritage.</description>
+    </item>
+    
+  </channel>
+</rss>
