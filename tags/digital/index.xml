@@ -149,5 +149,14 @@ API days</description>
       <description>The Printers won’t kill the Pin Factory To hear some of the talk around 3D printers one could be forgiven for thinking they’ll transform us all into a collection of skilled artisans creating in our bedrooms. Regardless of what one makes of other spectres that have been raised (neighbours running off 3D guns and the undermining of copyright) this seems an undeniably attractive image. Though it probably won&amp;rsquo;t be quite like that in reality, for a rather old-fashioned reason.</description>
     </item>
     
+    <item>
+      <title>Introduction to launching a Virtual Machine in the Cloud</title>
+      <link>https://johnardavies.github.io/technical/cloud_intro/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/cloud_intro/</guid>
+      <description>Almost all the digital services we use involve the cloud in some way i.e. computing which is not done on our laptop or mobile, but accessed over the internet. More and more services will use the cloud in future. However, coming across its technical details for the first time, the cloud can seem slightly mysterious to someone whose original background is not computing - I certainly found it that way. From a data science perspective working with it involves things that are not related to statistics, machine learning or even programming narrowly defined.</description>
+    </item>
+    
   </channel>
 </rss>
