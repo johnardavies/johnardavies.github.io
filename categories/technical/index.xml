@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>technical on John&#39;s Site</title>
+    <link>https://johnardavies.github.io/categories/technical/</link>
+    <description>Recent content in technical on John&#39;s Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://johnardavies.github.io/categories/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to launching a Virtual Machine in the Cloud</title>
+      <link>https://johnardavies.github.io/technical/cloud_intro/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/cloud_intro/</guid>
+      <description>Almost all the digital services we use involve the cloud in some way i.e. computing which is not done on our laptop or mobile, but accessed over the internet. More and more services will use the cloud in future. However, coming across its technical details for the first time, the cloud can seem slightly mysterious to someone whose original background is not computing - I certainly found it that way. From a data science perspective working with it involves things that are not related to statistics, machine learning or even programming narrowly defined.</description>
+    </item>
+    
+  </channel>
+</rss>
