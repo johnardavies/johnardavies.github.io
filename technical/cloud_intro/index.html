@@ -252,7 +252,7 @@ You now have a machine that, until you turn it off, can run programmes that you 
 <p>In AWS a lot of this is handled through what are known as Identity and Access Managment (IAM) roles. Here we use a standard linux firewall and restrictions on who has access privileges so this is less dependent on the specifics of Digital Ocean. The commands here should be executed on the virtual machine.</p>
 <p><strong>2.1 Activate a Firewall</strong><br>
 To reduce the scope for this we lock down all but one of the ports using a firewall leaving the only means of access the login ssh.</p>
-<p>**1.**Installing Uncomplicated Fire Wall (UFW). It should already be installed, but if not, this will install the latest version. The cursor now appears as # as we are logged in as root (The account with the highest level of privilege).<br>
+<p><strong>1.</strong>Installing Uncomplicated Fire Wall (UFW). It should already be installed, but if not, this will install the latest version. The cursor now appears as # as we are logged in as root (The account with the highest level of privilege).<br>
 <code># apt install ufw</code><!-- raw HTML omitted --></p>
 <p><strong>2.</strong> Enable ufw to run. The default is to deny all incoming connections and allow all outgoing connections.<br>
 <code># ufw enable</code><!-- raw HTML omitted --></p>
