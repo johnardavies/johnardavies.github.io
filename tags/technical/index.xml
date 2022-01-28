@@ -7,13 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Introduction to launching a Virtual Machine in the Cloud</title>
+      <title>Cloud 1: Introduction to launching a Virtual Machine in the Cloud</title>
       <link>https://johnardavies.github.io/technical/cloud_intro/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://johnardavies.github.io/technical/cloud_intro/</guid>
       <description>Es Devlin&amp;rsquo;s &amp;ldquo;BLUEWHITESKY&amp;rdquo; at the 2021 LUX exhibition
 More and more of the digital services we use involve the cloud, where the computing is not done on our laptop or mobile, but accessed over the internet. However, coming across its technical details for the first time, the cloud can be slightly opaque to someone whose background is not computing - I certainly found it that way. From a data science perspective working with it involves things that are not related to statistics, machine learning or even programming narrowly defined.</description>
+    </item>
+    
+    <item>
+      <title>Cloud 2: Getting started with using a Virtual Machine in the Cloud</title>
+      <link>https://johnardavies.github.io/technical/cloud_use/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/cloud_use/</guid>
+      <description>Clouds over the Lea valley, London
+In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&amp;rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&amp;rsquo;s helpful to be able to do.
+1. Getting things on and off the cloud machine</description>
     </item>
     
   </channel>
