@@ -1,0 +1,152 @@
+---
+author: "John Davies"
+title: "Cloud 2: Getting started with using a Virtual Machine in the Cloud"
+date: "2022-22-01"
+tags: [ "technical", "digital","cloud" ]
+categories: [ "technical" ]
+cover:
+    image: "/Cloud_2.jpeg"
+---
+*Clouds over the Lea valley, London*
+
+In the [last post](https://johnardavies.github.io/technical/cloud_intro/) we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn't doing anything useful. To work with the virtual machine there are some other basic things that it's helpful to be able to do.
+
+**1. Getting things on and off the cloud machine**\
+**2. Starting things running and leaving them**\
+**3. Running things at regular time intervals**
+
+These will be familiar to anybody who has worked with remote servers, but can be less well known among other data science backgrounds. Although these are being covered here in the context of a virtual machine in the cloud, what follows also applies to any Linux computer that is being accessed remotely such as a Raspberry Pi on a local network.
+There are other ways to do these actions, some of which are specific to a given cloud provider, but the following should work with any Linux based system.
+
+### 1. Getting things on and off the machine
+
+To do this we can use the **Secure Copy Protocol (SCP)** command which allows us to transfer files from the local computer to the machine in the cloud and conversely send files from the cloud to our local machine.
+In what follows the commands below are run from the command line of the local machine. The cloud machine has an IP address (ip_address) and we have an account on it called 'user' i.e. user@ip_address.
+
+
+**1.1 Sending files to the virtual machine in the cloud**\
+To send a folder/file to the cloud machine we run a command of the form: 
+
+`$ scp -r -i private_key_filepath sent_item_filepath user@ip_address:filepath_cloud`
+
+Here the item we are sending is located at `sent_item_filepath` on the local machine and it is being sent to the destination `filepath_cloud` on the cloud machine. The path to the private ssh key that is used to do this is `private_key_filepath`.
+
+The -r (which stands for recursive) is used to move folders and their contents, if it is a single file that is being moved then the -r flag can be omitted.
+The -i is included if we are using a particular ssh key, this and the keypath can also be omitted if you are using your default key.
+
+Below is an example of sending a folder `api_call_example` to the cloud machine. Here we have set up a virtual machine with the user name cloud_user at the IP address 46.101.32.1 `cloud_user@46.101.32.1` following the steps that we did in the first post. The folder we are copying to the cloud is in the same folder as we are running the command from. We are just copying the folder to the cloud machine's home directory.
+![Copy outo](/scp_example_1.png)
+
+**1.2 Getting files back from the cloud**\
+To send a folder/file from the cloud machine to our local machine we run a command of the form:
+
+`$ scp -r -i private_key_filepath user@ip_address:~/sent_item_filepath to_filepath`
+
+Here the item being sent from the cloud machine is located at `sent_item_filepath` and it is being sent to the location `to_filepath`.
+Below is an example of getting a folder called results off the cloud machine.
+![Copy return](/scp_example_2.png)
+
+### 2. Starting things running and leaving them
+
+We are logging into the virtual machine using ssh, however this has a limitation that if something is running we may want to log out of the virtual machine (which closing the laptop does) then the ssh session ends and stops the programme running.
+We therefore need a way to keep the programme running when we log out. One of the ways to do this is the Screen programme.
+
+In the following (unless stated otherwise) the commands are run from the command line of the virtual machine which we have logged into using ssh along the lines of the first post.
+We show a specific example of the steps worked through for the virtual machine in the cloud `cloud_user@46.101.32.1` (cloud_user@test-virtual-machine) running a programme (it's calling the Twitter API)
+which we transferred with SCP earlier.
+
+**1. From the command line install screen if not already installed. To do this it will prompt for the user password as we set up in the first post.**\
+`$ sudo apt-get install screen`
+
+**2. Starting a screen session, starting the programme and logging out.**\
+To start a screen session which we'll call api_call, we run the following:\
+`$ screen -S api_call`
+This will then take us into a new view of the virtual machine which is within the screen session we have just started. We then start the programme running. 
+
+The screenshot below shows an example of this. Within the screen session we move to the folder `api_call_example` activate a virtual environment `Twitter_call_env` and then run a python programme `Twitter_api_call.py`. This programme is collecting
+data from the Twitter API and is printing the id of the last Tweet collected in a given API call to the screen. These are the numbers scrolling down the screen.
+![Screen example](/Session_early.png)
+
+Then log out of/detach from the session typing crtl and a together and then typing d.
+
+You can now log out of the cloud machine by typing exit and the programme will keep running in the screen session.
+
+**3. To get back into the session from the command line of the home machine**
+
+`$ ssh user@ip_address` and input the ssh key password
+
+`$ screen -list` To list the screen sessions that have been left running
+
+`$ screen -r screen_session_id` and return will take you back into the session that is running the programme. In this case *$ screen -r 12912.api_call*. 
+The screen shot below shows an example of this (Some computer specific information has been removed)
+![Screen list](/Log_back.png)
+This will take you back into the session and you can see the programme has made a few more API calls since we last logged out.
+
+![Screen exampe](/Session_late.png)
+
+**4. Ending a sesssion permanently**
+If you want to end the screen session type ctrl and a together and then :quit will end the session.
+
+### 3. Running things at regular time intervals
+
+In the previous example we started a programme and left it running in the virtual machine. However, perhaps we want to run a programme, a web scraper for example, on the cloud machine at regular intervals, such as once a day at a certain time. There is a standard way to do this on Linux machines known as **Cronjobs**. Every Linux machine holds a user defined list (the crontab) of the location of programmes and how often they should be run (The cronjobs).
+
+**To see the crontab**\
+`$ crontab -e`
+
+If starting on a new virtual machine the crontab there won't be one set up, so when you type the above you will get a prompt to choose a text editor to edit the crontab (In this example I chose nano) and it will then show you the crontab below.
+![Crontab intro](/crontab_intro.png)
+
+**Cronjob**\
+Cronjobs have a particular format shown below:
+ `***** /path/to/script_that_is_being run`\
+![Crontab wiki](/crontab_wiki.png)
+Source: [https://en.wikipedia.org/wiki/Cron](https://en.wikipedia.org/wiki/Cron)\
+The order of times is Minute, Hour, Day of Month, Month of Year, Day of week. A star means that the programme is run for every unit of time the position corresponds to, thus ***** would run a programme every minute of every day of every month of every year, in short - every minute.
+Here the crontab is running a command, but if you want to run programme then replace the command with the path to the script.
+
+**Some cronjob examples:**\
+ `***** /path/to/script`\
+
+Every Monday at 12\
+`*12**0`\
+Every day at 4.30 pm\
+`30 16 ***`\
+Every 15 minutes\
+`*/15 * * * *`\
+**List cronjobs**\
+`$ crontab -l`
+
+In the example above the API call was being run at frequent intervals by the python programme. For the purposes of demonstrating a cronjob we will disable that functionality so that
+the programme makes just one API call and then stops until the operating system runs it again. We will write a cronjob that runs the programme and makes an API call every 10 minutes to do this..
+10***** 
+
+We package the activation of the virtual environment and the running of the api call and then deactivating the virtual environment into a shell script that the operating system runs using the cronjobs.
+We create the script called Twitter_api_call.sh:\
+`nano Twitter_api_call.sh`\
+To this script we add:
+
+```
+#!/bin/bash
+# Activate the virtual environment
+source /home/cloud_user/api_call_example/Twitter_call_env/bin/activate
+# Run the python script
+/usr/bin/python3 /home/cloud_user/api_call_example/Twitter_api_call.py
+# Deactivate the virtual environment
+deactivate
+```
+
+We change the permissions to make the script executable\
+`$ chmod u+x Twitter_api_call.sh`
+and then open the crontab with `crontab -e` and add the cronjob. Here we are running the programme every 5 minutes.
+![Cronjob example](/cronjob_example.png)
+
+
+
+**Check when the jobs have been run by searching syslog**\
+`$ sudo grep CRON /var/log/syslog`
+and we can see the command running. The cronjob won't print to the screen as it runs in the background (This means that we can log out
+and leave it running - no need to use Screen. If we want to print the Twitter ids it was generating we can redirect this to another file
+
+These are just a few useful things that I found helpful when working with the cloud.
+If there is anything that you think it would be useful to cover please let me know.
