@@ -5,7 +5,30 @@
     <link>https://johnardavies.github.io/categories/technical/</link>
     <description>Recent content in technical on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://johnardavies.github.io/categories/technical/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/categories/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud 3: Docker and Jupyter notebooks in the Cloud</title>
+      <link>https://johnardavies.github.io/technical/docker_use/</link>
+      <pubDate>Wed, 02 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/docker_use/</guid>
+      <description>Kings Cross underpass rotated, London
+In the last post we covered some basic operations with cloud machines, in this post we cover using containers to replicate environments in the cloud (Docker) and how to containerise a Jupyter notebook.
+Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system. In a way it&amp;rsquo;s a heavier duty version of python virtual environments which, just for python, allows python libraries to be packaged up and replicated.</description>
+    </item>
+    
+    <item>
+      <title>Cloud 2: Getting started with using a Virtual Machine in the Cloud</title>
+      <link>https://johnardavies.github.io/technical/cloud_use/</link>
+      <pubDate>Sat, 22 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/cloud_use/</guid>
+      <description>Clouds over the Lea valley, London
+In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&amp;rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&amp;rsquo;s helpful to be able to do.
+1. Getting things on and off the cloud machine</description>
+    </item>
+    
     <item>
       <title>Cloud 1: Introduction to launching a Virtual Machine in the Cloud</title>
       <link>https://johnardavies.github.io/technical/cloud_intro/</link>
@@ -14,17 +37,6 @@
       <guid>https://johnardavies.github.io/technical/cloud_intro/</guid>
       <description>Es Devlin&amp;rsquo;s &amp;ldquo;BLUEWHITESKY&amp;rdquo; at the 2021 LUX exhibition
 More and more of the digital services we use involve the cloud, where the computing is not done on our laptop or mobile, but accessed over the internet. However, coming across its technical details for the first time, the cloud can be slightly opaque to someone whose background is not computing - I certainly found it that way. From a data science perspective working with it involves things that are not related to statistics, machine learning or even programming narrowly defined.</description>
-    </item>
-    
-    <item>
-      <title>Cloud 2: Getting started with using a Virtual Machine in the Cloud</title>
-      <link>https://johnardavies.github.io/technical/cloud_use/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://johnardavies.github.io/technical/cloud_use/</guid>
-      <description>Clouds over the Lea valley, London
-In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&amp;rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&amp;rsquo;s helpful to be able to do.
-1. Getting things on and off the cloud machine</description>
     </item>
     
   </channel>
