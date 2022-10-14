@@ -3,15 +3,42 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://johnardavies.github.io/categories/</loc>
-    <lastmod>2020-01-31T00:00:00+00:00</lastmod>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/tags/cloud/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/technical/serverless/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/tags/digital/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/tags/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/tags/technical/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/categories/technical/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/technical/</loc>
+    <lastmod>2022-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/technical/docker_use/</loc>
+    <lastmod>2022-02-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://johnardavies.github.io/technical/cloud_use/</loc>
+    <lastmod>2022-01-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://johnardavies.github.io/tags/creative/</loc>
     <lastmod>2020-01-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://johnardavies.github.io/categories/data-economy/</loc>
-    <lastmod>2020-01-31T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://johnardavies.github.io/tags/digital/</loc>
     <lastmod>2020-01-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://johnardavies.github.io/categories/digital-creative/</loc>
@@ -20,13 +47,7 @@
     <loc>https://johnardavies.github.io/categories/digital-policy/</loc>
     <lastmod>2020-01-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://johnardavies.github.io/</loc>
-    <lastmod>2020-01-31T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://johnardavies.github.io/posts/</loc>
-    <lastmod>2020-01-31T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://johnardavies.github.io/tags/</loc>
     <lastmod>2020-01-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://johnardavies.github.io/posts/simulation_machine/</loc>
@@ -104,11 +125,7 @@
     <loc>https://johnardavies.github.io/posts/pin_factory/</loc>
     <lastmod>2013-11-23T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://johnardavies.github.io/tags/cloud/</loc>
-  </url><url>
     <loc>https://johnardavies.github.io/technical/cloud_intro/</loc>
-  </url><url>
-    <loc>https://johnardavies.github.io/technical/cloud_use/</loc>
   </url><url>
     <loc>https://johnardavies.github.io/contact/</loc>
   </url><url>
@@ -119,12 +136,6 @@
     <loc>https://johnardavies.github.io/other_data_projects/</loc>
   </url><url>
     <loc>https://johnardavies.github.io/talks/</loc>
-  </url><url>
-    <loc>https://johnardavies.github.io/tags/technical/</loc>
-  </url><url>
-    <loc>https://johnardavies.github.io/categories/technical/</loc>
-  </url><url>
-    <loc>https://johnardavies.github.io/technical/</loc>
   </url><url>
     <loc>https://johnardavies.github.io/thankyou/</loc>
   </url>
