@@ -6,7 +6,17 @@
     <description>Recent content in technical on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 14 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud 4: Using Serverless</title>
+      <link>https://johnardavies.github.io/technical/serverless/</link>
+      <pubDate>Fri, 14 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/serverless/</guid>
+      <description>La Cabane Éclatée aux 4 Salles, Daniel Buren at the Gori collection
+In previous posts we spun up virtual machines to work in the cloud, but we can also use the cloud to peform specific functions for us without having to run any servers, so called serverless computing. The servers that perform these actions still exist, it is just that they are managed by the cloud provider and not by us.</description>
+    </item>
+    
     <item>
       <title>Cloud 3: Docker and Jupyter notebooks in the Cloud</title>
       <link>https://johnardavies.github.io/technical/docker_use/</link>
@@ -14,8 +24,8 @@
       
       <guid>https://johnardavies.github.io/technical/docker_use/</guid>
       <description>Kings Cross underpass rotated, London
-In the last post we covered some basic operations with cloud machines, in this post we cover using containers to replicate environments in the cloud (Docker) and how to containerise a Jupyter notebook.
-Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system. In a way it&amp;rsquo;s a heavier duty version of python virtual environments which, just for python, allows python libraries to be packaged up and replicated.</description>
+In the last post we covered some basic operations with cloud machines, in this post we discuss using containers to replicate environments in the cloud (Docker) and how to containerise a Jupyter notebook.
+Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines.</description>
     </item>
     
     <item>

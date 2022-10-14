@@ -6,7 +6,17 @@
     <description>Recent content on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 14 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud 4: Using Serverless</title>
+      <link>https://johnardavies.github.io/technical/serverless/</link>
+      <pubDate>Fri, 14 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/serverless/</guid>
+      <description>La Cabane Éclatée aux 4 Salles, Daniel Buren at the Gori collection
+In previous posts we spun up virtual machines to work in the cloud, but we can also use the cloud to peform specific functions for us without having to run any servers, so called serverless computing. The servers that perform these actions still exist, it is just that they are managed by the cloud provider and not by us.</description>
+    </item>
+    
     <item>
       <title>Cloud 3: Docker and Jupyter notebooks in the Cloud</title>
       <link>https://johnardavies.github.io/technical/docker_use/</link>
@@ -27,16 +37,6 @@ Docker has become a standard way to package applications enabling something that
       <description>Clouds over the Lea valley, London
 In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&amp;rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&amp;rsquo;s helpful to be able to do.
 1. Getting things on and off the cloud machine</description>
-    </item>
-    
-    <item>
-      <title>Cloud 4: Using Serverless in the Cloud</title>
-      <link>https://johnardavies.github.io/technical/serverless/</link>
-      <pubDate>Sat, 22 Jan 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://johnardavies.github.io/technical/serverless/</guid>
-      <description>London*  In the past examples we spun up virtual machines to deal with certain factors, but there are other ways to work with the cloud. Serverless means that we can use the cloud to perform specific functions for us without having to create any servers. The servers still exist, it is just that they are managed by cloud provider and we don&amp;rsquo;t have to worry about them.
-We can use different components without having to have a virtual machine in the cloud.</description>
     </item>
     
     <item>
