@@ -14,7 +14,7 @@
       
       <guid>https://johnardavies.github.io/technical/serverless/</guid>
       <description>La Cabane Éclatée aux 4 Salles, Daniel Buren at the Gori collection
-What is Serverless? In previous posts we spun up virtual machines to work in the cloud, but the cloud can also perform specific functions for us without having to run any servers, so called serverless computing. The servers providing the services still exist, but they are managed by the cloud provider while we deal with the services directly.</description>
+What is Serverless? In previous posts we spun up virtual machines to work in the cloud, but the cloud can also perform specific functions for us without us having to run any servers, so called serverless computing. The servers providing the services still exist, but they are managed by the cloud provider while we deal with the services directly.</description>
     </item>
     
     <item>
