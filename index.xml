@@ -6,7 +6,18 @@
     <description>Recent content on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 14 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud 5: Introduction to deploying an app with simple CI/CD</title>
+      <link>https://johnardavies.github.io/technical/front_end/</link>
+      <pubDate>Sun, 05 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/front_end/</guid>
+      <description>Patrick Staff&amp;rsquo;s &amp;lsquo;On Venus&amp;rsquo; at the Serpentine gallery
+Deploying a web app with Continuous Integration and Continuous Deployment (CI/CD) Introduction
+In the last post we used a Serverless approach to regularly search Twitter for particular words and then store the corresponding Tweet data in a cloud database. Here we develop a simple Streamlit app that accesses the database and creates a page showing average daily sentiment on the topic. We then deploy the app in the cloud.</description>
+    </item>
+    
     <item>
       <title>Cloud 4: Using Serverless</title>
       <link>https://johnardavies.github.io/technical/serverless/</link>
