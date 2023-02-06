@@ -15,7 +15,7 @@
       <guid>https://johnardavies.github.io/technical/front_end/</guid>
       <description>Patrick Staff&amp;rsquo;s &amp;lsquo;On Venus&amp;rsquo; at the Serpentine gallery
 Deploying a web app with Continuous Integration and Continuous Deployment (CI/CD) Introduction
-The last post used a Serverless approach to regularly search Twitter for particular words and then storeed the corresponding Tweet data in a cloud database. Here we develop a simple Streamlit app that accesses the database and creates a page showing average daily sentiment on the topic. We then deploy the app in the cloud.</description>
+The last post used a Serverless approach to regularly search Twitter for particular words and then stored the corresponding Tweet data in a cloud database. Here we develop a simple Streamlit app that accesses the database and creates a page showing average daily sentiment on the topic. We then deploy the app in the cloud.</description>
     </item>
     
     <item>
