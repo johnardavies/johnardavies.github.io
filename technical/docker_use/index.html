@@ -248,7 +248,7 @@ COPY    Dockerised_notebook.ipynb        /notebooks/
 # Switch the working directory to notebooks
 WORKDIR /notebooks
 
-# Run the notebookr on container port 8009
+# Run the notebook on container port 8009
 CMD [&quot;jupyter&quot;, &quot;notebook&quot;, &quot;--port=8009&quot;, &quot;--no-browser&quot;, &quot;--ip=0.0.0.0&quot;, &quot;--allow-root&quot;]
 </code></pre><p>To build the docker image from the docker file we run the command below. The &ndash;tag gives the image a name <code>containerised_notebook</code>. Here the command is run from outside the folder <code>Notebook_example</code> which contains the Docker file.</p>
 <pre tabindex="0"><code>$ docker build --tag containerised_notebook Notebook_example
