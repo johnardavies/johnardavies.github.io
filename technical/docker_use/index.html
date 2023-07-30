@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Cloud 3: Docker and Jupyter notebooks in the Cloud | John&#39;s Site</title>
+<meta name="keywords" content="technical, digital, cloud" />
+<meta name="description" content="Kings Cross underpass rotated, London
+In the last post we covered some basic operations with cloud machines, in this post we discuss using Docker containers to replicate environments in the cloud and how to containerise a Jupyter notebook.
+Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines.">
+<meta name="author" content="John Davies">
+<link rel="canonical" href="https://johnardavies.github.io/technical/docker_use/" />
+<link crossorigin="anonymous" href="https://johnardavies.github.io/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css" integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw&#43;W8mWdq36u97PLc=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="https://johnardavies.github.io/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js" integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5&#43;kdJvBz5iKbt6B5PJI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.88.1" />
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-YJ821LVT08', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-YJ821LVT08', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Cloud 3: Docker and Jupyter notebooks in the Cloud" />
+<meta property="og:description" content="Kings Cross underpass rotated, London
+In the last post we covered some basic operations with cloud machines, in this post we discuss using Docker containers to replicate environments in the cloud and how to containerise a Jupyter notebook.
+Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://johnardavies.github.io/technical/docker_use/" />
+<meta property="og:image" content="https://johnardavies.github.io/Kings_cross.jpg" /><meta property="article:section" content="technical" />
+<meta property="article:published_time" content="2022-02-02T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2022-02-02T00:00:00&#43;00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://johnardavies.github.io/Kings_cross.jpg" />
+<meta name="twitter:title" content="Cloud 3: Docker and Jupyter notebooks in the Cloud"/>
+<meta name="twitter:description" content="Kings Cross underpass rotated, London
+In the last post we covered some basic operations with cloud machines, in this post we discuss using Docker containers to replicate environments in the cloud and how to containerise a Jupyter notebook.
+Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Cloud 3: Docker and Jupyter notebooks in the Cloud",
+      "item": "https://johnardavies.github.io/technical/docker_use/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Cloud 3: Docker and Jupyter notebooks in the Cloud",
+  "name": "Cloud 3: Docker and Jupyter notebooks in the Cloud",
+  "description": "Kings Cross underpass rotated, London\nIn the last post we covered some basic operations with cloud machines, in this post we discuss using Docker containers to replicate environments in the cloud and how to containerise a Jupyter notebook.\nDocker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines.",
+  "keywords": [
+    "technical", "digital", "cloud"
+  ],
+  "articleBody": "Kings Cross underpass rotated, London\nIn the last post we covered some basic operations with cloud machines, in this post we discuss using Docker containers to replicate environments in the cloud and how to containerise a Jupyter notebook.\nDocker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines. In a way it’s a heavier duty version of python virtual environments going beyond python to cover a wider range of dependencies. This post looks at:\n1. Building a Docker container for the notebook\n2. Running the container and saving it\n3. Accessing the container in the cloud and running it\n4. Other useful Docker commands\n1. Building a Docker container for the notebook Below is an example of a Dockerfile that will create a container with a Jupyter notebook. We can create this in a file $ nano Dockerfile in a folder Notebook_example where we will be working locally. The text below is pasted into the Dockerfile. These commands start with a base anaconda environment, and then imports python and jupyter. A notebook which we have locally Dockerised_notebook.ipynb is then copied into the container and run to output to the container’s port 8009.\n# We start with a Miniconda base image FROM continuumio/miniconda:latest # Update condas RUN conda update --all # Install python and a series of condas libraries RUN /opt/conda/bin/conda update -n base -c defaults conda \u0026\u0026 \\ /opt/conda/bin/conda install python=3.7 \u0026\u0026 \\ /opt/conda/bin/conda install anaconda-client \u0026\u0026 \\ /opt/conda/bin/conda install jupyter -y # Creates a folder for the notebooks RUN mkdir notebooks # Copy the notebook from the local machine to the notebooks folder COPY Dockerised_notebook.ipynb /notebooks/ # Switch the working directory to notebooks WORKDIR /notebooks # Run the notebookr on container port 8009 CMD [\"jupyter\", \"notebook\", \"--port=8009\", \"--no-browser\", \"--ip=0.0.0.0\", \"--allow-root\"] To build the docker image from the docker file we run the command below. The –tag gives the image a name containerised_notebook. Here the command is run from outside the folder Notebook_example which contains the Docker file.\n$ docker build --tag containerised_notebook Notebook_example This build stage will take a while as there are several things to install. Building the Docker file creates a Docker image. A Docker image is a blueprint/template that enables you to generate a Docker container by running it.\n2. Running the container and saving it To run the container a command of the general form below is used (Adding a -d flag runs the container in the background). The p flag maps the container port to a local port on the computer\n$ docker run -p localport:containerport image_id (or image_name) As a specific example in the command below we are running the containerised image on the local machine (The container is outputting to port 8009 and this is then sent to 8009 on the local machine)\n$ docker run -p 8009:8009 --init containerised_notebook Paste the hyperlink with the token that is generated in the browser and the notebook which is running in the container will be visible on the local computer at http://localhost:8009.\nChecks to do if the notebook is not visible:\n That the port number in the notebook’s url is the number that the container is being sent to on the local machine i.e. the left-hand number of local_machine_port:container_port If port 8009 is already in use on the machine, another local machine port should be used  Having tested that the container runs we can stop it running with the command below. This will remove any contents generated by the container, but keep the container.\n$ docker stop container_id (or container_name) If you want to delete the container this can be done with $ docker rm container_id (or container_name)\nListing the containers that have run or are running\nTo see the container images that have been created (both the stopped containers and the running) use:\n$ docker ps -a If you only want to see running containers drop the -a. An example of what this comand returns is given below, showing a stopped and running container with the image names and ids. The container ids and names are automatically generated as they weren’t specified when running the containers. Pushing the container image to a Docker registry so it is accessible\nHaving built the container and checked that it works we push the image to a container registry to store it and so we can access it from somewhere else like the cloud or another computer. Here we use Docker Hub and the examples assume you have an account on Docker Hub and are logged in on it, but there are other container registry options such as the GitHub Container registry and Amazon’s Elastic Container Registry. The Docker Hub account name is used to identify the container and should be included in the tag when it is built e.g. $ docker build --tag docker_account_name/containerised_notebook after this it can be pushed with:\n$ docker push docker_account_name/containerised_notebook Now when we want to use it we can pull the container down to any computer that has Docker and it should run.\n3. Accessing the notebook in the cloud In what follows we have set up a virtual machine in the cloud and ssh’d into it.\n3.1 Setting up Docker on the cloud machine and accessing the container\nIf Docker is not already installed on the cloud machine trying to run it will fail and you will be prompted to install it. On the Ubuntu instance used in this example the installation command is $ sudo snap install docker. When installed on the virtual machine run the below and then log out to add running Docker to the permissions of the current user when they input their password. The first command creates a group called docker, the second adds the current user to the group.\n$ sudo groupadd docker $ sudo usermod -a -G docker $USER Having done this you can pull the image we have just produced down from Docker Hub onto the virtual machine and run it.\n$ sudo docker pull docker_account_name/containerised_notebook 3.2 Accessing the notebook via port forwarding\nThe Jupyter notebook is creating a webpage as a user interface. This does not raise an issue on a local machine as only the computer user can use it, but in the context of a cloud machine it is problematic as on the public internet in principle others can use the notebook to run commands on the virtual machine. We therefore need to access it in a secure way.\nIn the first tutorial we used a firewall with ssh access only to lock down the ports of the machine. To access the machine through this we run the notebook back through the ssh connection using port forwarding. This means the notebook can only be accessed from the laptop where we have the ssh key.\nHere we have the containerised notebook in the cloud outputting to 8009. This is then passed through the firewall via ssh (see the discussion of how the firewall was set up in part 1) and forwarded to the port localhost:8009 where we can access it via a web browser. The general form of local port forwarding which we run from the local machine is:\n$ ssh -L local_port:destination_server_ip:remote_port ssh_server_hostname Looking at a specific example, where we are working on a virtual machine with the user account cloud_user at the following IP address cloud_user@178.62.108.102\n$ ssh -i private_key/filepath -L 8009:localhost:8009 cloud_user@178.62.108.102 The -L flag is used as we are forwarding a port (8009) from the local machine to the corresponding port on the cloud machine creating a tunnel via the ssh connection and then run the container from the cloud machine through it to the local machine. If as before, but now from the cloud machine, we run the container using the command below and send its output to 8009 then port forwarding will make this accessible at 8009 on the local machine via ssh.\n$ docker run -p 8009:8009 --init containerised_notebook If you copy and paste the link generated the hyperlink with the token into the browser on the local computer and the notebook should be visible. Below is an example of an iPad accessing a Jupyter notebook running on a container on a virtual machine in the cloud via port forwarding with the Termius app. 4. Other useful Docker commands We have built a container image and then run the image to produce a container, below are some other useful commands to know when working with Docker containers.\nLogging into the container\nThe container contains its own simulated operating system and file structure independently of the computer it is being run on. For example in the container above there is a folder notebooks inside the container which holds the jupyter notebook. To log into a running container:\n$ docker exec -it container_id (or container_name) /bin/bash After this one can navigate around, like a normal Linux based system. Below is an example of this, where a running container has been logged into and then its internal file structure shown. To exit the container and go back to the machine it is run from type exit from the command line of the container.\nRestarting a container Unlike run which rebuilds the container from scratch, start allows you to log back into the container that has been stopped\n$ docker start -ia container_id (or container name) Saving the container\nThis saves a container’s files to a new image. It does not save data contained inside the container.\n$ docker commit container_id docker_user_name/name_of_saved_image:version_no The below saves the image to a tar file\n$ docker save container_name  container_name.tar # Save to a tar file To load an image from a tar file use the command docker load.\nExporting data from the container\nThe following command will given a container_id and a filepath to the file inside the container you want to copy, copy it to the location specified by the destination_file_path on the local system.\n$ docker cp container_id:/file/path/within/container /destination_file_path Other cloud posts: Cloud 1: Introduction to launching a Virtual Machine in the Cloud\nCloud 2: Getting started with using a Virtual Machine in the Cloud\nCloud 3: Using Serverless\nCloud 5: Introduction to deploying an app with simple CI/CD\nReferences\n",
+  "wordCount" : "1728",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/Kings_cross.jpg","datePublished": "2022-02-02T00:00:00Z",
+  "dateModified": "2022-02-02T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/docker_use/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
+                    <span>creative industries</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/other_data_projects" title="other data projects">
+                    <span>other data projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/talks/" title="talks">
+                    <span>talks</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/technical/" title="technical">
+                    <span>technical</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/contact/" title="contact">
+                    <span>contact</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Cloud 3: Docker and Jupyter notebooks in the Cloud
+    </h1>
+    <div class="post-meta">February 2, 2022&nbsp;·&nbsp;John Davies
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://johnardavies.github.io/Kings_cross.jpg" alt="">
+        
+</figure>
+  <div class="post-content"><p><em>Kings Cross underpass rotated, London</em></p>
+<p>In the <a href="https://johnardavies.github.io/technical/cloud_intro/">last post</a> we covered some basic operations with cloud machines, in this post we discuss using <strong>Docker containers</strong> to replicate environments in the cloud and how to containerise a Jupyter notebook.</p>
+<p>Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines.
+In a way it&rsquo;s a heavier duty version of python virtual environments going beyond python to cover a wider range of dependencies.
+This post looks at:</p>
+<p><strong>1. Building a Docker container for the notebook</strong><br>
+<strong>2. Running the container and saving it</strong><br>
+<strong>3. Accessing the container in the cloud and running it</strong><br>
+<strong>4. Other useful Docker commands</strong></p>
+<h3 id="1--building-a-docker-container-for-the-notebook">1.  Building a Docker container for the notebook<a hidden class="anchor" aria-hidden="true" href="#1--building-a-docker-container-for-the-notebook">#</a></h3>
+<p>Below is an example of a Dockerfile that will create a container with a Jupyter notebook.
+We can create this in a file <code>$ nano Dockerfile</code> in a folder <code>Notebook_example</code> where we will be working locally. The text below is pasted into the Dockerfile.
+These commands start with a base anaconda environment, and then imports python and jupyter. A notebook which we have locally
+<code>Dockerised_notebook.ipynb</code> is then copied into the container and run to output to the container&rsquo;s port 8009.</p>
+<pre tabindex="0"><code># We start with a Miniconda base image
+FROM continuumio/miniconda:latest
+
+# Update condas
+RUN conda update --all
+
+# Install python and a series of condas libraries   
+RUN /opt/conda/bin/conda update -n base -c defaults conda &amp;&amp; \
+    /opt/conda/bin/conda install python=3.7 &amp;&amp; \
+    /opt/conda/bin/conda install anaconda-client &amp;&amp; \
+    /opt/conda/bin/conda install jupyter -y
+
+# Creates a folder for the notebooks
+RUN mkdir  notebooks
+# Copy the notebook from the local machine to the notebooks folder
+COPY    Dockerised_notebook.ipynb        /notebooks/
+
+# Switch the working directory to notebooks
+WORKDIR /notebooks
+
+# Run the notebookr on container port 8009
+CMD [&quot;jupyter&quot;, &quot;notebook&quot;, &quot;--port=8009&quot;, &quot;--no-browser&quot;, &quot;--ip=0.0.0.0&quot;, &quot;--allow-root&quot;]
+</code></pre><p>To build the docker image from the docker file we run the command below. The &ndash;tag gives the image a name <code>containerised_notebook</code>. Here the command is run from outside the folder <code>Notebook_example</code> which contains the Docker file.</p>
+<pre tabindex="0"><code>$ docker build --tag containerised_notebook Notebook_example
+</code></pre><p>This build stage will take a while as there are several things to install. Building the Docker file creates a <strong>Docker image</strong>. A Docker image is a blueprint/template that enables you
+to generate  a <strong>Docker container</strong>  by running it.</p>
+<h3 id="2--running-the-container-and-saving-it">2.  Running the container and saving it<a hidden class="anchor" aria-hidden="true" href="#2--running-the-container-and-saving-it">#</a></h3>
+<p>To run the container a command of the general form below is used (Adding a -d flag runs the container in the background). The p flag maps the container port to a local port on the computer</p>
+<pre tabindex="0"><code>$ docker run -p localport:containerport image_id (or image_name)
+</code></pre><p>As a specific example in the command below we are running the containerised image on the local machine (The container is outputting to port 8009 and this is then sent to 8009 on the local machine)</p>
+<pre tabindex="0"><code>$ docker run -p 8009:8009 --init containerised_notebook
+</code></pre><p>Paste the hyperlink with the token that is generated in the browser and the notebook which is running in the container will be visible on the local computer at  http://localhost:8009.</p>
+<p>Checks to do if the notebook is not visible:</p>
+<ol>
+<li>That the port number in the notebook&rsquo;s url is the number that the container is being sent to on the local machine i.e. the left-hand number of local_machine_port:container_port</li>
+<li>If port 8009 is already in use on the machine, another local machine port should be used</li>
+</ol>
+<p>Having tested that the container runs we can stop it running with the command below. This will remove any contents generated by the container, but keep the container.</p>
+<pre tabindex="0"><code>$ docker stop container_id (or container_name)
+</code></pre><p>If you want to delete the container this can be done with <code>$ docker rm  container_id (or container_name)</code></p>
+<p><strong>Listing the containers that have run or are running</strong><br>
+To see the container images that have been created (both the stopped containers and the running) use:</p>
+<pre tabindex="0"><code>$ docker ps -a
+</code></pre><p>If you only want to see running containers drop the -a. An example of what this comand returns is given below, showing a stopped and running container with the image names and ids. The container ids and names are automatically generated as they weren&rsquo;t specified when running the containers.
+<img loading="lazy" src="https://johnardavies.github.io/docker_ps.jpg" alt="docker_ps"  />
+</p>
+<p><strong>Pushing the container image to a Docker registry so it is accessible</strong><br>
+Having built the container and checked that it works we push the image to a container registry to store it and so we can access it from somewhere else like the cloud or another computer.
+Here we use <a href="https://hub.docker.com/">Docker Hub</a> and the examples assume you have an account on Docker Hub and are logged in on it, but there are other container registry options such as the GitHub Container registry and Amazon&rsquo;s Elastic Container Registry.
+The Docker Hub account name is used to identify the container and should be included in the tag when it is built e.g. <code>$ docker build --tag docker_account_name/containerised_notebook</code> after this it can be pushed with:</p>
+<pre tabindex="0"><code>$  docker push  docker_account_name/containerised_notebook
+</code></pre><p>Now when we want to use it we can pull the container down to any computer that has Docker and it should run.</p>
+<h3 id="3--accessing-the-notebook-in-the-cloud">3.  Accessing the notebook in the cloud<a hidden class="anchor" aria-hidden="true" href="#3--accessing-the-notebook-in-the-cloud">#</a></h3>
+<p>In what follows we have set up a virtual machine in the cloud and ssh&rsquo;d into it.</p>
+<p><strong>3.1 Setting up Docker on the cloud machine and accessing the container</strong><br>
+If Docker is not already installed on the cloud machine trying to run it will fail and you will be prompted to install it. On the Ubuntu instance used in this example
+the installation command is <code>$ sudo snap install docker</code>.
+When installed on the virtual machine run the below and then log out to add running Docker to the permissions of the current user when they input their password. The first command creates a group called docker, the second adds the current user to the group.</p>
+<pre tabindex="0"><code>$ sudo groupadd docker
+$ sudo usermod -a -G docker $USER
+</code></pre><p>Having done this you can pull the image we have just produced down from Docker Hub onto the virtual machine and run it.</p>
+<pre tabindex="0"><code>$ sudo docker pull  docker_account_name/containerised_notebook
+</code></pre><p><strong>3.2 Accessing the notebook via port forwarding</strong><br>
+The Jupyter notebook is creating a webpage as a user interface. This does not raise an issue on a local machine as only the computer user can use it, but in the context of a cloud
+machine it is problematic as on the public internet in principle others can use the notebook to run commands on the virtual machine. We therefore need to access it in a secure way.</p>
+<p>In the first tutorial we used a firewall with ssh access only to lock down the ports of the machine. To access the machine through this we run the notebook back through the ssh connection using port forwarding. This means the notebook can only be accessed from the laptop where we have the ssh key.</p>
+<p>Here we have the containerised notebook in the cloud outputting to 8009. This is then passed through the firewall via ssh (see the discussion of how the firewall was set up in <a href="https://johnardavies.github.io/technical/cloud_intro/">part 1</a>)
+and forwarded to the port localhost:8009 where we can access it via a web browser. The general form of local port forwarding which we run from the local machine is:</p>
+<pre tabindex="0"><code>$ ssh -L local_port:destination_server_ip:remote_port ssh_server_hostname
+</code></pre><p>Looking at a specific example, where we are working on a virtual machine with the user account cloud_user at the following IP address <code>cloud_user@178.62.108.102</code></p>
+<pre tabindex="0"><code>$ ssh  -i private_key/filepath -L  8009:localhost:8009 cloud_user@178.62.108.102
+</code></pre><p>The -L flag is used as we are forwarding a port (8009) from the local machine to the corresponding port on the cloud machine creating a tunnel via the ssh connection and then run the container from the cloud machine through it to the local machine. If as before, but now from the cloud machine, we run the container using the command  below and send its output to 8009 then port forwarding will make this accessible at 8009 on the local machine via ssh.</p>
+<pre tabindex="0"><code>$ docker run -p 8009:8009 --init containerised_notebook
+</code></pre><p>If you copy and paste the link generated the hyperlink with the token into the browser on the local computer and the notebook should be visible.
+Below is an example of an iPad accessing a Jupyter notebook running on a container on a virtual machine in the cloud via port forwarding with the Termius app.
+<img loading="lazy" src="https://johnardavies.github.io/ipad_example.jpg" alt="Ipad"  />
+</p>
+<h3 id="4--other-useful-docker-commands">4.  Other useful Docker commands<a hidden class="anchor" aria-hidden="true" href="#4--other-useful-docker-commands">#</a></h3>
+<p>We have built a container image and then run the image to produce a container, below are some other useful commands to know when working with Docker containers.</p>
+<p><strong>Logging into the container</strong><br>
+The container contains its own simulated operating system and file structure independently of the computer it is being run on. For example in the container above there is a folder <code>notebooks</code> inside the container which holds the jupyter notebook. To log into a running container:</p>
+<pre tabindex="0"><code>$ docker exec -it container_id (or container_name) /bin/bash
+</code></pre><p>After this one can navigate around, like a normal Linux based system. Below is an example of this, where a running container has been logged into and then its internal file structure shown.
+<img loading="lazy" src="https://johnardavies.github.io/container_login.png" alt="container login"  />
+
+To exit the container and go back to the machine it is run from type <code>exit</code> from the command line of the container.</p>
+<p><strong>Restarting a container</strong>
+Unlike run which rebuilds the container from scratch, <code>start</code> allows you to log back into the container that has been stopped</p>
+<pre tabindex="0"><code>$ docker start -ia container_id (or container name)
+</code></pre><p><strong>Saving the container</strong><br>
+This saves a container&rsquo;s files to a new image. It does not save data contained inside the container.</p>
+<pre tabindex="0"><code>$ docker commit container_id docker_user_name/name_of_saved_image:version_no
+</code></pre><p>The below saves the image to a tar file</p>
+<pre tabindex="0"><code>$ docker save container_name &gt; container_name.tar # Save to a tar file
+</code></pre><p>To load an image from a tar file use the command docker load.</p>
+<p><strong>Exporting data from the container</strong><br>
+The following command will given a container_id and a filepath to the file inside the container you want to copy, copy it to the location specified by the destination_file_path on the local system.</p>
+<pre tabindex="0"><code>$ docker cp container_id:/file/path/within/container /destination_file_path
+</code></pre><h3 id="other-cloud-posts">Other cloud posts:<a hidden class="anchor" aria-hidden="true" href="#other-cloud-posts">#</a></h3>
+<p><em><strong><a href="https://johnardavies.github.io/technical/cloud_intro/">Cloud 1: Introduction to launching a Virtual Machine in the Cloud</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/cloud_use/">Cloud 2: Getting started with using a Virtual Machine in the Cloud</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/serverless/">Cloud 3: Using Serverless</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/front_end/">Cloud 5: Introduction to deploying an app with simple CI/CD</a></strong></em></p>
+<p><em><strong>References</strong></em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://johnardavies.github.io/tags/technical/">technical</a></li>
+      <li><a href="https://johnardavies.github.io/tags/digital/">digital</a></li>
+      <li><a href="https://johnardavies.github.io/tags/cloud/">cloud</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+    menu.onscroll = function () {
+        localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
