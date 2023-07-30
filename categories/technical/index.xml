@@ -5,9 +5,53 @@
     <link>https://johnardavies.github.io/categories/technical/</link>
     <description>Recent content in technical on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://johnardavies.github.io/categories/technical/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 05 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/categories/technical/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Introduction to launching a Virtual Machine in the Cloud</title>
+      <title>Cloud 5: Introduction to deploying an app with simple CI/CD</title>
+      <link>https://johnardavies.github.io/technical/front_end/</link>
+      <pubDate>Sun, 05 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/front_end/</guid>
+      <description>Patrick Staff&amp;rsquo;s &amp;lsquo;On Venus&amp;rsquo; at the Serpentine gallery
+Deploying a web app with Continuous Integration and Continuous Deployment (CI/CD) Introduction
+The last post used a Serverless approach to regularly search Twitter for particular words and then stored the corresponding Tweet data in a cloud database. Here we develop a simple Streamlit app that accesses the database and creates a page showing average daily sentiment on the topic. We then deploy the app in the cloud.</description>
+    </item>
+    
+    <item>
+      <title>Cloud 4: Using Serverless</title>
+      <link>https://johnardavies.github.io/technical/serverless/</link>
+      <pubDate>Fri, 14 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/serverless/</guid>
+      <description>La Cabane Éclatée aux 4 Salles, Daniel Buren at the Gori collection
+What is Serverless? In previous posts we spun up virtual machines to work in the cloud, but the cloud can also perform specific functions for us without us having to run any servers, so called serverless computing. The servers providing the services still exist, but they are managed by the cloud provider while we deal with the services directly.</description>
+    </item>
+    
+    <item>
+      <title>Cloud 3: Docker and Jupyter notebooks in the Cloud</title>
+      <link>https://johnardavies.github.io/technical/docker_use/</link>
+      <pubDate>Wed, 02 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/docker_use/</guid>
+      <description>Kings Cross underpass rotated, London
+In the last post we covered some basic operations with cloud machines, in this post we discuss using Docker containers to replicate environments in the cloud and how to containerise a Jupyter notebook.
+Docker has become a standard way to package applications enabling something that runs on one machine to run on another. It is a container which holds a virtualisation of an operating system within which applications can be packaged to allow them to move between machines.</description>
+    </item>
+    
+    <item>
+      <title>Cloud 2: Getting started with using a Virtual Machine in the Cloud</title>
+      <link>https://johnardavies.github.io/technical/cloud_use/</link>
+      <pubDate>Sat, 22 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/cloud_use/</guid>
+      <description>Clouds over the Lea valley, London
+In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&amp;rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&amp;rsquo;s helpful to be able to do.
+1. Getting things on and off the cloud machine</description>
+    </item>
+    
+    <item>
+      <title>Cloud 1: Introduction to launching a Virtual Machine in the Cloud</title>
       <link>https://johnardavies.github.io/technical/cloud_intro/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

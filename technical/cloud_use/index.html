@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Cloud 2: Getting started with using a Virtual Machine in the Cloud | John&#39;s Site</title>
+<meta name="keywords" content="technical, digital, cloud" />
+<meta name="description" content="Clouds over the Lea valley, London
+In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&rsquo;s helpful to be able to do.
+1. Getting things on and off the cloud machine">
+<meta name="author" content="John Davies">
+<link rel="canonical" href="https://johnardavies.github.io/technical/cloud_use/" />
+<link crossorigin="anonymous" href="https://johnardavies.github.io/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css" integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw&#43;W8mWdq36u97PLc=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="https://johnardavies.github.io/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js" integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5&#43;kdJvBz5iKbt6B5PJI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.88.1" />
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-YJ821LVT08', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-YJ821LVT08', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Cloud 2: Getting started with using a Virtual Machine in the Cloud" />
+<meta property="og:description" content="Clouds over the Lea valley, London
+In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&rsquo;s helpful to be able to do.
+1. Getting things on and off the cloud machine" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://johnardavies.github.io/technical/cloud_use/" />
+<meta property="og:image" content="https://johnardavies.github.io/Cloud_2.jpeg" /><meta property="article:section" content="technical" />
+<meta property="article:published_time" content="2022-01-22T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2022-01-22T00:00:00&#43;00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://johnardavies.github.io/Cloud_2.jpeg" />
+<meta name="twitter:title" content="Cloud 2: Getting started with using a Virtual Machine in the Cloud"/>
+<meta name="twitter:description" content="Clouds over the Lea valley, London
+In the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&rsquo;s helpful to be able to do.
+1. Getting things on and off the cloud machine"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Cloud 2: Getting started with using a Virtual Machine in the Cloud",
+      "item": "https://johnardavies.github.io/technical/cloud_use/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Cloud 2: Getting started with using a Virtual Machine in the Cloud",
+  "name": "Cloud 2: Getting started with using a Virtual Machine in the Cloud",
+  "description": "Clouds over the Lea valley, London\nIn the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn\u0026rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it\u0026rsquo;s helpful to be able to do.\n1. Getting things on and off the cloud machine",
+  "keywords": [
+    "technical", "digital", "cloud"
+  ],
+  "articleBody": "Clouds over the Lea valley, London\nIn the last post we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn’t doing anything useful. To work with the virtual machine there are some other basic things that it’s helpful to be able to do.\n1. Getting things on and off the cloud machine\n2. Starting things running and leaving them\n3. Running things at regular time intervals\nPre-existing knowledge of these activities with remote servers is implicit in many cloud discussions. A motivation for writing this is that I found that, unless one already has experience of this, this is not so obvious when encountering cloud computing for the first time which makes the area harder to learn.\nWhat is covered here in the context of a virtual machine in the cloud also applies to any Linux computer that is being accessed remotely such as a Raspberry Pi on a local network (which also means that all of what follows could be learnt with a Pi rather than a virtual machine). There are other ways to do these actions, some of which are specific to a given cloud provider, but the following should work with any Linux based system.\n1. Getting things on and off the machine To do this we can use the Secure Copy Protocol (SCP) command which allows us to transfer files from the local computer to the machine in the cloud and vice versa. SCP commands have a general form:\n$ scp location_of_object_being_sent destination_it_is_being_sent_to\nIn what follows the commands below are run from the command line of the local machine. The cloud machine has an IP address (ip_address) and we have an account on it called ‘user’ i.e. user@ip_address.\nSending files to the virtual machine in the cloud\nTo send a folder/file to the cloud machine we run a command of the form:\n$ scp -r -i private_key_filepath sent_item_filepath user@ip_address:filepath_cloud\nHere the item we are sending is located at sent_item_filepath on the local machine and it is being sent to the destination filepath_cloud on the cloud machine. The path to the private ssh key that is used to do this is private_key_filepath.\nThe -r (which stands for recursive) is used to move folders and their contents, if it is a single file that is being moved then the -r flag can be omitted. The -i is included if we are using a particular ssh key, this and the keypath can also be omitted if you are using your default key.\nBelow is an example of sending a folder api_call_example to the cloud machine. Here we have set up a virtual machine with the user name cloud_user at the IP address 46.101.32.1 cloud_user@46.101.32.1 following the steps that we did in the first post. The folder we are copying to the cloud is in the same directory as the one we are running the command from. We are just copying the folder to the cloud machine’s home directory (The private key name here and what follows has been replaced with a generic label). Getting files back from the cloud\nTo send a folder/file from the cloud machine to our local machine we just use the location of the file/folder on the cloud machine as the location of the item we want to send.\n$ scp -r -i private_key_filepath user@ip_address:~/sent_item_filepath to_filepath\nHere the item being sent from the cloud machine is located at sent_item_filepath and it is being sent to the location to_filepath. Below is an example of getting a folder called results off the cloud machine. 2. Starting things running and leaving them We are logging into the virtual machine using ssh, however this has a limitation that if something is running we may want to log out of the virtual machine (or perhaps ssh ends accidentally as we forget about it and close the laptop, we lose wifi etc) then the ssh session ends and stops the programme running. We therefore need a way to keep the programme running when this happens. One of the ways to do this is the Screen programme.\nIn the following (unless stated otherwise) the commands are run from the command line of the virtual machine which we have logged into using ssh along the lines of the first post. We show a specific example of the steps worked through for the virtual machine in the cloud cloud_user@46.101.32.1 (cloud_user@test-virtual-machine) running a programme (it’s calling the Twitter API) which we transferred with SCP earlier.\n1. From the command line install screen if not already installed. To do this it will prompt for the user password as we set up in the first post.\n$ sudo apt-get install screen\n2. Starting a screen session, starting the programme and logging out.\nTo start a screen session which we’ll call api_call, we run the following:\n$ screen -S api_call This will then take us into a new view of the virtual machine which is within the screen session we have just started. We then start the programme running.\nThe screenshot below shows an example of this. Within the screen session we move to the folder api_call_example activate a virtual environment Twitter_call_env and then run a python programme Twitter_api_call.py. This programme is collecting data from the Twitter API and is printing the id of the last Tweet collected in a given API call to the screen. These are the numbers scrolling down the screen. Then log out of/detach from the session typing crtl and a together Ctrl+a and then typing d. You can now work on something else in the virtual machine/log out etc and the programme will keep running in the background in the screen session.\n3. To get back into the session from the command line of the home machine\nAssuming we have logged out of the machine, to get back in:\n$ ssh -i /path/to/private_key user@ip_address and input the ssh key password\n$ screen -list To list the screen sessions that have been left running\n$ screen -r screen_session_id and return will take you back into the session that is running the programme. In this case $ screen -r 12912.api_call. The screen shot below shows an example of this (Some computer specific information has been removed) This will take you back into the session and you can see the programme has made a few more API calls since we last logged out.\n4. Ending a sesssion permanently If you want to end the screen session type ctrl and a together Ctrl+a and then :quit will end the session.\n3. Running things at regular time intervals In the previous example we started a programme and left it running in the virtual machine. However, perhaps we want to run something, a web scraper for example, on the cloud machine at regular intervals, such as once a day at a certain time. There is a standard way to do this on Linux machines known as Cronjobs. Every Linux machine holds a user defined list (the crontab) of the location of programmes and how often they should be run (the cronjobs).\n1. Accessing the crontab\nTo edit the crontab type the below, if you just want to see it swap the -e for -l.\n$ crontab -e\nIf starting on a new virtual machine there won’t be a crontab set up, so when you type the above you will get a prompt to choose a text editor to edit the crontab (In this example I chose nano) and it will then show you the crontab below. 2. Writing a cronjob\nCronjobs have a particular format shown below: ***** /path/to/script_being run\nSource: https://en.wikipedia.org/wiki/Cron\nThe order of times is Minute, Hour, Day of Month, Month of Year, Day of week. A star means that the programme is run for every change in the unit of time the position corresponds to, thus ***** would run a programme every minute of every day of every month of every year, in short - every minute.\nSome cron examples:\nEvery Monday at 3pm: 0 15 * * 0\nEvery day at 4.30 pm: 30 16 * * *\nEvery first day of month at 12 noon:0 12 1 * *\nEvery 15 minutes: */15 * * * * The / makes the event happen at intervals.\nThese can be formatted with or without spaces between the items (here with spaces). Tools like crontab generator can help generate the desired time frequency.\nIn the example above the API call was being run at frequent intervals by the python programme. For the purposes of demonstrating a cronjob we will disable that functionality so that the programme makes just one API call and the stops. We will write a cronjob that runs the programme and makes an API call every 5 minutes to do this */5****.\nWe package the activation of the virtual environment, the running of the python API call and then deactivating the virtual environment into a shell script that the operating system runs using the cronjobs. We create the script called Twitter_api_call.sh:\nnano Twitter_api_call.sh\nTo this script we add:\n#!/bin/bash # Activate the virtual environment source /home/cloud_user/api_call_example/Twitter_call_env/bin/activate # Run the python script /usr/bin/python3 /home/cloud_user/api_call_example/Twitter_api_call.py # Deactivate the virtual environment deactivate We change the permissions to make the script executable\n$ chmod u+x Twitter_api_call.sh and then open the crontab with $ crontab -e and add the cronjob. Here we are running the programme every 5 minutes. 3. Check when the jobs have been run by searching syslog\nTo see that the cronjob is running access the log for cron with the command below:\n$ sudo grep CRON /var/log/syslog\nYou will be prompted for the user password that you set up with the virtual machine (see first post). This will show the job in our example running every 5 minutes (and other internal crons) running.\nCronjobs run in the background. This means we can log out and they will keep running - no need to use Screen. This also means that the Twitter ids we were printing to the screen in the previous example won’t be visible, but we can redirect them to a text file and read them there. Changing the line in the shell script to the below will print the Twitter ids to the text file output_file.txt in the same folder. /usr/bin/python3 /home/cloud_user/api_call_example/Twitter_api_call.py  output_file.txt\nThese are just a few things that I found helpful getting started with the cloud. If there is anything that you think it would be useful to cover please let me know.\nThe warning no cloud tutorial is without Running a virtual machine in the cloud costs money. It is important to know how much things are costing, track the billing and turn things off if no longer needed to avoid unpleasant surprises.\nPrevious cloud posts: Cloud 1: Introduction to launching a Virtual Machine in the Cloud\nCloud 3: Docker and Jupyter notebooks in the Cloud\nCloud 4: Using Serverless\nCloud 5: Introduction to deploying an app with simple CI/CD\n",
+  "wordCount" : "1845",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/Cloud_2.jpeg","datePublished": "2022-01-22T00:00:00Z",
+  "dateModified": "2022-01-22T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/cloud_use/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
+                    <span>creative industries</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/other_data_projects" title="other data projects">
+                    <span>other data projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/talks/" title="talks">
+                    <span>talks</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/technical/" title="technical">
+                    <span>technical</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/contact/" title="contact">
+                    <span>contact</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Cloud 2: Getting started with using a Virtual Machine in the Cloud
+    </h1>
+    <div class="post-meta">January 22, 2022&nbsp;·&nbsp;John Davies
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://johnardavies.github.io/Cloud_2.jpeg" alt="">
+        
+</figure>
+  <div class="post-content"><p><em>Clouds over the Lea valley, London</em></p>
+<p>In the <a href="https://johnardavies.github.io/technical/cloud_intro/">last post</a> we covered setting up a virtual machine in the cloud, logging into it via ssh and securing it. However, this gets us a virtual machine running in the cloud costing us money, it isn&rsquo;t doing anything useful. To work with the virtual machine there are some other basic things that it&rsquo;s helpful to be able to do.</p>
+<p><strong>1. Getting things on and off the cloud machine</strong><br>
+<strong>2. Starting things running and leaving them</strong><br>
+<strong>3. Running things at regular time intervals</strong></p>
+<p>Pre-existing knowledge of these activities with remote servers is implicit in many cloud discussions. A motivation for writing this is that I found that, unless one already has experience of this, this is not so obvious when encountering cloud computing for the first time which makes the area harder to learn.</p>
+<p>What is covered here in the context of a virtual machine in the cloud also applies to any Linux computer that is being accessed remotely such as a Raspberry Pi on a local network (which also means that all of what follows could be learnt with a Pi rather than a virtual machine).
+There are other ways to do these actions, some of which are specific to a given cloud provider, but the following should work with any Linux based system.</p>
+<h3 id="1-getting-things-on-and-off-the-machine">1. Getting things on and off the machine<a hidden class="anchor" aria-hidden="true" href="#1-getting-things-on-and-off-the-machine">#</a></h3>
+<p>To do this we can use the <strong>Secure Copy Protocol (SCP)</strong> command which allows us to transfer files from the local computer to the machine in the cloud and vice versa.
+SCP commands have a general form:<br>
+<code>$ scp location_of_object_being_sent destination_it_is_being_sent_to</code><br>
+In what follows the commands below are run from the command line of the local machine. The cloud machine has an IP address (ip_address) and we have an account on it called &lsquo;user&rsquo; i.e. user@ip_address.</p>
+<p><strong>Sending files to the virtual machine in the cloud</strong><br>
+To send a folder/file to the cloud machine we run a command of the form:</p>
+<p><code>$ scp -r -i private_key_filepath sent_item_filepath user@ip_address:filepath_cloud</code></p>
+<p>Here the item we are sending is located at <code>sent_item_filepath</code> on the local machine and it is being sent to the destination <code>filepath_cloud</code> on the cloud machine. The path to the private ssh key that is used to do this is <code>private_key_filepath</code>.</p>
+<p>The -r (which stands for recursive) is used to move folders and their contents, if it is a single file that is being moved then the -r flag can be omitted.
+The -i is included if we are using a particular ssh key, this and the keypath can also be omitted if you are using your default key.</p>
+<p>Below is an example of sending a folder <code>api_call_example</code> to the cloud machine. Here we have set up a virtual machine with the user name cloud_user at the IP address 46.101.32.1 <code>cloud_user@46.101.32.1</code> following the steps that we did in the first post. The folder we are copying to the cloud is in the same directory as the one we are running the command from. We are just copying the folder to the cloud machine&rsquo;s home directory (The private key name here and what follows has been replaced with a generic label).
+<img loading="lazy" src="https://johnardavies.github.io/scp_example_1.png" alt="Copy outo"  />
+</p>
+<p><strong>Getting files back from the cloud</strong><br>
+To send a folder/file from the cloud machine to our local machine we just use the location of the file/folder on the cloud machine as the location of the item we want to send.</p>
+<p><code>$ scp -r -i private_key_filepath user@ip_address:~/sent_item_filepath to_filepath</code></p>
+<p>Here the item being sent from the cloud machine is located at <code>sent_item_filepath</code> and it is being sent to the location <code>to_filepath</code>.
+Below is an example of getting a folder called results off the cloud machine.
+<img loading="lazy" src="https://johnardavies.github.io/scp_example_2.png" alt="Copy return"  />
+</p>
+<h3 id="2-starting-things-running-and-leaving-them">2. Starting things running and leaving them<a hidden class="anchor" aria-hidden="true" href="#2-starting-things-running-and-leaving-them">#</a></h3>
+<p>We are logging into the virtual machine using ssh, however this has a limitation that if something is running we may want to log out of the virtual machine (or perhaps ssh ends accidentally as we forget about it and close the laptop, we lose wifi etc) then the ssh session ends and stops the programme running.
+We therefore need a way to keep the programme running when this happens. One of the ways to do this is the Screen programme.</p>
+<p>In the following (unless stated otherwise) the commands are run from the command line of the virtual machine which we have logged into using ssh along the lines of the first post.
+We show a specific example of the steps worked through for the virtual machine in the cloud <code>cloud_user@46.101.32.1</code> (cloud_user@test-virtual-machine) running a programme (it&rsquo;s calling the Twitter API)
+which we transferred with SCP earlier.</p>
+<p><strong>1. From the command line install screen if not already installed. To do this it will prompt for the user password as we set up in the first post.</strong><br>
+<code>$ sudo apt-get install screen</code></p>
+<p><strong>2. Starting a screen session, starting the programme and logging out.</strong><br>
+To start a screen session which we&rsquo;ll call api_call, we run the following:<br>
+<code>$ screen -S api_call</code>
+This will then take us into a new view of the virtual machine which is within the screen session we have just started. We then start the programme running.</p>
+<p>The screenshot below shows an example of this. Within the screen session we move to the folder <code>api_call_example</code> activate a virtual environment <code>Twitter_call_env</code> and then run a python programme <code>Twitter_api_call.py</code>. This programme is collecting
+data from the Twitter API and is printing the id of the last Tweet collected in a given API call to the screen. These are the numbers scrolling down the screen.
+<img loading="lazy" src="https://johnardavies.github.io/Session_early.png" alt="Screen example"  />
+</p>
+<p>Then log out of/detach from the session typing crtl and a together <code>Ctrl+a</code> and then typing d. You can now work on something else in the virtual machine/log out etc and the programme will keep running in the background in the screen session.</p>
+<p><strong>3. To get back into the session from the command line of the home machine</strong></p>
+<p>Assuming we have logged out of the machine, to get back in:</p>
+<p><code>$ ssh -i /path/to/private_key user@ip_address</code> and input the ssh key password</p>
+<p><code>$ screen -list</code> To list the screen sessions that have been left running</p>
+<p><code>$ screen -r screen_session_id</code> and return will take you back into the session that is running the programme. In this case <em>$ screen -r 12912.api_call</em>.
+The screen shot below shows an example of this (Some computer specific information has been removed)
+<img loading="lazy" src="https://johnardavies.github.io/Log_back.png" alt="Screen list"  />
+
+This will take you back into the session and you can see the programme has made a few more API calls since we last logged out.</p>
+<p><img loading="lazy" src="https://johnardavies.github.io/Session_late.png" alt="Screen exampe"  />
+</p>
+<p><strong>4. Ending a sesssion permanently</strong>
+If you want to end the screen session type ctrl and a together <code>Ctrl+a</code> and then <code>:quit</code> will end the session.</p>
+<h3 id="3-running-things-at-regular-time-intervals">3. Running things at regular time intervals<a hidden class="anchor" aria-hidden="true" href="#3-running-things-at-regular-time-intervals">#</a></h3>
+<p>In the previous example we started a programme and left it running in the virtual machine. However, perhaps we want to run something, a web scraper for example, on the cloud machine at regular intervals, such as once a day at a certain time. There is a standard way to do this on Linux machines known as <strong>Cronjobs</strong>. Every Linux machine holds a user defined list (the crontab) of the location of programmes and how often they should be run (the cronjobs).</p>
+<p><strong>1. Accessing the crontab</strong><br>
+To edit the crontab type the below, if you just want to see it swap the -e for -l.<br>
+<code>$ crontab -e</code></p>
+<p>If starting on a new virtual machine there won&rsquo;t be a crontab set up, so when you type the above you will get a prompt to choose a text editor to edit the crontab (In this example I chose nano) and it will then show you the crontab below.
+<img loading="lazy" src="https://johnardavies.github.io/crontab_intro.png" alt="Crontab intro"  />
+</p>
+<p><strong>2. Writing a cronjob</strong><br>
+Cronjobs have a particular format shown below:
+<code>***** /path/to/script_being run</code><br>
+<img loading="lazy" src="https://johnardavies.github.io/crontab_wiki.png" alt="Crontab wiki"  />
+
+Source: <a href="https://en.wikipedia.org/wiki/Cron">https://en.wikipedia.org/wiki/Cron</a><br>
+The order of times is Minute, Hour, Day of Month, Month of Year, Day of week. A star means that the programme is run for every change in the unit of time the position corresponds to, thus ***** would run a programme every minute of every day of every month of every year, in short - every minute.</p>
+<p><strong>Some cron examples:</strong><br>
+Every Monday at 3pm: <code>0 15 * * 0</code><br>
+Every day at 4.30 pm: <code>30 16 * * *</code><br>
+Every first day of month at 12 noon:<code>0 12 1 * *</code><br>
+Every 15 minutes: <code>*/15 * * * *</code>  The <code>/</code> makes the event happen at intervals.</p>
+<p>These can be formatted with or without spaces between the items (here with spaces). Tools like <a href="https://crontab-generator.org/">crontab generator</a> can help generate the desired time frequency.</p>
+<p>In the example above the API call was being run at frequent intervals by the python programme. For the purposes of demonstrating a cronjob we will disable that functionality so that
+the programme makes just one API call and the stops. We will write a cronjob that runs the programme and makes an API call every 5 minutes to do this <code>*/5****</code>.</p>
+<p>We package the activation of the virtual environment, the running of the python API call and then deactivating the virtual environment into a shell script that the operating system runs using the cronjobs.
+We create the script called Twitter_api_call.sh:<br>
+<code>nano Twitter_api_call.sh</code><br>
+To this script we add:</p>
+<pre tabindex="0"><code>#!/bin/bash
+# Activate the virtual environment
+source /home/cloud_user/api_call_example/Twitter_call_env/bin/activate
+# Run the python script
+/usr/bin/python3 /home/cloud_user/api_call_example/Twitter_api_call.py
+# Deactivate the virtual environment
+deactivate
+</code></pre><p>We change the permissions to make the script executable<br>
+<code>$ chmod u+x Twitter_api_call.sh</code>
+and then open the crontab with <code>$ crontab -e</code> and add the cronjob. Here we are running the programme every 5 minutes.
+<img loading="lazy" src="https://johnardavies.github.io/cronjob_example.png" alt="Cronjob example"  />
+</p>
+<p><strong>3. Check when the jobs have been run by searching syslog</strong><br>
+To see that the cronjob is running access the log for cron with the command below:<br>
+<code>$ sudo grep CRON /var/log/syslog</code><br>
+You will be prompted for the user password that you set up with the virtual machine (see first post).
+This will show the job in our example running every 5 minutes (and other internal crons) running.<br>
+<img loading="lazy" src="https://johnardavies.github.io/cronjob_running.png" alt="Cronjob running"  />
+</p>
+<p>Cronjobs run in the background. This means we can log out and they will keep running - no need to use Screen.
+This also means that the Twitter ids we were printing to the screen in the previous example won&rsquo;t be visible,
+but we can redirect them to a text file and read them there. Changing the line in the shell script to the below will print
+the Twitter ids to the text file output_file.txt in the same folder.
+<code>/usr/bin/python3 /home/cloud_user/api_call_example/Twitter_api_call.py &gt;&gt; output_file.txt</code></p>
+<p>These are just a few things that I found helpful getting started with the cloud.
+If there is anything that you think it would be useful to cover please let me know.</p>
+<p><strong>The warning no cloud tutorial is without</strong> Running a virtual machine in the cloud costs money. It is important to know
+how much things are costing, track the billing and turn things off if no longer needed to avoid unpleasant surprises.</p>
+<h3 id="previous-cloud-posts">Previous cloud posts:<a hidden class="anchor" aria-hidden="true" href="#previous-cloud-posts">#</a></h3>
+<p><em><strong><a href="https://johnardavies.github.io/technical/cloud_intro/">Cloud 1: Introduction to launching a Virtual Machine in the Cloud</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/docker_use/">Cloud 3: Docker and Jupyter notebooks in the Cloud</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/serverless/">Cloud 4: Using Serverless</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/front_end/">Cloud 5: Introduction to deploying an app with simple CI/CD</a></strong></em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://johnardavies.github.io/tags/technical/">technical</a></li>
+      <li><a href="https://johnardavies.github.io/tags/digital/">digital</a></li>
+      <li><a href="https://johnardavies.github.io/tags/cloud/">cloud</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+    menu.onscroll = function () {
+        localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
