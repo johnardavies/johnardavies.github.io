@@ -6,7 +6,18 @@
     <description>Recent content in technical on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 26 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Transformers 1: The Attention Mechanism</title>
+      <link>https://johnardavies.github.io/technical/transformer1/</link>
+      <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/transformer1/</guid>
+      <description>&amp;ldquo;Let me Unsee&amp;rdquo; by Asbetos, Belfast, August 2023.
+The T in GPT In all the excitement around OpenAI’s ChatGPT two things are often not mentioned:
+ the underlying architecture of Generative Pre-trained Transformer (GPT) models is an approach called the Transformer which was invented and made public by Google despite these models’ large scale and complexity the underlying mathematics involved (at least in terms of the components used) is relatively simple  As these models are already important and likely to be more important in future it felt worth learning more about them.</description>
+    </item>
+    
     <item>
       <title>Cloud 5: Introduction to deploying an app with simple CI/CD</title>
       <link>https://johnardavies.github.io/technical/front_end/</link>
