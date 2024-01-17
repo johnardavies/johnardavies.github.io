@@ -6,7 +6,20 @@
     <description>Recent content in Technicals on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 26 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/technical/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Transformers 2: The Transformer&#39;s Structure</title>
+      <link>https://johnardavies.github.io/technical/transformer2/</link>
+      <pubDate>Fri, 12 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/transformer2/</guid>
+      <description>Helix, White City
+Transformers 2: The structure of a Transformer The previous post discussed the attention mechanism that underlies how Transformers work. Continuing the series of notes on Transformers I’ll now look at the overall structure of Transformers and how attention is used within them in the context of language translation. I’ll cover:
+1. The architecture of Transformers
+2. How attention is included in the Transformer
+1. The architecture of Transformers 1.</description>
+    </item>
+    
     <item>
       <title>Transformers 1: The Attention Mechanism</title>
       <link>https://johnardavies.github.io/technical/transformer1/</link>
