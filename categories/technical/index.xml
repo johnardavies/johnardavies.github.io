@@ -14,9 +14,10 @@
       
       <guid>https://johnardavies.github.io/technical/transformer2/</guid>
       <description>Helix, White City
-Transformers 2: The structure of a Transformer The previous post discussed the attention mechanism that underlies how Transformers work. Continuing the series of notes on Transformers I’ll now look at the overall structure of Transformers and how attention is used within them in the context of language translation. I’ll cover:
+Transformers 2: The structure of a Transformer Continuing the series of notes on Transformers I’ll now look at the overall structure of Transformers and how attention is used within them in the context of language translation. I’ll cover:
 1. The architecture of Transformers
 2. How attention is included in the Transformer
+The previous post discussed the attention mechanism that underlies how Transformers work.
 1. The architecture of Transformers 1.</description>
     </item>
     
