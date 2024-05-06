@@ -6,7 +6,17 @@
     <description>Recent content on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud 6: Introduction to Infrastructure as Code using CloudFormation</title>
+      <link>https://johnardavies.github.io/technical/infrastructure/</link>
+      <pubDate>Sun, 05 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/infrastructure/</guid>
+      <description>Chicago Willis tower, September 2023
+Infrastructure as code In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled.</description>
+    </item>
+    
     <item>
       <title>Transformers 2: The Transformer&#39;s Structure</title>
       <link>https://johnardavies.github.io/technical/transformer2/</link>
@@ -333,11 +343,11 @@ Mapping city-level food access In partnership with the Liverpool good food inita
       
       <guid>https://johnardavies.github.io/talks/</guid>
       <description>I have spoken at many conferences and events globally, including:
+  European Broadcasting Union, Data Technology Seminar, Geneva, 13th March, 2024
   Public spaces - internet for the common good conference, 12th March, 2021
   Cross Innovation Conference, Hamburg Kreativ Gesellschaft, 2nd December, 2020
   Coronavirus (COVID-19) and museums: impact, innovations and planning for post-crisis, OECD, 10th April, 2020
-  Beyond conference research symposium, Edinburgh, 21st November, 2019
-  Internationale Fachkonferenz 2019, Berlin, October 30th, 2019</description>
+  Beyond conference research symposium, Edinburgh, 21st November, 2019</description>
     </item>
     
     <item>

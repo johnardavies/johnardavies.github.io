@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Cloud 6: Introduction to Infrastructure as Code using CloudFormation | John&#39;s Site</title>
+<meta name="keywords" content="technical, digital, cloud" />
+<meta name="description" content="Chicago Willis tower, September 2023
+Infrastructure as code In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled.">
+<meta name="author" content="John Davies">
+<link rel="canonical" href="https://johnardavies.github.io/technical/infrastructure/" />
+<link crossorigin="anonymous" href="https://johnardavies.github.io/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css" integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw&#43;W8mWdq36u97PLc=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="https://johnardavies.github.io/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js" integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5&#43;kdJvBz5iKbt6B5PJI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.88.1" />
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-YJ821LVT08', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-YJ821LVT08', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Cloud 6: Introduction to Infrastructure as Code using CloudFormation" />
+<meta property="og:description" content="Chicago Willis tower, September 2023
+Infrastructure as code In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://johnardavies.github.io/technical/infrastructure/" />
+<meta property="og:image" content="https://johnardavies.github.io/glass_floor.jpg" /><meta property="article:section" content="technical" />
+<meta property="article:published_time" content="2024-05-05T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2024-05-05T00:00:00&#43;00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://johnardavies.github.io/glass_floor.jpg" />
+<meta name="twitter:title" content="Cloud 6: Introduction to Infrastructure as Code using CloudFormation"/>
+<meta name="twitter:description" content="Chicago Willis tower, September 2023
+Infrastructure as code In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Cloud 6: Introduction to Infrastructure as Code using CloudFormation",
+      "item": "https://johnardavies.github.io/technical/infrastructure/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Cloud 6: Introduction to Infrastructure as Code using CloudFormation",
+  "name": "Cloud 6: Introduction to Infrastructure as Code using CloudFormation",
+  "description": "Chicago Willis tower, September 2023\nInfrastructure as code In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled.",
+  "keywords": [
+    "technical", "digital", "cloud"
+  ],
+  "articleBody": "Chicago Willis tower, September 2023\nInfrastructure as code In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled. We’ll therefore use a simple code based approach to create some infrastructure using Amazon Web Services' (AWS) CloudFormation. CloudFormation was also used in the previous post involving Serverless to set up a series of lambda jobs.\nWe have the following objectives:\n Spin up a virtual machine (An Amazon EC2 instance) of our choosing Give the EC2 instance access to an S3 bucket of our choosing Give restricted inbound access to the instance i.e. allow SSH access only from a specified IP address  In this post we do this by:\n1. A CloudFormation template that launches an EC2 instance\n1.1 Setting up the inputs that the template uses\n1.2 Setting up an Identity and Access Management (IAM) role to give S3 access\n1.3 Creating an EC2 instance\n1.4 Setting up the security group to allow restricted SSH access\n2. Deploying the template to create the instance and then deleting it\nWhat follows assumes that you have generated an AWS key pair, have the AWS command line interface (cli) installed with permissions to create EC2 instances and manage bucket access. This sort of set-up described can, with a bigger instance, be used to temporarily create an EC2 to run a machine learnining model, giving access to a dataset saved in an S3 bucket and then save the model checkpoints generated during training to the bucket. The example here is not really designed to create a longer-term running EC2 as to do that would involve handling more issues in terms of IP addresses varying and locking down the instance internally.\nThe usual cloud warning Using cloud services can be expensive and linking cloud services together potentially raises security issues. What is being spun up and access given to should be checked before deploying. Cloud services should be monitored and turned off to avoid unecessary costs.\n1. The CloudFormation template that launches an EC2 instance To following CloudFormation template in yaml format specifies the services we want to use. In this example the template is named as launch_ec2.yml. The treatment of IAM roles used here is based on that in Eduardo Rabelo’s post on IAM and CloudFormation.\nAWSTemplateFormatVersion: '2010-09-09' Parameters: LocalIPAddress: Type: String Description: Local IP address S3BucketName: Type: String Description: Name of the S3 bucket to access Resources: AppDevRole: Type: AWS::IAM::Role Properties: AssumeRolePolicyDocument: Statement: - Effect: Allow Principal: Service: - ec2.amazonaws.com Action: - sts:AssumeRole Policies: - PolicyName: AppDevRolePolicy PolicyDocument: Statement: - Effect: Allow Action: - s3:ListBucket Resource: - !Sub arn:aws:s3:::${S3BucketName} - Effect: Allow Action: - s3:PutObject - s3:GetObject Resource: - !Sub arn:aws:s3:::${S3BucketName}/* AppDevEC2InstanceProfile: Type: AWS::IAM::InstanceProfile Properties: Roles: - !Ref AppDevRole EC2Instance: Type: AWS::EC2::Instance Properties: InstanceType: t2.micro # Replace with the instance type wanted ImageId: ami-0b9932f4918a00c4f # Replace with the Amazon Machine Image (AMI) ID wanted KeyName: cloud_key SecurityGroups: - !Ref SSHSecurityGroup IamInstanceProfile: !Ref AppDevEC2InstanceProfile AvailabilityZone: eu-west-2a SSHSecurityGroup: Type: AWS::EC2::SecurityGroup Properties: GroupDescription: Enable SSH access only from my iP address SecurityGroupIngress: - IpProtocol: tcp FromPort: 22 ToPort: 22 CidrIp: !Ref LocalIPAddress This has the following stages:\n1.1 Setting up the inputs that the template uses\nParameters: LocalIPAddress: Type: String Description: Local IP address S3BucketName: Type: String Description: Name of the S3 bucket to access This sets up two parameters that we will pass to AWS when creating the stack. The IP address that we want the instance to be accessible from LocalIPAddress and the S3 bucket that we want the EC2 to be able to access S3BucketName. The bucket is assumed to already exist. When the stack is created we pass these values to it using the following command line argument format, here shown for the IP address we want to give access to --parameters ParameterKey=LocalIPAddress,ParameterValue='IP address'.\n1.2 Setting up an Identity and Access Management (IAM) role to give S3 access\n AppDevRole: Type: AWS::IAM::Role Properties: AssumeRolePolicyDocument: Statement: - Effect: Allow Principal: Service: - ec2.amazonaws.com Action: - sts:AssumeRole Policies: - PolicyName: AppDevRolePolicy PolicyDocument: Statement: - Effect: Allow Action: - s3:ListBucket Resource: - !Sub arn:aws:s3:::${S3BucketName} - Effect: Allow Action: - s3:PutObject - s3:GetObject Resource: - !Sub arn:aws:s3:::${S3BucketName}/* AppDevEC2InstanceProfile: Type: AWS::IAM::InstanceProfile Properties: Roles: - !Ref AppDevRole This sets up an:\n  IAM roleAppDevRole with AssumePolicyDocument that gives an Amazon EC2 instance the right to assume a policy. An IAM role as distinct from an IAM user applies to the permissions of AWS resources, here EC2 instances, rather than the permissions of a person.\n  IAM policy AppDevRolePolicy which specifies the permissions the role has. In this case it allows the EC2 instance the ability to list the files in the S3 bucket itself ListBucket and to put PutObject and get GetObject objects from inside the bucket defined byS3BucketName. The put and get commands require direct access to the contents of the bucket. This is why the resource for this polict also has the * wildcard which represents the objects in the bucket, as opposed to the bucket itself which is the resource for the list command.\n  IAM InstanceProfileAppDevEC2InstanceProfile which attaches the role to the EC2 instance when it launches.\n  !Sub is used to identify the resources, as distinct from !Ref, as we are substituting the bucket name into a string to identify a resource rather than just referencing it outright.\n1.3 Creating an EC2 instance\nEC2Instance: Type: AWS::EC2::Instance Properties: InstanceType: t2.micro # Replace with the instance type wanted ImageId: ami-0b9932f4918a00c4f # Replace with the Amazon Machine Image (AMI) ID wanted KeyName: cloud_key SecurityGroups: - !Ref SSHSecurityGroup IamInstanceProfile: !Ref AppDevEC2InstanceProfile AvailabilityZone: eu-west-2a This part of the yaml creates an EC2 instance in the eu-west-2a area (which is London). Here the size is set to small t2.micro, with a standard ubuntu image specified in the ImageID. The AWS key pair that is needed to ssh into the instance is specified in the KeyName variable. It attaches a security group SSHSecurityGroup which manages how we can access the instance (this is defined in the next part of the yaml and only allows SSH access from the IP address that we pass to the template when we launch it). The IAM profile created previously is attached to the EC2 to give access to the bucket.\n1.4 Setting up the security group to allow restricted SSH access:\n SSHSecurityGroup: Type: AWS::EC2::SecurityGroup Properties: GroupDescription: Enable SSH access only from my iP address SecurityGroupIngress: - IpProtocol: tcp FromPort: 22 ToPort: 22 CidrIp: !Ref LocalIPAddress The default setting for an EC2 instance when it is launched is that all ports are locked down. Here we allow one way into the EC2 instance by adding a SecurityGroupIngress on the SSH port 22 (To allow outbound ports, the corresponding term is SecurityGroupEgress). CidrIp (Classless Inter-Domain Routing IP address) specifies which Ip addresses are allowed to access this port, which we specify in the variable LocalIPAddress that we pass to the CloudFormation template.\n2. Deploying the template to create the instance and then deleting it To launch an EC2 instance restricted to my own IP address, with access to S3 due to an IAM role:\n$ aws cloudformation create-stack \\ --stack-name test-stack \\ --template-body file://launch_ec2.yml \\ --parameters \\ ParameterKey=LocalIPAddress,ParameterValue=\"$(curl -s https://checkip.amazonaws.com)/32\" \\ ParameterKey=S3BucketName,ParameterValue=test-bucket-cf-store-jd \\ --capabilities CAPABILITY_IAM The stack is given a name test-stack and the yml shown above is referenced from the –template-body. Here we use the curl to the AWS site https://checkip.amazonaws.com to automatically detect the IP we are running the template from and then pass it as the ParameterValue for LocalIPAddress. The name of the bucket that we are granting access to is passed as the parameter value corresponding to S3BucketName. To make the change to IAM we also pass CAPABILITIES_IAM with the capabilities flag.\nThe screen shot below shows an example of what happens when we do thiss (Some computer specific information has been removed). If we run this we get the following response. The CloudFormation stack launches (shown here from the CloudFormation page of the AWS console). The corresponding EC2 instance is created and starts running. We get the IP address and login to it. After installing the AWS cli on the instance, to check that the bucket rules work, we create a file test.txt on the EC2, we then copy it to the bucket and list the bucket’s contents from the EC2 instance. To see the stacks that have been created:\n$ aws cloudformation describe-stacks --stack-name test-stack The EC2 created will keep running and incurring costs so we want to be able to delete it when our usage ends. This can be done manually from the Stack actions and Actions tabs in the CloudFormation and EC2 consoles shown above. Alternatively, from the command line the following will delete the stack that has just been created.\n$ aws cloudformation delete-stack --stack-name test-stack Previous Cloud posts Cloud 1: Introduction to launching a Virtual Machine in the Cloud\nCloud 2: Getting started with using a Virtual Machine in the Cloud\nCloud 3: Docker and Jupyter notebooks in the Cloud\nCloud 4: Using Serverless\nCloud 5: Introduction to deploying an app with simple CI/CD\nReferences Eduardo Rabelo (2023), AWS IAM Roles with AWS CloudFormation, AWS Fundamentals.\nAndreas and Michael Wittig, ‘Amazon Web Services in action’, Manning.\n",
+  "wordCount" : "1567",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/glass_floor.jpg","datePublished": "2024-05-05T00:00:00Z",
+  "dateModified": "2024-05-05T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/infrastructure/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
+                    <span>creative industries</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/other_data_projects" title="other data projects">
+                    <span>other data projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/talks/" title="talks">
+                    <span>talks</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/technical/" title="technical posts">
+                    <span>technical posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Cloud 6: Introduction to Infrastructure as Code using CloudFormation
+    </h1>
+    <div class="post-meta">May 5, 2024&nbsp;·&nbsp;John Davies
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://johnardavies.github.io/glass_floor.jpg" alt="">
+        
+</figure>
+  <div class="post-content"><p>Chicago Willis tower, September 2023</p>
+<h3 id="infrastructure-as-code">Infrastructure as code<a hidden class="anchor" aria-hidden="true" href="#infrastructure-as-code">#</a></h3>
+<p>In <a href="https://johnardavies.github.io/technical/cloud_intro/">previous posts</a> we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we
+want to access in code is more explicit and easier to reuse - it can also be version controlled. We&rsquo;ll therefore use a simple code
+based approach to create some infrastructure using Amazon Web Services' (AWS) CloudFormation. CloudFormation was also used in the previous post involving Serverless <a href="https://johnardavies.github.io/technical/serverless/">to set up a series of lambda jobs</a>.</p>
+<p>We have the following objectives:</p>
+<ul>
+<li><em><strong>Spin up a virtual machine (An Amazon EC2 instance) of our choosing</strong></em></li>
+<li><em><strong>Give the EC2 instance access to an S3 bucket of our choosing</strong></em></li>
+<li><em><strong>Give restricted inbound access to the instance i.e. allow SSH access only from a specified IP address</strong></em></li>
+</ul>
+<p>In this post we do this by:</p>
+<p><em><strong>1. A CloudFormation template that launches an EC2 instance</strong></em><br>
+     <em><strong>1.1 Setting up the inputs that the template uses</strong></em><br>
+     <em><strong>1.2 Setting up an Identity and Access Management (IAM) role to give S3 access</strong></em><br>
+     <em><strong>1.3 Creating an EC2 instance</strong></em><br>
+     <em><strong>1.4 Setting up the security group to allow restricted SSH access</strong></em></p>
+<p><em><strong>2. Deploying the template to create the instance and then deleting it</strong></em></p>
+<p>What follows assumes that you have generated an AWS key pair, have the AWS command line interface (cli) installed with permissions to create EC2 instances and manage bucket
+access. This sort of set-up described can, with a bigger instance, be used to temporarily create an EC2 to run a machine learnining model, giving access to a dataset saved in an S3
+bucket and then save the model checkpoints generated during training to the bucket. The example here is not really designed to create a longer-term running EC2
+as to do that would involve handling more issues in terms of IP addresses varying and locking down the instance internally.</p>
+<p><em><strong>The usual cloud warning</strong></em>
+Using cloud services can be expensive and linking cloud services together potentially raises security issues. What is being spun up and access given to should be checked before deploying. Cloud services should be monitored
+and turned off to avoid unecessary costs.</p>
+<h3 id="1-the-cloudformation-template-that-launches-an-ec2-instance">1. The CloudFormation template that launches an EC2 instance<a hidden class="anchor" aria-hidden="true" href="#1-the-cloudformation-template-that-launches-an-ec2-instance">#</a></h3>
+<p>To following CloudFormation template in yaml format specifies the services we want to use.
+In this example the template is named as <code>launch_ec2.yml</code>. The treatment of IAM roles used here is based on that in Eduardo Rabelo&rsquo;s post on <a href="https://blog.awsfundamentals.com/aws-iam-roles-with-aws-cloudformation">IAM and
+CloudFormation</a>.</p>
+<pre tabindex="0"><code>AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  LocalIPAddress:
+    Type: String
+    Description: Local IP address 
+  S3BucketName:
+    Type: String
+    Description: Name of the S3 bucket to access
+Resources:
+  AppDevRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: AppDevRolePolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: 
+                  - !Sub arn:aws:s3:::${S3BucketName}
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                Resource:
+                  - !Sub arn:aws:s3:::${S3BucketName}/*
+  AppDevEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref AppDevRole
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro         # Replace with the instance type wanted
+      ImageId: ami-0b9932f4918a00c4f # Replace with the Amazon Machine Image (AMI) ID wanted
+      KeyName: cloud_key
+      SecurityGroups:
+        - !Ref SSHSecurityGroup
+      IamInstanceProfile: !Ref AppDevEC2InstanceProfile
+      AvailabilityZone: eu-west-2a     
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access only from my iP address
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref LocalIPAddress       
+</code></pre><p>This has the following stages:</p>
+<p><em><strong>1.1 Setting up the inputs that the template uses</strong></em></p>
+<pre tabindex="0"><code>Parameters:
+  LocalIPAddress:
+    Type: String
+    Description: Local IP address 
+  S3BucketName:
+    Type: String
+    Description: Name of the S3 bucket to access
+</code></pre><p>This sets up two parameters that we will pass to AWS when creating the stack.
+The IP address that we want the instance to be accessible from <code>LocalIPAddress</code> and the S3 bucket
+that we want the EC2 to be able to access <code>S3BucketName</code>. The bucket is assumed to already exist.
+When the stack is created we pass these values to it using the following command line argument format, here shown for the IP address we want to give access to
+<code>--parameters ParameterKey=LocalIPAddress,ParameterValue='IP address'</code>.</p>
+<p><em><strong>1.2 Setting up an Identity and Access Management (IAM) role to give S3 access</strong></em></p>
+<pre tabindex="0"><code>  AppDevRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: AppDevRolePolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: 
+                  - !Sub arn:aws:s3:::${S3BucketName}
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                Resource:
+                  - !Sub arn:aws:s3:::${S3BucketName}/*
+  AppDevEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref AppDevRole
+</code></pre><p>This sets up an:</p>
+<ol>
+<li>
+<p><em><strong>IAM role</strong></em><code>AppDevRole</code> with <code>AssumePolicyDocument</code> that gives an Amazon EC2 instance the right to assume a policy. An IAM role as distinct from an IAM user
+applies to the permissions of AWS resources, here EC2 instances, rather than the permissions of a person.</p>
+</li>
+<li>
+<p><em><strong>IAM policy</strong></em> <code>AppDevRolePolicy</code> which specifies the permissions the role has. In this case it allows the EC2 instance the ability to list the files in the S3 bucket itself <code>ListBucket</code> and to put <code>PutObject</code> and get <code>GetObject</code> objects from inside the bucket defined by<code>S3BucketName</code>. The put and get commands require direct access to the contents of the bucket. This is why the resource for this polict also has the * wildcard which represents the objects in the bucket, as opposed to the bucket itself which is the resource for the list command.</p>
+</li>
+<li>
+<p><em><strong>IAM InstanceProfile</strong></em><code>AppDevEC2InstanceProfile</code> which attaches the role to the EC2 instance when it launches.</p>
+</li>
+</ol>
+<p>!Sub is used to identify the resources, as distinct from !Ref, as we are substituting the bucket name into a string to identify a resource rather than just referencing it outright.</p>
+<p><em><strong>1.3 Creating an EC2 instance</strong></em></p>
+<pre tabindex="0"><code>EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro         # Replace with the instance type wanted
+      ImageId: ami-0b9932f4918a00c4f # Replace with the Amazon Machine Image (AMI) ID wanted
+      KeyName: cloud_key
+      SecurityGroups:
+        - !Ref SSHSecurityGroup
+      IamInstanceProfile: !Ref AppDevEC2InstanceProfile
+      AvailabilityZone: eu-west-2a    
+</code></pre><p>This part of the yaml creates an EC2 instance in the <code>eu-west-2a</code> area (which is London). Here the size is set to small <code>t2.micro</code>, with a standard ubuntu image specified in the ImageID.
+The AWS key pair that is needed to ssh into the instance is specified in the <code>KeyName</code> variable. It attaches a security group
+<code>SSHSecurityGroup</code> which manages how we can access the instance (this is defined in the next part of the yaml and only allows SSH access from the
+IP address that we pass to the template when we launch it). The IAM profile created previously is attached to the EC2 to give access to the bucket.</p>
+<p><em><strong>1.4 Setting up the security group to allow restricted SSH access</strong></em>:</p>
+<pre tabindex="0"><code> SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH access only from my iP address
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref LocalIPAddress  
+</code></pre><p>The default setting for an EC2 instance when it is launched is that all ports are locked down.
+Here we allow one way into the EC2 instance by adding a <code>SecurityGroupIngress</code> on the SSH port 22 (To allow outbound ports, the corresponding term is <code>SecurityGroupEgress</code>).
+CidrIp (Classless Inter-Domain Routing IP address) specifies which Ip addresses are allowed to access this port, which we specify in the variable LocalIPAddress that we pass
+to the CloudFormation template.</p>
+<h3 id="2-deploying-the-template-to-create-the-instance-and-then-deleting-it">2. Deploying the template to create the instance and then deleting it<a hidden class="anchor" aria-hidden="true" href="#2-deploying-the-template-to-create-the-instance-and-then-deleting-it">#</a></h3>
+<p>To launch an EC2 instance restricted to my own IP address, with access to S3 due to an IAM role:</p>
+<pre tabindex="0"><code>$ aws cloudformation create-stack \
+--stack-name test-stack \
+--template-body file://launch_ec2.yml \
+--parameters \
+ParameterKey=LocalIPAddress,ParameterValue=&quot;$(curl -s https://checkip.amazonaws.com)/32&quot; \
+ParameterKey=S3BucketName,ParameterValue=test-bucket-cf-store-jd \
+--capabilities CAPABILITY_IAM
+</code></pre><p>The stack is given a name test-stack and the yml shown above is referenced from the &ndash;template-body.
+Here we use the curl to the AWS site <a href="https://checkip.amazonaws.com">https://checkip.amazonaws.com</a> to automatically detect the IP we are running the template from
+and then pass it as the ParameterValue for <code>LocalIPAddress</code>. The name of the bucket that we are granting access to is
+passed as the parameter value corresponding to S3BucketName. To make the change to IAM we also pass CAPABILITIES_IAM with the capabilities flag.</p>
+<p>The screen shot below shows an example of what happens when we do thiss (Some computer specific information has been removed).
+If we run this we get the following response.
+<img loading="lazy" src="https://johnardavies.github.io/launch_stack.png" alt="launch_stack"  />
+
+The CloudFormation stack launches (shown here from the CloudFormation page of the AWS console).
+<img loading="lazy" src="https://johnardavies.github.io/stack_create.png" alt="stack_create"  />
+
+The corresponding EC2 instance is created and starts running.
+<img loading="lazy" src="https://johnardavies.github.io/ec2_create.png" alt="ec2_create"  />
+
+We get the IP address and login to it.
+<img loading="lazy" src="https://johnardavies.github.io/ubuntu_login.png" alt="ec2_login"  />
+</p>
+<p>After installing the AWS cli on the instance, to check that the bucket rules work, we create a file test.txt on the EC2, we then copy it to the bucket and list the bucket&rsquo;s contents from the EC2
+instance.
+<img loading="lazy" src="https://johnardavies.github.io/s3_works.png" alt="s3_works"  />
+</p>
+<p>To see the stacks that have been created:</p>
+<pre tabindex="0"><code>$ aws cloudformation describe-stacks --stack-name test-stack
+</code></pre><p>The EC2 created will keep running and incurring costs so we want to be able to delete it when our usage ends. This can be done manually from the <code>Stack actions</code> and <code>Actions</code> tabs
+in the CloudFormation and EC2 consoles shown above. Alternatively, from the command line the following will delete the stack that has just been created.</p>
+<pre tabindex="0"><code>$ aws cloudformation delete-stack --stack-name test-stack
+</code></pre><h3 id="previous-cloud-posts">Previous Cloud posts<a hidden class="anchor" aria-hidden="true" href="#previous-cloud-posts">#</a></h3>
+<p><em><strong><a href="https://johnardavies.github.io/technical/cloud_intro/">Cloud 1: Introduction to launching a Virtual Machine in the Cloud</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/cloud_use/">Cloud 2: Getting started with using a Virtual Machine in the Cloud</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/docker_use/">Cloud 3: Docker and Jupyter notebooks in the Cloud</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/serverless/">Cloud 4: Using Serverless</a></strong></em></p>
+<p><em><strong><a href="https://johnardavies.github.io/technical/front_end/">Cloud 5: Introduction to deploying an app with simple CI/CD</a></strong></em></p>
+<h3 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h3>
+<p>Eduardo Rabelo (2023), <em><strong><a href="https://blog.awsfundamentals.com/aws-iam-roles-with-aws-cloudformation">AWS IAM Roles with AWS CloudFormation</a></strong></em>, AWS Fundamentals.</p>
+<p>Andreas and Michael Wittig, &lsquo;Amazon Web Services in action&rsquo;, Manning.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://johnardavies.github.io/tags/technical/">technical</a></li>
+      <li><a href="https://johnardavies.github.io/tags/digital/">digital</a></li>
+      <li><a href="https://johnardavies.github.io/tags/cloud/">cloud</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+    menu.onscroll = function () {
+        localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
