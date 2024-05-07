@@ -14,7 +14,7 @@
       
       <guid>https://johnardavies.github.io/technical/infrastructure/</guid>
       <description>Willis tower, Chicago, August 2023
-Infrastructure as code In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled.</description>
+Introduction to Infrastructure as Code - deploying a virtual machine In previous posts we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we want to access in code is more explicit and easier to reuse - it can also be version controlled.</description>
     </item>
     
     <item>
