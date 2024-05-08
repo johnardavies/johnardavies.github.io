@@ -9,7 +9,7 @@ cover:
 ---
 Willis tower, Chicago, August 2023
 
-### Infrastructure as code
+### Introduction to Infrastructure as Code - deploying a virtual machine
 
 In [previous posts](https://johnardavies.github.io/technical/cloud_intro/) we spun up virtual machines from the consoles of cloud providers websites. However this has the disadvantage that it can be time consuming and the steps involved complicated and easy to forget. By contrast directly specifying the cloud computing that we 
 want to access in code is more explicit and easier to reuse - it can also be version controlled. We'll therefore use a simple code
@@ -24,25 +24,26 @@ We have the following objectives:
 In this post we do this by:
 
 ***1. A CloudFormation template that launches an EC2 instance***\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.1 Setting up the inputs that the template uses***\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.2 Setting up an Identity and Access Management (IAM) role to give S3 access***\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.3 Specifying the type of EC2 to be launched and the rules attached to it***\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.4 Setting up the security group to allow restricted SSH access***
+This specifies:\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.1 The inputs that the template uses***\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.2 An Identity and Access Management (IAM) role to give S3 access***\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.3 The type of EC2 to be launched and the rules attached to it***\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***1.4 A security group to allow restricted SSH access***
 
 ***2. Deploying the template to create the instance and then deleting it***
 
 What follows assumes that you have generated an AWS key pair, have the AWS command line interface (CLI) installed with permissions to create EC2 instances and manage bucket 
-access. This sort of set-up described can, with a bigger instance, be used to temporarily create an EC2 to run a machine learnining model, giving access to a dataset saved in an S3
-bucket and then save the model checkpoints generated during training to the bucket. The example here is not really designed to create a longer-term running EC2
-as to do that would involve handling more issues in terms of IP addresses varying and locking down the instance internally.
+access. The infrastructure created by the template can, with a bigger instance, be used to temporarily create an EC2 to train a machine learning model. A python script running on the instance using the 
+package Boto3 can access a dataset saved to the S3 bucket and then save the model checkpoints generated during training to the bucket. The example here is not really designed to create a longer-term 
+running EC2 as to do that would involve handling access from varying IP addresses and locking down the instance internally.
 
 ***The usual cloud warning*** 
 Using cloud services can be expensive and linking cloud services together potentially raises security issues. What is being spun up and access given to should be checked before deploying. Cloud services should be monitored 
-and turned off to avoid unecessary costs.
+and turned off to avoid unnecessary costs.
 
-### 1. The CloudFormation template that launches an EC2 instance
+### 1. A CloudFormation template that launches an EC2 instance
 
-To following CloudFormation template in yaml format specifies the services we want to use. 
+The following CloudFormation template in yaml format specifies the services we want to use. 
 In this example the template is named as `launch_ec2.yml`. The treatment of IAM roles used here is based on that in Eduardo Rabelo's post on [IAM and 
 CloudFormation](https://blog.awsfundamentals.com/aws-iam-roles-with-aws-cloudformation).
 
@@ -109,7 +110,7 @@ Resources:
 ```
 This has the following stages:
 
-***1.1 Setting up the inputs that the template uses***
+***1.1 The inputs that the template uses***
 
 ```
 Parameters:
@@ -126,7 +127,7 @@ that we want the EC2 to be able to access `S3BucketName`. The bucket is assumed 
 When the stack is created we pass these values to it using the following command line argument format, here shown for the IP address we want to give access to
  `--parameters ParameterKey=LocalIPAddress,ParameterValue='IP address'`.
 
-***1.2 Setting up an Identity and Access Management (IAM) role to give S3 access***
+***1.2 An Identity and Access Management (IAM) role to give S3 access***
 ```
   AppDevRole:
     Type: AWS::IAM::Role
@@ -162,18 +163,20 @@ When the stack is created we pass these values to it using the following command
 ```
 This sets up an:
 
-1. ***IAM role***`AppDevRole` with `AssumePolicyDocument` that gives an Amazon EC2 instance the right to assume a policy. An IAM role as distinct from an IAM user 
-applies to the permissions of AWS resources, here EC2 instances, rather than the permissions of a person.
+1. ***IAM role***`AppDevRole` with `AssumePolicyDocument` that gives an Amazon EC2 instance the right to perform certain actions specified in the subsequent IAM policy. An IAM role as distinct from an 
+IAM user applies to the permissions of AWS resources, here EC2 instances, rather than the permissions of a person.
 
 
-2. ***IAM policy*** `AppDevRolePolicy` which specifies the permissions the role has. In this case it allows the EC2 instance the ability to list the files in the S3 bucket itself `ListBucket` and to put `PutObject` and get `GetObject` objects from inside the bucket defined by`S3BucketName`. The put and get commands require direct access to the contents of the bucket. This is why the resource for this polict also has the * wildcard which represents the objects in the bucket, as opposed to the bucket itself which is the resource for the list command.
+2. ***IAM policy*** `AppDevRolePolicy` which specifies the permissions the role has. In this case it allows the EC2 instance to list the files (`ListBucket`) in the bucket identfied by `S3BucketName` 
+and to put (`PutObject`) and get (`GetObject`) objects in the bucket. The put and get commands require direct access to the contents of the bucket. This is why the resource for 
+these actions has the * wildcard which represents the objects in the bucket, as opposed to the resource for the list action which is just the bucket itself.
 
 
 3. ***IAM InstanceProfile***`AppDevEC2InstanceProfile` which attaches the role to the EC2 instance when it launches.
 
 !Sub is used to identify the resources, as distinct from !Ref, as we are substituting the bucket name into a string to identify a resource rather than just referencing it outright.
 
-***1.3 Specifying the type of EC2 to be launched and the rules attached to it***
+***1.3 The type of EC2 to be launched and the rules attached to it***
 
 ```
 EC2Instance:
@@ -188,11 +191,11 @@ EC2Instance:
       AvailabilityZone: eu-west-2a    
 ```
 This part of the yaml creates an EC2 instance in the `eu-west-2a` area (which is London). Here the size is set to small `t2.micro`, with a standard ubuntu image specified in the ImageID.
-The AWS key pair that is needed to ssh into the instance is specified in the `KeyName` variable. It attaches a security group 
-`SSHSecurityGroup` which manages how we can access the instance (this is defined in the next part of the yaml and only allows SSH access from the
+The AWS key pair that is needed to SSH into the instance is specified in the `KeyName` variable (In the example it is called cloud_key corresponding to the cloud_key.pem file downloaded from AWS). 
+The template then attaches a security group `SSHSecurityGroup` which manages how we can access the instance (this is defined in the next part of the yaml and only allows SSH access from the
 IP address that we pass to the template when we launch it). The IAM profile created previously is attached to the EC2 to give access to the bucket.
 
-***1.4 Setting up the security group to allow restricted SSH access***:
+***1.4 A security group to allow restricted SSH access***:
 ```
  SSHSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -206,11 +209,12 @@ IP address that we pass to the template when we launch it). The IAM profile crea
 ```
 The default setting for an EC2 instance when it is launched is that all ports are locked down.
 Here we allow one way into the EC2 instance by adding a `SecurityGroupIngress` on the SSH port 22 (To allow outbound ports, the corresponding term is `SecurityGroupEgress`).
-CidrIp (Classless Inter-Domain Routing IP address) specifies which IP addresses are allowed to access this port, which we specify in the variable LocalIPAddress that we pass 
-to the CloudFormation template.
+CidrIp (Classless Inter-Domain Routing IP address) specifies the IP address that is allowed to access this port. This address is set in the variable LocalIPAddress that we pass 
+to the CloudFormation template when it is deployed.
 
 ### 2. Deploying the template to create the instance and then deleting it
-To launch an EC2 instance restricted to my own IP address, with access to S3 due to an IAM role involves an AWS CLI command of the form:
+To launch an EC2 instance restricted to the IP address that the template is deployed from (with access to an S3 bucket `test-bucket-cf-store-jd` due to an IAM role) involves an AWS CLI command of the 
+form:
 ```
 $ aws cloudformation create-stack \
 --stack-name test-stack \
@@ -220,25 +224,24 @@ ParameterKey=LocalIPAddress,ParameterValue="$(curl -s https://checkip.amazonaws.
 ParameterKey=S3BucketName,ParameterValue=test-bucket-cf-store-jd \
 --capabilities CAPABILITY_IAM
 ```
-In this example, the stack is given a name `test-stack` and the yaml shown above is referenced from the --template-body. The yaml is saved in a folder called `cloud_formation_learn`
-Here we use the curl to the AWS site https://checkip.amazonaws.com to automatically detect the IP we are running the template from
-and then pass it as the ParameterValue for `LocalIPAddress`. The name of the S3 bucket that we are granting access to (in the example `test-bucket-cf-store-jd`) is
+In the example the stack is given a name `test-stack`. The yaml shown above is saved as `launch_ec2.yml` in a folder called 
+`cloud_formation_learn` and is referenced from the --template-body. Here we use the curl to the AWS site https://checkip.amazonaws.com to automatically detect the IP we are running the template from
+and then pass it as the ParameterValue for `LocalIPAddress`. The name of the S3 bucket that we are granting access to is
 passed as the parameter value corresponding to S3BucketName. To make the change to IAM we also pass CAPABILITY_IAM with the capabilities flag.
 
-The screen shot below shows an example of what happens when we do this (Some computer specific information has been removed).
-If we run this we get the following response.
+The screen shot below shows an example of what is returneds when we run this (Some computer specific information has been removed):
 ![launch_stack](/launch_stack.png)
 The CloudFormation stack launches (shown here from the CloudFormation page of the AWS console).
 ![stack_create](/stack_create.png)
-The corresponding EC2 instance is created and starts running.
+The corresponding EC2 instance is created and starts running (shown from the EC2 page)..
 ![ec2_create](/ec2_create.png) 
-We get the IP address and login to it, appending ubuntu in front of the address as this is the operating system selected.
+We get its IP address and login to it with the key identified when we set up the stack, appending ubuntu in front of the address as this is the operating system selected.
 ![ec2_login](/ubuntu_login.png)
 
 After installing the AWS CLI on the instance, to check that the bucket rules work, we create a file test.txt on the EC2, copy it to the bucket and list the bucket's contents from the instance.
 ![s3_works](/s3_works.png)
 
-To see details on the stack that has been created:
+The following command provides details on the stack that has been created (or all stacks if the the command up to describe-stacks part is run):
 ```
 $ aws cloudformation describe-stacks --stack-name test-stack
 ```
