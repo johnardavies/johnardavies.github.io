@@ -1,0 +1,756 @@
+---
+author: "John Davies"
+title: "Transformers 3: Building and training the Transformer"
+date: "2024-05-18"
+tags: [ "technical", "digital" ]
+categories: [ "technical" ]
+cover:
+    image: "/printworks.jpg"
+---
+Printworks
+
+### Transformers 3: Building and training the Transformer
+
+Having discussed [how attention works](https://johnardavies.github.io/technical/transformer2/) and [the structure of 
+Transformers](https://johnardavies.github.io/technical/transformer2/) we’ll now implement a simple Transformer that takes German text and generates English translations. To do this we’ll take the attention mechanism and other network components that Andrej Karpathy used in nanoGPT and reuse them to implement 
+a language translation Transformer. This uses the PyTorch framework. The Transformer’s structure will follow the example in François Chollet's 
+book ‘Deep Learning with Python’ which is written in Tensorflow. 
+This note will cover:
+
+**1. Processing the text data**\
+**2. The implementation of attention**\
+**3. The implementation of other Transformer components**\
+**3. Putting all the components together to create a Transformer**\
+**4. Training**\
+**5. Generation of translations**
+
+To start we will initialise the model with a PyTorch dataclass (config.py)that sets out the model's key parameters:
+```
+from dataclasses import dataclass
+
+@dataclass
+class TransformerConfig:
+
+    """With a dataclass we don't need to write an init function, just specify class attributes and their types"""
+
+    block_size: int = 20  # Was 20
+    vocab_size: int = 15000  # GPT-2 vocab_size of 50257, padded up to nearest multiple of 64 for efficiency
+    dim_embedding: int = 600
+    dim_inner_layer: int =  2000
+    n_head: int = 6
+
+    dropout: float = 0.2
+    bias: bool = False
+    epoch: int = 30
+    batch_size: int = 30
+
+
+config = TransformerConfig()
+```
+The model will have an embedding dimension of 600 and a vocabulary size of 15000 words for each language. Attention will be calculated over 6 heads in parallel. During training German text and a corresponding English translation 
+will be input in batches of 30 text-pairs. Both the German text and English translation text are capped at 20 tokens in length. In training we'll loop through the training data 30 times (30 epochs).
+
+
+
+**1. Processing the text data**
+
+To get some text data to train and test the Transformer we download the english-german translation pairs from 
+[anki](https://www.manythings.org/anki/) and unzip the file:
+```
+$ wget https://www.manythings.org/anki/deu-eng.zip && unzip deu-eng.zip
+```
+This produces the text file (deu.txt) which consists of pairs of English and German text, for example:\
+`Bless you.	Gesundheit` \
+`Buy a gun.	Leg dir eine Schusswaffe` 
+
+We want to encode these into numbers (for both English and German). We will process this with the python script `text_processing.py`.
+To do this we'll start by processing the pairs by removing punctuation, setting the text to lowercase and adding [start] and [end] 
+tags at the beginning and end of all of the english texts.
+```
+# Strip punctuation
+def strip_punctuation(s):
+    """Function that removes punctuation"""
+    return str(''.join(c for c in s if c not in punctuation))
+
+# Split the text file into german and english
+# We start each line of the english text with start and end it with end
+
+text_file = "lang/deu.txt"
+with open(text_file) as language_file:
+    lines = language_file.read().split("\n")
+    print("There are " + str(len(lines)) + " lines")
+
+text_pairs = []
+for i, line in enumerate(lines):
+    try:
+        english, german = line.split("\t")[0:2] 
+        english = "[start] " + strip_punctuation(english.lower()) + " [end]"
+        text_pairs.append([strip_punctuation(german.lower()), english])
+    except: 
+        print("failed to load %s" % (i))
+```
+We then calculate the distinct words used in all the German and all the English terms.
+We then create a class EncodeDecode which is initiated for each language separately
+and has two methods that are dictionaries allowing the most common 15,000 words in each language to be encoded into numbers and decoded back.
+```
+# To get the tokens used in English and German text we create
+# two separate lists and from these create a single german 
+# text and a single english text
+german_list = [item[0] for item in text_pairs]
+english_list = [item[1] for item in text_pairs]
+
+
+german_text=' '.join(german_list)
+english_text=' '.join(english_list)
+
+
+class EncodeDecode():
+    """Class that produces two dictionaries from input text, one of which maps words
+    to numbers and the other one maps numbers to words."""
+
+    def __init__(self, text, vocab):
+        self.text = text
+        # Get the tokens
+        self.tokens_list = list(set(self.text.split()))
+        self.vocab_size=vocab
+        # Get the most common tokens
+        self.tokens_counter=Counter(self.text.split()).most_common(self.vocab_size)
+        self.tokens_vocab=[item for item, count in self.tokens_counter]
+      
+
+    def decode(self):
+        # Create a decoder from the numbers to the tokens
+        decoder = {i+1: token for i, token in enumerate(self.tokens_vocab)}
+        return decoder
+
+    def encode(self):
+        # Create an encoder of the tokens to numbers
+        encoder = {token: i+1 for i, token in enumerate(self.tokens_vocab)}
+        return encoder
+
+# Initialise the english and german classes
+english_tokens=EncodeDecode(english_text, 14999)
+german_tokens=EncodeDecode(german_text, 14999)
+```
+We then apply the dictionaries to encode the English and German texts into numbers
+and each German and English text is padded with 0s to get to 20 tokens. The encoder and decoder
+calculations above start at 1 in order to keep 0 for the pading.
+```
+
+%%time
+# Encode the tokens if they are in the 15000 most common tokens
+
+text_pairs_encoded = [
+    [
+        [
+            german_encoded[element]
+            for element in pair[0].split()
+            if element in german_tokens.tokens_vocab
+        ],
+        [
+            english_encoded[element]
+            for element in pair[1].split()
+            if element in english_tokens.tokens_vocab
+        ]
+    ]
+    for pair in text_pairs
+]
+
+
+# Take the encoded text pairs and move the english translation one element to the right
+text_pairs_encoded_split = [
+    (elem[0], elem[1][:-1], elem[1][1:]) for elem in text_pairs_encoded
+]
+
+# We pad the data to feed the data into a network in a consistent size
+def tensor_pad(x):
+    """converts list to tensor and pads to length 20"""
+    return torch.nn.functional.pad(torch.tensor(x, dtype=torch.int64), (0, 20))
+
+# pads all of the tensors so that they are of size 20
+text_pairs_encoded_padded = [
+    [
+        tensor_pad(item1)[:config.block_size],
+        tensor_pad(item2)[:config.block_size],
+        tensor_pad(item3)[:config.block_size],
+    ]
+    for item1, item2, item3 in text_pairs_encoded_split
+]
+
+```
+Having done that we split the data into  a 20% test and 80% training sample.
+```
+# Calculate how many observations are needed for a 20% test sample
+test_len = round(len(text_pairs_encoded_padded) * 0.2)
+
+# Calculate the number of training observations as residual
+train_len = round(len(text_pairs_encoded_padded)) - test_len
+
+# Split the data into training and test datasets
+train_dataset, test_dataset = random_split(
+    text_pairs_encoded_padded, [train_len, test_len]
+)
+
+# Lastly we create a dataloader to iterate through the data config.batch_size
+train_dataloader = DataLoader(train_dataset, batch_size=20, shuffle=True)
+
+```
+
+**2. The implementation of attention in PyTorch**
+The following code forms part of the transformers script `Transformer.py` which is the core model script.
+Below is the implementation of attention that Andrej Karpathy used in nanoGPT. As with all PyTorch layers it sets up the parts that 
+are used to construct the network when it is initiated. The forward method then details what happens when the data is input into an 
+initialised attention layer. All layer classes inherit from the nn.Module class which is the class for all neural network modules.
+
+```
+class CausalSelfAttention(nn.Module):
+
+    def __init__(self, config):
+        super().__init__()
+        assert config.dim_embedding % config.n_head == 0
+        # key, query, value projections for all heads, but in a batc
+        # nn.Linear applies a linear y=Ax +b transformation to the input
+        # the input dimension is the first argument
+        # the output dimension is the second argument
+        # the last argument is the b (bias) term 
+        self.c_attn = nn.Linear(config.dim_embedding, 3 * config.dim_embedding, bias=config.bias)
+        # output projection
+        self.c_proj = nn.Linear(config.dim_embedding, config.dim_embedding, bias=config.bias)
+        # regularization
+        self.attn_dropout = nn.Dropout(config.dropout)
+        self.resid_dropout = nn.Dropout(config.dropout)
+        self.n_head = config.n_head
+        self.dim_embedding = config.dim_embedding
+        self.dropout = config.dropout
+        # flash attention make GPU go brrrrr but support is only in PyTorch >= 2.0
+        self.flash = hasattr(torch.nn.functional, 'scaled_dot_product_attention')
+        if not self.flash:
+            print("WARNING: using slow attention. Flash Attention requires PyTorch >= 2.0")
+            # causal mask to ensure that attention is only applied to the left in the input sequence
+            self.register_buffer("bias", torch.tril(torch.ones(config.block_size, config.block_size))
+                                        .view(1, 1, config.block_size, config.block_size))
+
+    def forward(self, x):
+        # Split the input tensor dimension down into the batch size B , the sequence length T and the emnedding dimensionality C
+        B, T, C = x.size() # batch size, sequence length, embedding dimensionality (dim_embedding)
+       # print(B, T, C)
+        # calculate query, key, values 
+        # by splitting the output of the attention layer into tensors of dimensio dim_embedding on the 2nd dimension
+        q, k, v  = self.c_attn(x).split(self.dim_embedding, dim=2)
+        # split k down by batch_size, sequence_length, number_heads, dimension_embedding/number_heads
+        k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+        if self.flash:
+            # efficient attention using Flash Attention CUDA kernels
+            y = torch.nn.functional.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=self.dropout if self.training 
+else 0, is_causal=False)
+        else:
+            # manual implementation of attention
+            # Calculate the inner product of the q and k vectors and normalise by square root of length of key vectors
+            att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
+            # Calculate the masked attention
+         #   att = att.masked_fill(self.bias[:,:,:T,:T] == 0, float('-inf'))
+            # Apply the softmax layer so that everything sums to 1
+            att = F.softmax(att, dim=-1)
+            att = self.attn_dropout(att)
+            # Multiply the attention results by the value vectors
+            y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
+            # Change the shape of the tensor back to B, T, C removing the heads
+        y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
+
+        # output projection
+        y = self.resid_dropout(self.c_proj(y))
+        return y
+
+```
+Here you can see the creation of key, query and value vectors from the embeddings:
+```
+q, k, v  = self.c_attn(x).split(self.dim_embedding, dim=2)
+# split k down by batch_size, sequence_length, number_heads, dimension_embedding/number_heads
+k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs
+```
+
+
+The method contains an optimised attention mechanism that uses flash attention. The `is_causal=False` as for the language we want to translate 
+from we are assumed to be be able to access the full text to be translated. This is changed to True in the decoder side as, as we are generating the translation
+recursively we use the prediction of the first word in the translation to generate the prediction of the second word of the translation etc. This means that in training, to generate 
+the nth word of the translation we only allow access to the n-1 words of translated text before it. For the first word of the translation, the translation is given the `[start]` token.
+```
+            y = torch.nn.functional.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=self.dropout if self.training else 0, is_causal=False)
+```
+If this is not available there is also a version that implements attention 
+directly in Python. This illustrates more explicitly the components that make up attention.
+The matrix multiplication of query and the transposed key matrix and then normalising the results by the square root of the key
+vector's dimensionality:
+```
+att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
+```
+The application of the softmax layer:
+``` 
+att = F.softmax(att, dim=-1)
+```
+The multiplication of the attention weights by the values vectors:
+```
+ y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
+```
+The concatenation of the head outputs and then the projection of resulting vector down to the model's embedding dimension. In the Karpathy implementation he then adds a dropout layer.
+```
+ y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
+
+# output projection
+ y = self.resid_dropout(self.c_proj(y))
+```
+**3. The implementation of other Transformer components**
+
+The Embedding class below takes in the encoded text and then passes each word to two embedding layers. There is the word embedding layer (wte) and the position embedding layer (wtp). 
+These two layers map the word and its position in the text into two vectors of the chosen embedding dimensionality. These two vectors are then added together encoding both the word and its position in the text in a single vector. This is done for all of the 20 words/tokens in a piece of text fed into the network, and their relative position in the text.
+```
+class Embedding(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        #  Creates the text embedding and the position embedding
+        # The embedding layer automatically does the one hot encoding so this
+        # does not need to be created directly
+        self.config = config
+        self.wte = nn.Embedding(15000, config.dim_embedding)
+        self.wtp = nn.Embedding(20, config.dim_embedding)
+  
+
+    def forward(self, x):
+        # Applies the word embedding and then adds it to the position embedding
+        x = self.wte(x)
+        # The position embedding is applied over a tensor that ranges 0 to 20 representing each word's position
+        x = x + self.wtp(torch.arange(0, 20))
+        return x
+```
+
+The LayerNorm class applies layer normalisation.
+```
+class LayerNorm(nn.Module):
+    """ LayerNorm but with an optional bias. PyTorch doesn't support simply bias=False """
+
+    def __init__(self, ndim, bias):
+        super().__init__()
+        self.weight = nn.Parameter(torch.ones(ndim))
+        self.bias = nn.Parameter(torch.zeros(ndim)) if bias else None
+
+    def forward(self, input):
+        return Fun.layer_norm(input, self.weight.shape, self.weight, self.bias, 1e-5)
+```
+A series of layers that implements a layer norm, a dense layer with a skip connection and then a dense layer again:
+```
+class Processing_layer(nn.Module):
+      def __init__(self, config):
+            super().__init__()
+            self.denselayer1 = nn.Linear(config.dim_embedding, config.dim_embedding)
+            self.denselayer2 = nn.Linear(config.dim_embedding, config.dim_embedding)
+            self.layernorm1 = LayerNorm(config.dim_embedding, bias=config.bias)
+            self.layernorm2 = LayerNorm(config.dim_embedding, bias=config.bias)
+
+      def forward(self, x):
+             # A layer norm and then two dense layers\n",
+             x_in = self.layernorm1(x)
+             x = self.denselayer1(x_in)
+             x = self.denselayer2(x)+x_in
+             x = self.layernorm2(x)
+             return x
+
+```
+There is also a class that implements masked causal self attention:
+```
+class CausalSelfAttentionMasked(nn.Module):
+
+    def __init__(self, config):
+        super().__init__()
+        assert config.dim_embedding % config.n_head == 0
+        # key, query, value projections for all heads, but in a batc
+        # nn.Linear applies a linear y=Ax +b transformation to the input
+        # the input dimension is the first argument
+        # the output dimension is the second argument
+        # the last argument is the b (bias) term 
+        self.c_attn = nn.Linear(config.dim_embedding, 3 * config.dim_embedding, bias=config.bias)
+        # output projection
+        self.c_proj = nn.Linear(config.dim_embedding, config.dim_embedding, bias=config.bias)
+        # regularization
+        self.attn_dropout = nn.Dropout(config.dropout)
+        self.resid_dropout = nn.Dropout(config.dropout)
+        self.n_head = config.n_head
+        self.dim_embedding = config.dim_embedding
+        self.dropout = config.dropout
+        # flash attention make GPU go brrrrr but support is only in PyTorch >= 2.0
+        self.flash = hasattr(torch.nn.functional, 'scaled_dot_product_attention')
+        if not self.flash:
+            print("WARNING: using slow attention. Flash Attention requires PyTorch >= 2.0")
+            # causal mask to ensure that attention is only applied to the left in the input sequence
+            self.register_buffer("bias", torch.tril(torch.ones(config.block_size, config.block_size))
+                                        .view(1, 1, config.block_size, config.block_size))
+
+    def forward(self, x):
+        # Split the input tensor dimension down into the batch size B , the sequence length T and the emnedding dimensionality G
+        B, T, C = x.size() # batch size, sequence length, embedding dimensionality (dim_embedding)
+        # calculate query, key, values 
+        # by splitting the output of the attention layer into tensors of dimensio dim_embedding on the 2nd dimension
+        q, k, v  = self.c_attn(x).split(self.dim_embedding, dim=2)
+        # split k down by batch_size, sequence_length, number_heads, dimension_embedding/number_heads
+        k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, nh, T, hs)
+        if self.flash:
+            # efficient attention using Flash Attention CUDA kernels
+            y = torch.nn.functional.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=self.dropout if self.training else 0, is_causal=True)
+        else:
+            # manual implementation of attention
+            # Calculate the inner product of the q and k vectors and normalise by square root of length of key vectors
+            att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
+            # Calculate the masked attention
+            att = att.masked_fill(attn_mask == 0, float('-inf'))
+            # Apply the softmax layer so that everything sums to 1
+            att = F.softmax(att, dim=-1)
+            att = self.attn_dropout(att)
+            # Multiply the attention results by the value vectors
+            y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
+            # Change the shape of the tensor back to B, T, C removing the heads
+        y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
+
+        # output projection
+        y = self.resid_dropout(self.c_proj(y))
+        return y
+```
+The Decoder has two inputs: the output from the encoder and the output from the previous layer of the decoder's masked self-attention class. The encoder output is split into 
+key and value vectors. These vectors are then combined with the query vectors created from the vectors output from the decoder's previous layer in an attention calculation.
+```
+class EncoderDecoderAttention(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        assert config.dim_embedding % config.n_head == 0
+        # key, query, value projections for all heads, but in a batch
+        self.c_attn_en = nn.Linear(
+            config.dim_embedding, 3 * config.dim_embedding, bias=config.bias
+        )
+
+        self.c_attn = nn.Linear(
+            config.dim_embedding, 3 * config.dim_embedding, bias=config.bias
+        )
+        # output projection
+        self.c_proj = nn.Linear(
+            config.dim_embedding, config.dim_embedding, bias=config.bias
+        )
+        # regularization
+        self.attn_dropout = nn.Dropout(config.dropout)
+        self.resid_dropout = nn.Dropout(config.dropout)
+        self.n_head = config.n_head
+        self.dim_embedding = config.dim_embedding
+
+        self.dropout = config.dropout
+        # flash attention make GPU go brrrrr but support is only in PyTorch >= 2.0
+        self.flash = hasattr(torch.nn.functional, "scaled_dot_product_attention")
+        if not self.flash:
+            print(
+                "WARNING: using slow attention. Flash Attention requires PyTorch >= 2.0"
+            )
+            # causal mask to ensure that attention is only applied to the left in the input sequence
+            self.register_buffer(
+                "bias",
+                torch.tril(torch.ones(config.block_size, config.block_size)).view(
+                    1, 1, config.block_size, config.block_size
+                ),
+            )
+
+    def forward(self, x, e):
+
+        # Generating the query and key vectors from the vectors from the encoder
+        (
+            B,
+            T,
+            C,
+        ) = (
+            e.size()
+        )  # batch size, sequence length, embedding dimensionality (dim_embedding)
+        # calculate query, key, values
+        # by splitting the output of the attention layer into tensors of dimensio dim_embedding on the 2nd dimension
+        _, k, v = self.c_attn_en(e).split(self.dim_embedding, dim=2)
+        k = k.view(B, T, self.n_head, C // self.n_head).transpose(
+            1, 2
+        )  # (B, nh, T, hs)
+        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
+        #   print(q.size(), k.size())
+
+        # Generating the value vector from  the decoder input
+        (
+            B,
+            T,
+            C,
+        ) = (
+            x.size()
+        )  # batch size, sequence length, embedding dimensionality (dim_embedding)
+
+        # calculate values for all heads in batch and move head forward to be the batch dim
+        q, _, _ = self.c_attn(x).split(self.dim_embedding, dim=2)
+        q = q.view(B, T, self.n_head, C // self.n_head).transpose(
+            1, 2
+        )  # (B, nh, T, hs)
+
+        # causal self-attention; Self-attend: (B, nh, T, hs) x (B, nh, hs, T) -> (B, nh, T, T)
+        if self.flash:
+            # efficient attention using Flash Attention CUDA kernels
+            y = torch.nn.functional.scaled_dot_product_attention(
+                q,
+                k,
+                v,
+                attn_mask=None,
+                dropout_p=self.dropout if self.training else 0,
+                is_causal=False,
+            )
+        else:
+            # manual implementation of attention
+            att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
+            att = att.masked_fill(attn_mask == 0, float("-inf"))
+            att = F.softmax(att, dim=-1)
+            att = self.attn_dropout(att)
+            y = att @ v  # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
+        y = (
+            y.transpose(1, 2).contiguous().view(B, T, C)
+        )  # re-assemble all head outputs side by side
+
+        # output projection
+        y = self.resid_dropout(self.c_proj(y))
+        return y
+            
+```
+
+**3. Putting all the components together to create a Transformer**
+
+We now combine all of these components together into a single Transformer class which we will initialise and then train.
+
+```
+class Encoder(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        assert config.vocab_size is not None
+        assert config.block_size is not None
+        self.config = config
+
+        # Create embeddings for both the encoder and the decoder
+        self.encoder_embed = Embedding(config)
+
+        # Create an attention mechanism for the encoder
+        self.attention_encoder = CausalSelfAttention(config)
+        
+
+        # Set up a processing layer
+        self.encoder_processing_layer = Processing_layer(config)
+
+    def forward(self, x):
+        # Encode the language we want to translate from
+        x = self.encoder_embed(x)
+
+        # Apply the attention mechanism and add the input
+        x = self.attention_encoder(x) + x
+
+        # apply layer norm, two dense layers and a layer norm again
+        x = self.encoder_processing_layer(x)
+
+        return x
+    
+    
+    
+class Decoder(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        assert config.vocab_size is not None
+        assert config.block_size is not None
+        self.config = config
+
+        # Create embeddings for both the encoder and the decoder
+        self.decoder_embed = Embedding(config)
+
+        # Create an attention mechanism for the decoder
+        self.attention_decoder = CausalSelfAttentionMasked(config)
+        
+        # Create a layernorm layer
+        self.layernorm = LayerNorm(config.dim_embedding, bias=config.bias)
+
+        # Create the encoder decoder attention
+        self.decoder_attn = EncoderDecoderAttention(config)
+
+        # Set up a processing sections one for the encoder and the other for the decoder
+        self.decoder_processing_layer = Processing_layer(config)
+
+     
+        # The final layer which maps the models embedding dimension batch to the vocab size
+        self.finallayer = nn.Linear(config.dim_embedding, config.vocab_size+1)
+
+    def forward(self, x, y):
+
+        # Encode the language we want to translate into
+        y = self.decoder_embed(y)
+        
+        # Apply the attention mechanism and add the input
+        y = self.attention_decoder(y) + y
+        
+        y = self.layernorm(y)
+
+        # Take the ouput from the encoder and last layer of decoder and calculate attention again then add the input
+        y = self.decoder_attn(y, x) + y
+
+        # apply layer norm, two dense layers and a layer norm again
+        y = self.decoder_processing_layer(y)
+
+        y = self.finallayer(y)
+        return y
+    
+class Transformer(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        assert config.vocab_size is not None
+        assert config.block_size is not None
+        self.config = config
+
+        # Create embeddings for both the encoder and the decoder
+        self.encoder = Encoder(config)
+        self.decoder = Decoder(config)
+            
+    def forward(self, x, y):
+        # Encode the language we want to translate from
+        encoder_out = self.encoder(x)
+
+        # Apply the attention mechanism and add the input
+        y = self.decoder(encoder_out,y)
+        return y
+# instantiate the Transformer with the config file
+model = Transformer(config)
+```
+
+**4. Training**
+The code below is from the python script `train.py` trains the model for 30 epochs. It minimises the cross entropy between the predicted translations and the actual translations.
+```
+%%time
+
+losses = []
+
+torch.set_grad_enabled(True)
+
+#optimizer = optim.Adam(model2.parameters(), lr=1e-3)
+
+optimizer = optim.SGD(model4.parameters(), lr=0.01, momentum=0.9)
+
+
+for epoch in range(0, 30):
+    for i, (german, english, output) in enumerate(train_dataloader):
+        model.train()
+        yhat = model(german, english)
+        loss = Fun.cross_entropy(
+            yhat.view(-1, yhat.size(-1)), output.view(-1), ignore_index=-1
+        )
+        loss.backward()
+        optimizer.step()
+        # clear the gradients
+        optimizer.zero_grad()
+        losses.append(loss)
+        if i % 400 == 0:
+            print(f"Epoch: {epoch}, Iteration: {i}, Loss: {loss.item()}")
+```
+**5. Generation of translations**
+
+The function below generates a translation from the input text. This is included in the script `translate.py`. It takes as an input the sentence we want to translate, it then:
+
+1. encodes that text into integers using the coding developed in the text processing phase. 
+2. adds an extra dimension with the unsqueeze(0) so that the model which is trained on batches of 30, can read a single sentence rather than needing a batched input of multiple texts. 
+3. it then generates the translation one token at a time.
+4. it starts with a blank decoding sentence and the encoded text we want the trained model to translate. The model takes these inputs and generates a probability distribution for its  prediction of the first word of the translation.
+5. the model then samples from the probability distribution of the next word i.e. the word with highest predicted probability is most likely to be chosen.
+6. the predicted word is then added to the decoded sentence as its first word.
+7. the original sentence and the updated decoded sentence is then input into the model to get the next word.
+8. this is done recursively until we predict the token [end] and the translation ends.
+
+```
+def prediction(x,y):
+    logits=model(x,y)
+    logits=logits.squeeze(0) # Will remove the first dimension if it is set to 0
+    # returns a tensor with all specified dimensions of input of size 1 removed - in this case the first dimension
+    # The dim = -1 applies softmax over the last dimension of the tensor
+    return Fun.softmax(logits, dim=-1)
+```
+Functions that encode strings of text as integers according to the encoding of the laguages developed earlier:
+```
+def target_vectorization(x):
+    return [english_encoded[element] for element in x.split() if element in english_tokens.tokens_vocab]
+
+def source_vectorization(x):
+    return [german_encoded[element] for element in x.split() if element in german_tokens.tokens_vocab]
+```
+
+```
+def decode_sequence_no_print(input_sentence):
+    # Unsqueezing adds an extra dimension so that the tensor is of size torch.Size([1, 20])
+    tokenized_input_sentence = tensor_pad(source_vectorization(input_sentence))[
+        :20
+    ].unsqueeze(0)
+    decoded_sentence = "[start]"
+    # Loop through the sentence word by word
+    for i in range(config.block_size):
+        tokenized_target_sentence = target_vectorization(decoded_sentence)
+
+        if i<0:
+          tokenized_target_sentence = torch.zeros(20,dtype=torch.int).unsqueeze(0) 
+
+        elif i >= 0:
+           tokenized_target_sentence=tensor_pad(tokenized_target_sentence)[:20].unsqueeze(0)
+
+        predictions = prediction(tokenized_input_sentence, tokenized_target_sentence)
+        # The second index is the word position, the third index are the words
+        # The .item() extracts the tensor index from the tensor
+        probs=torch.multinomial(predictions[i,:], num_samples=1)
+           
+        sampled_token_index = predictions[i, :].argmax().item()
+
+        sampled_token = english_tokens.decode()[sampled_token_index]
+
+        decoded_sentence += " " + sampled_token
+        # If the predicted token is end stop
+        if sampled_token == "[end]":
+            break
+    return decoded_sentence
+```
+
+The code below loops through the test data and generates predictions:
+```
+class style:
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
+
+# Looping through the test dataset to generate some translations:
+
+for i, elem in enumerate(test_dataloader):
+    if i % 1000 == 0:
+      
+        print(style.BOLD+'Orginal'+style.END)
+        german=trans(elem[0].tolist()[0], 'ger')
+        print(german)
+        print(style.BOLD+'Translation'+style.END)
+        print(trans(elem[1].tolist()[0], 'eng'))
+        print(style.BOLD+'Machine Translation'+style.END)
+        print(decode_sequence_no_print(german))
+        print('\n')
+```
+
+**References:**
+
+[The original Transformers paper 'Attention is All You Need',
+Vaswani et al. (2017)](https://arxiv.org/abs/1706.03762/)
+
+[The repo for Andrej Karpathy's nanoGPT](https://github.com/karpathy/nanoGPT/)
+
+[Jay Alammar’s ‘The illustrated transformer’](https://jalammar.github.io/illustrated-transformer/)
+
+François Chollet’s book ‘Deep Learning with Python (2nd edition)’
+
+[OpenAI's, 'Language Models are Few-Shot Learners'](https://arxiv.org/pdf/2005.14165.pdf)
+
+**Previous Transformer notes**:
+1. [**Transformers 1: The Attention Mechanism**](https://t.co/hFufxkFXaQ)
+2. [**Transformers 2: The Transformer's Structure**](https://johnardavies.github.io/technical/transformer2/)
