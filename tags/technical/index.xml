@@ -6,7 +6,17 @@
     <description>Recent content in technical on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Transformers 3: Building and training the Transformer</title>
+      <link>https://johnardavies.github.io/technical/transformer3/</link>
+      <pubDate>Sat, 18 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/transformer3/</guid>
+      <description>Printworks, April 2023
+Transformers 3: Building and training the Transformer Having discussed how attention works and the structure of Transformers we’ll now implement a simple Transformer that takes German text and generates English translations. To do this we’ll take the attention mechanism and other network components that Andrej Karpathy developed in nanoGPT for language generation and reuse them to implement a Transformer for language translation. This uses the PyTorch framework. The language translation Transformer’s structure follows the example in François Chollet&amp;rsquo;s book ‘Deep Learning with Python’ which is written in Keras/TensorFlow.</description>
+    </item>
+    
     <item>
       <title>Cloud 6: Introduction to Infrastructure as Code using CloudFormation</title>
       <link>https://johnardavies.github.io/technical/infrastructure/</link>
@@ -24,7 +34,7 @@ Introduction to Infrastructure as Code - deploying a virtual machine In previous
       
       <guid>https://johnardavies.github.io/technical/transformer2/</guid>
       <description>Helix, White City
-Transformers 2: The structure of a Transformer Continuing the series of notes on Transformers I’ll now look at the overall structure of Transformers and how attention is used within them in the context of language translation. I’ll cover:
+Transformers 2: The structure of a Transformer Continuing the series of notes on Transformers post I’ll now look at the overall structure of Transformers and how attention is used within them in the context of language translation. I’ll cover:
 1. The architecture of Transformers
 2. How attention is included in the Transformer
 The previous post discussed the attention mechanism that underlies how Transformers work.
