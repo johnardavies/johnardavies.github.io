@@ -15,7 +15,7 @@
       <guid>https://johnardavies.github.io/technical/bayes1/</guid>
       <description>Ilke Sahin&amp;rsquo;s &amp;lsquo;Water Canals (Aquaducts)&amp;rsquo; at Goldsmiths degree show 2024
 This note reviews some basic aspects of Bayesian inference to refresh my knowledge of it and some of the probability distributions it often uses.
-1. Finding the most probable parameters given the data using Bayes’ theorem We want to find the best hypothesis, or model parameter(s) that describes the data. Bayes’ theorem allows us to write down the formula for the probability of model parameters or hypotheses given the data.</description>
+1. Finding the most probable parameters given the data using Bayes’ theorem We want to find the best hypothesis or model parameter(s) that describes the data. Bayes’ theorem allows us to write down the formula for the probability of model parameters or hypotheses given the data.</description>
     </item>
     
     <item>
