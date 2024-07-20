@@ -6,7 +6,18 @@
     <description>Recent content in technical on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 20 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bayes 1: Introduction to Bayesian inference</title>
+      <link>https://johnardavies.github.io/technical/bayes1/</link>
+      <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/bayes1/</guid>
+      <description>Ilke Sahin&amp;rsquo;s &amp;lsquo;Water Canals (Aquaducts)&amp;rsquo; at Goldsmiths degree show 2024
+This note reviews some basic aspects of Bayesian inference to refresh my knowledge of it and some of the probability distributions it often uses.
+1. Finding the most probable parameters given the data using Bayes’ theorem We want to find the best hypothesis, or model parameter(s) that describes the data. Bayes’ theorem allows us to write down the formula for the probability of model parameters or hypotheses given the data.</description>
+    </item>
+    
     <item>
       <title>Transformers 3: Building and training a Transformer</title>
       <link>https://johnardavies.github.io/technical/transformer3/</link>
