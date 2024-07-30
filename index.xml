@@ -6,7 +6,18 @@
     <description>Recent content on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 20 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bayes 2: Bayesian inference with Markov Chain Monte Carlo</title>
+      <link>https://johnardavies.github.io/technical/mcmc/</link>
+      <pubDate>Tue, 30 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/mcmc/</guid>
+      <description>View from the Peggy Guggenheim Collection, Venice.
+In the previous post we calculated the posterior distribution for a parameter that we wanted to estimate. However, in practice, this is often not possible and numerical simulations are needed. Here we evaluate the distribution using a Markov Chain Monte Carlo (MCMC) technique.
+The idea is to use a Markov chain to generate samples from the distribution that we want to evaluate such that the chain has the property that as it evolves over time it generates the posterior’s probability distribution.</description>
+    </item>
+    
     <item>
       <title>Bayes 1: Introduction to Bayesian Inference</title>
       <link>https://johnardavies.github.io/technical/bayes1/</link>
