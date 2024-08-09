@@ -15,7 +15,7 @@
       <guid>https://johnardavies.github.io/technical/mcmc/</guid>
       <description>View from the Peggy Guggenheim Collection, Venice.
 In the previous post we calculated the posterior distribution for a parameter we wanted to estimate. However, in practice, this is often not analytically possible and numerical simulations are needed. Here we evaluate the distribution using a Markov Chain Monte Carlo (MCMC) technique.
-The idea is to use a Markov chain to generate samples from the distribution we want to evaluate where as the chain evolves over time the values it generates have the properties of the posterior’s probability distribution.</description>
+The idea is to use a Markov chain to generate samples from the distribution we want to evaluate where, as the chain evolves over time, the values it generates have the properties of the posterior’s probability distribution.</description>
     </item>
     
     <item>
