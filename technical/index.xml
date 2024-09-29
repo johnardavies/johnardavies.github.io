@@ -6,7 +6,17 @@
     <description>Recent content in Technicals on John&#39;s Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 30 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/technical/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://johnardavies.github.io/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Reinforcement learning</title>
+      <link>https://johnardavies.github.io/technical/reinforcement/</link>
+      <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://johnardavies.github.io/technical/reinforcement/</guid>
+      <description>View from the Palazzo Leoni Montanari di Vicenza
+Reinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs.</description>
+    </item>
+    
     <item>
       <title>Bayes 2: Bayesian inference with Markov Chain Monte Carlo</title>
       <link>https://johnardavies.github.io/technical/mcmc/</link>
