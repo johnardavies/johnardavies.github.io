@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Reinforcement learning | John&#39;s Site</title>
+<meta name="keywords" content="technical" />
+<meta name="description" content="View from the Palazzo Leoni Montanari di Vicenza
+Reinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs.">
+<meta name="author" content="John Davies">
+<link rel="canonical" href="https://johnardavies.github.io/technical/reinforcement/" />
+<link crossorigin="anonymous" href="https://johnardavies.github.io/assets/css/stylesheet.min.5e2b4101351c21e906f398ae96901791830f58d430f96f2659dab7eaef7b3cb7.css" integrity="sha256-XitBATUcIekG85iulpAXkYMPWNQw&#43;W8mWdq36u97PLc=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="https://johnardavies.github.io/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js" integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5&#43;kdJvBz5iKbt6B5PJI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<meta name="generator" content="Hugo 0.88.1" />
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-YJ821LVT08', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-YJ821LVT08', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Reinforcement learning" />
+<meta property="og:description" content="View from the Palazzo Leoni Montanari di Vicenza
+Reinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://johnardavies.github.io/technical/reinforcement/" />
+<meta property="og:image" content="https://johnardavies.github.io/reinforcement.png" /><meta property="article:section" content="technical" />
+<meta property="article:published_time" content="2024-09-29T00:00:00&#43;00:00" />
+<meta property="article:modified_time" content="2024-09-29T00:00:00&#43;00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://johnardavies.github.io/reinforcement.png" />
+<meta name="twitter:title" content="Reinforcement learning"/>
+<meta name="twitter:description" content="View from the Palazzo Leoni Montanari di Vicenza
+Reinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Reinforcement learning",
+      "item": "https://johnardavies.github.io/technical/reinforcement/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Reinforcement learning",
+  "name": "Reinforcement learning",
+  "description": "View from the Palazzo Leoni Montanari di Vicenza\nReinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs.",
+  "keywords": [
+    "technical"
+  ],
+  "articleBody": "View from the Palazzo Leoni Montanari di Vicenza\nReinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs. We want to work out how to optimise an agent’s outcomes over time given this. Reinforcement learning techniques can help infer what the optimal strategy might be.\nTo learn more about reinforcement learning I decided to work through a simple example of this using the game noughts and crosses (or tic-tac-toe as it is called in the US). In the unlikely event this is unfamiliar it is a two-player game where each player takes consecutive turns and places their piece (a nought or a cross) on a 3 x 3 grid. The winner is the first to get 3 of their pieces ‘a three’ in a horizontal, vertical or diagonal line. The game has the advantage that it is allows many of the standard components of reinforcement learning to be used, while being accessible as it is very simple and not that computationally intensive. This approach uses the Python PyTorch framework and uses it to play the game.\nWe cover this in terms of:\n1. Structuring optimisation problems in terms of a value function\n2. The game set-up\n3. Approximating the value function with a neural network\n4. Game play\n5. The optimisation problem to estimate the approximate value function\n6. Training the model\n7. The model’s performance at playing the game\n1. Structuring optimisation problems in terms of a value function We have an agent choosing a series of actions over time: action_1, action_2,….action_n affecting the environment and leading to a corresponding set of payoffs: reward_1, reward_2, reward_3, etc. We assume that the agent wants to maximise its payoff over time and that some of actions it can choose will have higher returns than others. In choosing a given action the agent may need to consider that, in addition to a payoff now, its actions could affect the environment and the payoffs in future periods. Here where the player starts building its lines in the game affects future moves and whether it wins.\nThere is a central technique in reinforcement learning knowns as dynamic programming. This was developed by Richard Bellman in the 1950s and provides a way to structure optimisation problems by rewriting them in terms of a value function that can make them easier to solve.\nThe present value to the agent of future rewards can be written as a discounted sum of future rewards where Beta is a discount factor less than 1 weighting payoffs in the future less than the present. The reward in each period depends on the action (a) chosen in that period and the environment (E). The agent chooses an action from the set of feasible actions in each period to maximise the total reward.\nSuppose there is a function the ‘value function’ that, for a given environment state, gives the value now of an action assuming all future actions afterwards are chosen optimally to maximise the payoff going ahead. We can then write the total payoff to a person choosing an action in terms of a value function. The multiple stage optimisation is then converted into choosing an action now that maximises the reward in the current period and the value function. Here there is no uncertainty, a finite number of future periods and discrete time periods, but versions of what follows can also applied when these conditions are relaxed.\nLooking at the total reward rewritten in terms of the value function we can see that the value function is recursive in that, from the perspective of the present, if we choose the action that maximises the reward + discounted value function then the total reward is itself the value function. With the value function we have taken a multiple stage decision problem of choosing actions in each time period and changed it into:\n Find the value function Given the value function choose the action that maximises the sum of the current payoff and the discounted value function   This also gives us a strategy to find the value function. The value function is a function that satisfies the equation above. One way to solve the value function is to make a first guess of the value function of v(0)=0 and find the action that maximises the right-hand side of the equation above. This gives us an estimate for v(1) which we substitute for the value function on the right-hand side and solve again for the action that maximises the payoff to give v(2). We keep doing this until the function ideally converges to the value function with v(n+1)=v(n).\nThe above is a bit abstract, so let’s implement it with an actual example and some machine learning and see it in action.\nThe Python code is split into:\n config.py holds key parameters game.py: records the state of the game (the position of pieces on the board) and how the players are doing game_moves.py: generates the player moves game_network.py: specifies the network that estimates the value function chart_funcs.py: tracks game progress and charts it learn_game.py: imports all the scripts and runs the training loop that plays the game and trains the network  The config file shown below specifies key parameters:\nimport torch # The parameters # The discount factor GAMMA = 0.9 # The batch size for the replay memory BATCH_SIZE = 50 # The weight for the soft update of the target network TAU = 0.05 # The learning rate for the optimizer LR = 1e-4 # The EPS parameters which specify the transition from random play to using the network EPS_START = 0.9 EPS_END = 0.05 EPS_DECAY = 1000 # Reward values reward_scores = { \"three_score\": 10000, \"two_score\": 2000, \"one_score\": 10, \"loss\": -5000, \"illegal_move_loss\": -6000 } # Specificies the device to use device = torch.device( \"cuda\" if torch.cuda.is_available() else \"mps\" if torch.backends.mps.is_available() else \"cpu\" ) The config file contains the rewards for the different outcomes for Player 1. The highest outcome is when Player 1 has a three score and so wins. Fewer pieces (i.e. two or one) in a row generate lower scores. Losses generate negative rewards. The most negative outcome is for an illegal move on the basis that Player 1 playing by the game rules and losing is better than losing because the player 0does not follow the rules.\n2. The game set-up The game consists of a set of:\n States: The positions of the pieces on the board Actions: Placing pieces on the board changing the state Returns: The return to the player from the action  Rather than talking about noughts and crosses, we will express everything in terms of Player 1 and Player 2. Player 1 plays first followed by Player 2.\nIn game.py we have two classes:\nGameBoard: has the board positions and an update method which changes the positions as a specified player moves its piece. Moves are specified in terms of Python tuples e.g. the method update((2,2), “player_1”) is when Player 1 places a piece in the bottom right-hand corner.\nPersonScore: which tracks how many threes, twos and ones scores each player has given the state of the game board.\nimport numpy as np import config as config class GameBoard: \"\"\"Class that keeps track of board positions\"\"\" def __init__(self): self.board = np.zeros((3, 3)) self.person_1_locs = [] self.person_2_locs = [] self.all_locs = [] def update(self, x, player): assert (x[0] 3. Approximating the value function with a neural network In certain restricted situations it is possible to prove that the iteration process described in Section 1 will converge to the actual value function. In practice it is only possible to obtain analytical solutions this way in a limited number of situations and one typically needs to compute an approximation to the value function instead.\nHere we use a neural network to estimate an approximate value function. The neural network takes as an input the state of the board encoded as a 9 dimensional tensor which can take integer values 0, 1 and 2. These represent the location of empty spaces and the pieces of players 1 and 2 respectively.\nThis input passes to an embedding layer of dimensionality 100 and then a series of fully connected layers. In the final layer the values are mapped back to a layer with 9 dimensions representing the value function over the 9 possible moves a player can make.\nThe network output is aiming to represent the value function for a given move when the environment is in a particular state. We then choose the action corresponding to the network output with the maximum payoff as, if we have the true value function (or something close to it) the move output with the highest value represents the move that should maximise our payoff. As the network better and better approximates the value function the moves it suggests should provide better game outcomes.\nAfter the first move some of the 9 board locations will represent illegal moves as a player has already placed a piece on them. We do not directly prevent the network from making illegal moves, but penalise it when it plays them by making it lose the game so that it learns to avoid them.\nimport torch import torch.nn as nn import torch.nn.functional as F from config import * # Define the network class SimpleNet(nn.Module): def __init__(self): super(SimpleNet, self).__init__() # Embedding layer: 3 possible values, embedding size 100 self.embedding = nn.Embedding(num_embeddings=3, embedding_dim=100) # Example first layer after embedding # Flattening the 3x3 grid (which after embedding will be 3x3x4) to a vector of size 3*3*4 = 36 self.fc1 = nn.Linear(3 * 3 * 100, 75) self.fc2 = nn.Linear(75, 75) # Fully connected layer self.fc3 = nn.Linear(75, 9) def forward(self, x): # Assuming x is a 3x3 tensor with values 0, 1, or 2 x = self.embedding(x) # Shape: (3, 3, 4) x = x.view(-1, 3 * 3 * 100) x = self.fc1(x) x = self.fc2(x) x = self.fc3(x) return x # Set up the networks on the device policy_net = SimpleNet().to(device) target_net = SimpleNet().to(device) model_state = torch.load(\"crosser_trained\") # Loads the model policy_net.load_state_dict(model_state[\"model_state_dict\"]) # Copy the weights of the policy_net to the target_net target_net.load_state_dict(policy_net.state_dict()) def save_checkpoint(model, optimizer, save_path): \"\"\"function to save checkpoints on the model weights, the optimiser state and epoch\"\"\" torch.save( { \"model_state_dict\": model.state_dict(), \"optimizer_state_dict\": optimizer.state_dict(), }, save_path, ) 4. Game play We train the model to take the role of Player 1. In training we let it switch between two modes of playing:\nMode 1. Completely random play\nMode 2. Play based on choosing a move that maximises the value function we are training\nIn training Player 1 we start with most of its plays being random (effectively exploring the space of moves and seeing what happens as a result). The proportion of times we play using the moves suggested by the network increases as more is learnt about the game. The starting and end proportion of moves played by network and rate of transition between the two are specified by the EPS parameters in the config.py file.\nPlayer 2 behaves randomly subject to the restriction that it does not make illegal moves (this is specified by the function select_random_zero_coordinate). Effectively Player 2 represents a stochastic environment that Player 1 is playing against. The move behaviour is specified in the file game_moves.py shown below.\nimport numpy as np import random import torch import logging import math from game_network import policy_net, device import config as config from game_network import SimpleNet steps_done = 0 def select_random_zero_coordinate(array): \"\"\"Function that selects a random zero coordinate from a 3x3 array\"\"\" if isinstance(array, torch.Tensor): array = array.squeeze(0) # Unsqueeze to remove the extra empty dimension array = array.cpu().numpy() else: assert array.shape == (3, 3) # \"Input must be a 3x3 array\" zero_coordinates = list(zip(*np.where(array == 0))) if zero_coordinates: # return zero_coordinates return random.choice(zero_coordinates) else: return None def generate_random_tuple(): \"\"\"Function that generates a random move represented as a tuple\"\"\" x = random.randint(0, 2) y = random.randint(0, 2) return (x, y) def map_tensor_to_index(tensor): \"\"\"Function that maps the output of the network back to a tuple\"\"\" tensor = tensor.cpu().squeeze(0) # assert tensor.dim() == 1 and 0 eps_threshold: # play a network move logging.info(\"using network\") # tensor = torch.from_numpy(state) if (state == 0).all(): state = state.to(device) else: state = state.long() # Convert the tensor to long integers with torch.no_grad(): # pick the action with the larger expected reward. return map_tensor_to_index(policy_net(state).max(1).indices.view(1, 1)) else: # play a random move logging.info(\"using random\") return generate_random_tuple() 5. The optimisation problem to estimate the approximate value function We want to update the network based on the data so that it approximates the value function as well as possible. To do this we want the function to satisfy the recursive property that equation 3 has.\nIn training there are two neural networks. A target network (target_net) and a policy network (policy_net).\n  policy_net is used to estimate the value function given the state and the action that the agent took in response (The left side of equation 3).\n  target_net is used to estimate the payoff to the player in the next stage from the present, given the reward in the current stage, the next state and the action that would maximise the payoff (The value function on the right side of equation 3).\n  If we have a good approximation to the value function then the payoff from target_net should be similar to the reward that person got in the next period + the discounted payoff for target_net.\nAt the start of training both networks have random weights so this will not be true. Given the collected information from the game, we adjust the weights of policy_net to reduce the gap between the two sides of the equation. We then update the target_net weights with the policy_net weights, chose the optimal action again, adjust the policy_net weights again to close the gap, update the target_net weights again. Continuing this process to get a better approximation to the value function and optimal decision making. This is covered in the optimising_network.py script imported by learn_game.py.\nimport torch import torch.nn as nn import torch.optim as optim import torch.nn.functional as F import random from collections import namedtuple, deque import logging from config import * # Importing the network used to play the game from game_network import policy_net, target_net, device, save_checkpoint optimizer = optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True) # Sets up Transition that will be used to save the previous values Transition = namedtuple(\"Transition\", (\"state\", \"action\", \"next_state\", \"reward\")) class ReplayMemory(object): def __init__(self, capacity): self.memory = deque([], maxlen=capacity) def push(self, *args): \"\"\"Save a transition\"\"\" self.memory.append(Transition(*args)) def sample(self, batch_size): return random.sample(self.memory, batch_size) def __len__(self): return len(self.memory) # Sets up a list to save the loss scores loss_scores = [] def optimize_model(memory, BATCH_SIZE, target_net, policy_net, GAMMA, LR): \"\"\"For the batch of returns, actions and values compute an estimated value function and see if it converges\"\"\" if len(memory) 5.1 The data we collect on move outcomes as the game develops\nTo train the value function for Player 1, we collect a set of information as the game develops. This information is the:\n 1. state: state before the player moved\n2. action: action the player took in response\n3. return: return that the player got\n4. next_state: next state in the game\nIf Player 1 wins, loses or draws with its move 3. and 4. can be calculated immediately otherwise they are calculated after Player 2 moves. After we have generated a pre-specified amount of this game play information we use it to estimate the value function. We save this information using the Transition specification and the ReplayMemory class shown below. In each training iteration we randomly the sample for batch_size sets of tuples to be used together to evaluation the degree to which the approximate value function satisfies the recursion relationship.\nTransition = namedtuple(\"Transition\", (\"state\", \"action\", \"next_state\", \"reward\")) class ReplayMemory(object): def __init__(self, capacity): self.memory = deque([], maxlen=capacity) def push(self, *args): \"\"\"Save a transition\"\"\" self.memory.append(Transition(*args)) def sample(self, batch_size): return random.sample(self.memory, batch_size) def __len__(self): return len(self.memory) 5.2 State action values (which is based on policy_net and the current states)\nThe policy_net is used to compute the state_action_values. It takes as its input the states as a batch. Prior to this processing the actions are copied to the device.\naction_batch = action_batch.to(state_batch.device).long() The index of the actions corresponding to the specific action that was taken is extracted across the batch.\naction_batch = action_batch.max(1, keepdim=True)[1] The batch of states is then fed into the policy_net and the corresponding values for the actions chosen are extracted from the network outputs i.e. the network had a 9 dimensional output (one dimension for each action) and we obtain the value corresponding to the action that was chosen:\nstate_action_values = policy_net(state_batch).gather(1, action_batch.long()) 5.3 Expected state action values (which is based on target_net and rewards and the future states)\nWith the expected_state_action_values we need to get the current reward of a given action and then choose the action, based on the next state, that gives the maximum of our approximate value function target_net.\nThe next_state and reward values that are input need to correspond to the values that are on the left-hand side of the equation which is based on the original state and the corresponding action that the agent took. On the right-hand side we therefore use the correspondingnext_state and reward in the batch. We then calculate the action which, given next_state maximises the value from target_net and add the corresponding value function maximising value multiplied by the discount factor and the reward that relates to next_state.\nWe start by processing the batch of next_states to get those where the game is continuing:\n non_final_mask = torch.tensor( tuple(map(lambda s: s is not None, batch.next_state)), device=device, dtype=torch.bool, ) non_final_next_states = torch.cat([s for s in batch.next_state if s is not None]) For states where there is no end state as the game is in play, choose the action that maximises the return and return the values. To do this max(1).values extracts the maximum values from the estimated value functions i.e. the payoff from the value function when the optimal action is chosen:\n with torch.no_grad(): next_state_values[non_final_mask] = ( target_net(non_final_next_states).max(1).values ) next_state_values = next_state_values.unsqueeze(1) From the pre-existing data we have collected we can get the reward information:\nreward_batch = torch.cat(batch.reward) We then put this all together to calculate the expected_state_action_values for the batch.\nexpected_state_action_values = reward_batch + (next_state_values * GAMMA) 4.3 Updating the loss to minimise the weights\nAfter each training pass the weights of policy_net are updated to reduce the loss metric of the difference between the expected_state_actions_values and the state_action_value. The loss compares the state_action_values to the expected_state_action_values for a sample of the batch that we have collected.\nloss = criterion(state_action_values, expected_state_action_values.unsqueeze(1)) The loss metric is based on SmoothL1Loss() where smaller errors are effectively squared and larger errors are treated in absolute terms making the loss metric less sensitive to outliers. The target_net weights after each training pass are updated as a weighted average of the weights of the policy_net and the target_net.\n6. Training the model In the model training the game play is as follows:\nWhen Player 1 plays there are four possibilities, Player 1:\n plays an illegal move and loses the game gets a three after their move and wins has played the 9th (and last) move without creating a three and we have a draw has neither lost, won or drawn and play passes to Player 2  In all but the last case we calculate the return for Player 1 after they have played.\nWhen Player 2 plays there are two possibilities, Player 2:\n gets a three after their move and wins (It is impossible for Player 2 to lose after moving as Player 2’s move cannot produce a three for Player 1) does not lose or win and play passes to Player 2  In both cases we calculate the return for Player 1 after Player 2 has moved. After a Player 1 move and a Player 2 move the function optimize_model() is run to optimise the policy_net weights as discussed in the previous section. The target_net weights are then updated using a weighted average of the policy_net weights and the target_net weights. This form of updating is known as a soft update.\n target_net_state_dict[key] = policy_net_state_dict[key] * config.TAU + target_net_state_dict[key] * (1 - config.TAU) The share of each networks' weights in the updating is given by the parameter TAC specified in the config file.\nimport torch import torch.nn as nn import torch.optim as optim import torch.nn.functional as F import logging import config as config # Importing the game board, player scores and moves from game import GameBoard, PersonScores, calculate_scores, contains_three # Importing the network used to play the game from game_network import policy_net, target_net, device, save_checkpoint # Importing the functions used to create game moves from game_moves import select_random_zero_coordinate, select_action, create_tensor_with_value_at_index # Importing the network optimisation functions from optimising_network import optimize_model, ReplayMemory, loss_scores, optimizer # Importing charting functions from chart_funcs import plot_wins, plot_wins_stacked, plot_errors, cumulative_wins file_handler = logging.FileHandler( filename=\"/Users/johndavies/Documents/Data_work/re_learn/re_learn.log\" ) # Sets up a logger logging.basicConfig( level=logging.INFO, format=\"%(asctime)s - %(levelname)s - %(message)s\", datefmt=\"%Y-%m-%d %H:%M:%S\", handlers=[file_handler], ) # Sets up the replay memory memory = ReplayMemory(20000) # If cuda is available use more games for training if torch.cuda.is_available() or torch.backends.mps.is_available(): num_games = 5000 else: num_games = 50 # Sets up a list to register the game outcome which has entries: # 1. If Player 1 wins 2. If Player 1 makes an illegal move and loses # 3. If the game is a draw 4. If Player 2 wins game_outcome = [] def main(config): # Start the training loop for i_game in range(num_games): if i_game % 100 == 0: print(i_game) # Create a new game game = GameBoard() logging.info(\"game starts\") for i in range(1, 10): logging.info(game.board) if i % 2 != 0: # Player 1's turn illegal_player_1_move = False state = game.board state = ( torch.tensor(game.board, dtype=torch.int8, device=device) .unsqueeze(0) .int() ) logging.info(\"Player 1 moves\") # Get the player 1 action given the state player_1_action = select_action(state, config) logging.info(player_1_action) # converts the player 1 action to a tensor so that it can be fed into the network player1_action = torch.tensor( create_tensor_with_value_at_index(player_1_action), dtype=torch.int8, device=device, ).unsqueeze(0) # If player 1 makes an illegal move end the game if player_1_action in game.all_locs: logging.info(\"player 1 makes an illegal move\") reward = torch.tensor([config.reward_scores[\"illegal_move_loss\"]], device=device).unsqueeze(0) logging.info(f\" Reward {reward}\") next_state = None game_outcome.append(2) memory.push(state, player1_action, next_state, reward) # End the game. There is no next state and the reward is the losing reward break else: # Player 1 makes the move and the game updates game.update(player_1_action, \"player_1\") # If after Player 1 has moved there is a three, Player 1 wins and game ends if contains_three(PersonScores(game.board).all_scores) == True: logging.info(\"Player 1 wins\") # Append a 1 to the game_outcone list indicating a Player 1 win game_outcome.append(1) logging.info(game.board) # Games ends so the next state is the board at the end of the game next_state = ( torch.tensor(game.board, dtype=torch.int8, device=device) .unsqueeze(0) .int() ) memory.push(state, player1_action, next_state, reward) logging.info(\"game ends\") break # If 9 moves have been played and still no winnr, the game is a draw elif ( i == 9 and contains_three(PersonScores(game.board).all_scores) == False ): # Append a 3 to the game_outcone list indicating a draw game_outcome.append(3) reward = calculate_scores( PersonScores(game.board).all_scores, \"player_1\" ) next_state = ( torch.tensor(game.board, dtype=torch.int8, device=device) .unsqueeze(0) .int() ) reward = torch.tensor([reward], device=device).unsqueeze(0) logging.info(f\"Reward {reward}\") memory.push(state, player1_action, next_state, reward) logging.info(\"last move - game is drawn\") break elif i % 2 == 0: # Player 1 did not win the last move and so it is player 2's turn logging.info(\"Player 2 moves\") # Player chooses a random moves player_2_action = select_random_zero_coordinate(game.board) # Update the game's board game.update(player_2_action, \"player_2\") # Convert the board to a tensor to feed it into the network next_state = ( torch.tensor(game.board, dtype=torch.int8, device=device) .unsqueeze(0) .int() ) # Checks if Player 2 won after the move if contains_three(PersonScores(game.board).all_scores) == True: logging.info(\"Player 2 moves and wins\") # Append a 4 to the game_outcome list indicating a Player 2 win game_outcome.append(4) reward = torch.tensor([config.reward_scores[\"loss\"]], device=device).unsqueeze(0) logging.info(f\"Reward {reward}\") logging.info(game.board) memory.push(state, player1_action, next_state, reward) break # Player 2 did not win the last move and we calculate Player 1's payoff elif contains_three(PersonScores(game.board).all_scores) == False: # Player 1 made a legal move and the game is still in play. This should be the most common scenario logging.info( \"Player 1 made legal move, player 2 has moved, but not won\" ) reward = calculate_scores( PersonScores(game.board).all_scores, \"player_1\" ) reward = torch.tensor([reward], device=device).unsqueeze(0) logging.info(f\" Reward {reward}\") memory.push(state, player1_action, next_state, reward) # Perform one step of the optimization (on the policy network) after player 2 moves optimize_model(memory, config.BATCH_SIZE, target_net, policy_net, config.GAMMA, config.LR) # Soft update of the target network's weights. New weights are mostly taken from target_net_state_dict # θ′ ← τ θ + (1 −τ )θ′ target_net_state_dict = target_net.state_dict() policy_net_state_dict = policy_net.state_dict() for key in policy_net_state_dict: target_net_state_dict[key] = policy_net_state_dict[ key ] * config.TAU + target_net_state_dict[key] * (1 - config.TAU) target_net.load_state_dict(target_net_state_dict) # Save the model at the end of the training save_checkpoint(target_net, optimizer, \"crosser\") # Generate the plot for the number of errors plot_errors(loss_scores) # Generate the plot for the number of wins plot_wins(cumulative_wins(game_outcome)) # Plot a stacked bar chart of how the games are going plot_wins_stacked(cumulative_wins(game_outcome)) print(\"Training complete\") if __name__ == \"__main__\": main(config) The figure below shows the decline in the gap between the two sides of the value equation as we iterate on it. 7. The model’s performance at playing the game. The figure below shows the cumulative number of Player 1 wins, draws and losses (as Player 2 wins or Player 1 makes an illegal move) as the model trains (calculated using the function cumulative_wins() above). Initially as Player 1 plays randomly it makes many illegal moves, gradually though as the network learns it starts to play better and the wins total starts growing faster than the illegal moves total. In the second figure we can see how the share of games that the network is winning rises as we look at the games in batches of 200. The network does still sometimes make a wrong move, but it has been able to play correctly and win most of the time. An example game of the network is shown below. This shows that the network as it is facing a random opponent keeps building its line of pieces on the basis that if it gets to two in a row it probably won’t be stopped in the way that it would be with a normal opponent. Replacing the random opponent with the trained network may help address this.\ngame begins [[0. 0. 0.] [0. 0. 0.] [0. 0. 0.]] Player 1 (The network) moves [[0. 0. 0.] [0. 0. 0.] [0. 0. 1.]] Player 2 moves [[2. 0. 0.] [0. 0. 0.] [0. 0. 1.]] Player 1 (The network) moves [[2. 0. 0.] [0. 0. 0.] [1. 0. 1.]] Player 2 moves [[2. 0. 0.] [2. 0. 0.] [1. 0. 1.]] Player 1 (The network) moves [[2. 0. 0.] [2. 0. 0.] [1. 1. 1.]] Player 1 (The network) wins References Paszke and Towers ‘Reinforcement Learning (DQN) Tutorial’ and the repo.\nGéron, ‘Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow’, 2nd Edition\nLjungqvist and Sargent, ‘Recursive Macroeconomic Theory’\n",
+  "wordCount" : "5208",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/reinforcement.png","datePublished": "2024-09-29T00:00:00Z",
+  "dateModified": "2024-09-29T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/reinforcement/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
+                    <span>creative industries</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/other_data_projects" title="other data projects">
+                    <span>other data projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/talks/" title="talks">
+                    <span>talks</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/technical/" title="technical posts">
+                    <span>technical posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Reinforcement learning
+    </h1>
+    <div class="post-meta">September 29, 2024&nbsp;·&nbsp;John Davies
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://johnardavies.github.io/reinforcement.png" alt="">
+        
+</figure>
+  <div class="post-content"><p>View from the <a href="https://gallerieditalia.com/it/vicenza/">Palazzo Leoni Montanari di Vicenza</a></p>
+<h3 id="reinforcement-learning">Reinforcement learning<a hidden class="anchor" aria-hidden="true" href="#reinforcement-learning">#</a></h3>
+<p>In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs. We want to work out how to optimise an agent’s outcomes over time given this. Reinforcement learning techniques can help infer what the optimal strategy might be.</p>
+<p>To learn more about reinforcement learning I decided to work through a simple example of this using the game noughts and crosses (or tic-tac-toe as it is called in the US). In the unlikely event this is unfamiliar it is a two-player game where each player takes consecutive turns and places their piece (a nought or a cross) on a 3 x 3 grid. The winner is the first to get 3 of their pieces ‘a three’ in a horizontal, vertical or diagonal line. The game has the advantage that it is allows many of the standard components of reinforcement learning to be used, while being accessible as it is very simple and not that computationally intensive. This approach uses the Python PyTorch framework and uses it to play the game.</p>
+<p>We cover this in terms of:</p>
+<p><strong>1.  Structuring optimisation problems in terms of a value function</strong><br>
+<strong>2.  The game set-up</strong><br>
+<strong>3.  Approximating the value function with a neural network</strong><br>
+<strong>4.  Game play</strong><br>
+<strong>5.  The optimisation problem to estimate the approximate value function</strong><br>
+<strong>6.  Training the model</strong><br>
+<strong>7.  The model’s performance at playing the game</strong></p>
+<h3 id="1--structuring-optimisation-problems-in-terms-of-a-value-function">1.  Structuring optimisation problems in terms of a value function<a hidden class="anchor" aria-hidden="true" href="#1--structuring-optimisation-problems-in-terms-of-a-value-function">#</a></h3>
+<p>We have an agent choosing a series of actions over time: action_1, action_2,….action_n affecting the environment and leading to a corresponding set of payoffs: reward_1, reward_2, reward_3, etc. We assume that the agent wants to maximise its payoff over time and that some of actions it can choose will have higher returns than others. In choosing a given action the agent may need to consider that, in addition to a payoff
+now, its actions could affect the environment and the payoffs in future periods. Here where the player starts building its lines in the game affects future moves and whether it wins.</p>
+<p>There is a central technique in reinforcement learning knowns as
+dynamic programming. This was developed by Richard Bellman in the 1950s and provides a way to structure optimisation problems by rewriting them in terms of a <strong>value function</strong> that can make them easier to solve.</p>
+<p>The present value to the agent of future rewards can be written as a discounted sum of future rewards where Beta is a discount factor less than 1 weighting payoffs in the future less than the present. The reward in each period depends on the action (a) chosen in that period and the environment (E).
+<img loading="lazy" src="https://johnardavies.github.io/re_learn_1.png" alt="r_learn_1"  />
+
+The agent chooses an action from the set of feasible actions in each period to maximise the total reward.</p>
+<p>Suppose there is a function the ‘value function’ that, for a given environment state, gives the value now of an action assuming all future actions afterwards are chosen optimally to maximise the payoff going ahead. We can then write the total payoff to a person choosing an action in terms of a value function. The multiple stage optimisation is then converted into choosing an action now that maximises the reward in the current period and the value function. Here there is no uncertainty, a finite number of future periods and discrete time periods, but versions of what follows can also applied when these conditions are relaxed.</p>
+<p><img loading="lazy" src="https://johnardavies.github.io/re_learn_2.png" alt="r_learn_2"  />
+<br>
+Looking at the total reward rewritten in terms of the value function we can see that the value function is recursive in that, from the
+perspective of the present, if we choose the action that maximises the reward + discounted value function then the total reward is itself the value function.
+<img loading="lazy" src="https://johnardavies.github.io/re_learn_3.png" alt="r_learn_3"  />
+
+With the value function we have taken a  multiple stage decision problem of choosing actions in each time period and changed it into:</p>
+<ol>
+<li>Find the value function</li>
+<li>Given the value function choose the action that maximises the sum of the current payoff and the discounted value function </li>
+</ol>
+<p>This also gives us a strategy to find the value function. The value function is a function that satisfies the equation above. One way to solve the value function is to make a first guess of the value function of v(0)=0 and find the action that maximises the right-hand side of the equation above. This gives us an estimate for v(1) which we substitute for the value function on the right-hand side and solve again for the action that maximises the payoff to give v(2).
+<img loading="lazy" src="https://johnardavies.github.io/re_learn_4.png" alt="r_learn_4"  />
+</p>
+<p>We keep doing this until the function ideally converges to the value function with v(n+1)=v(n).</p>
+<p>The above is a bit abstract, so let’s implement it with an actual example and some machine learning and see it in action.</p>
+<p>The Python code is split into:</p>
+<ul>
+<li><strong>config.py</strong> holds key parameters</li>
+<li><strong>game.py</strong>: records the state of the game (the position of pieces on the board) and how the players are doing</li>
+<li><strong>game_moves.py</strong>:  generates the player moves</li>
+<li><strong>game_network.py</strong>: specifies the network that estimates the value function</li>
+<li><strong>chart_funcs.py</strong>: tracks game progress and charts it</li>
+<li><strong>learn_game.py</strong>: imports all the scripts and runs the training loop that plays the game and trains the network</li>
+</ul>
+<p>The config file shown below specifies key parameters:</p>
+<pre tabindex="0"><code>import torch
+
+# The parameters
+
+# The discount factor
+GAMMA = 0.9
+# The batch size for the replay memory
+BATCH_SIZE = 50
+# The weight for the soft update of the target network
+TAU = 0.05
+# The learning rate for the optimizer
+LR = 1e-4
+# The EPS parameters which specify the transition from random play to using the network
+EPS_START = 0.9
+EPS_END = 0.05
+EPS_DECAY = 1000
+
+# Reward values
+reward_scores = {
+    &quot;three_score&quot;: 10000,
+    &quot;two_score&quot;: 2000,
+    &quot;one_score&quot;: 10,
+    &quot;loss&quot;: -5000,
+    &quot;illegal_move_loss&quot;: -6000
+}
+
+# Specificies the device to use
+device = torch.device(
+    &quot;cuda&quot;
+    if torch.cuda.is_available()
+    else &quot;mps&quot;
+    if torch.backends.mps.is_available()
+    else &quot;cpu&quot;
+)
+
+</code></pre><p>The config file contains the rewards for the different outcomes for Player 1. The highest outcome is when Player 1 has a three score and so wins. Fewer pieces (i.e. two or one) in a row generate lower scores. Losses generate negative rewards. The most negative outcome is for an illegal move on the basis that Player 1 playing by the game rules and losing is better than losing because the player 0does not follow the rules.</p>
+<h3 id="2--the-game-set-up">2.  The game set-up<a hidden class="anchor" aria-hidden="true" href="#2--the-game-set-up">#</a></h3>
+<p>The game consists of a set of:</p>
+<ul>
+<li><strong>States</strong>: The positions of the pieces on the board</li>
+<li><strong>Actions</strong>: Placing pieces on the board changing the state</li>
+<li><strong>Returns</strong>: The return to the player from the action</li>
+</ul>
+<p>Rather than talking about noughts and crosses, we will express everything in terms of Player 1 and Player 2. Player 1 plays first followed by Player 2.</p>
+<p>In <strong>game.py</strong> we have two classes:</p>
+<p><strong>GameBoard</strong>: has the board positions and an update method which changes the positions as a specified player moves its piece. Moves are specified in terms of Python tuples e.g. the method <strong>update((2,2), &ldquo;player_1&rdquo;)</strong> is when Player 1 places a piece in the bottom right-hand corner.</p>
+<p><strong>PersonScore</strong>: which tracks how many threes, twos and ones scores each player has given the state of the game board.</p>
+<pre tabindex="0"><code>import numpy as np
+import config as config
+
+class GameBoard:
+    &quot;&quot;&quot;Class that keeps track of board positions&quot;&quot;&quot;
+
+    def __init__(self):
+        self.board = np.zeros((3, 3))
+        self.person_1_locs = []
+        self.person_2_locs = []
+        self.all_locs = []
+
+    def update(self, x, player):
+        assert (x[0] &lt; 3) and (x[1] &lt; 3)
+        if player == &quot;player_1&quot;:
+            self.board[x[0], x[1]] = 1
+        if player == &quot;player_2&quot;:
+            self.board[x[0], x[1]] = 2
+        self.person_1_locs = list(
+            zip(np.where(self.board == 1)[0], np.where(self.board == 1)[1])
+        )
+        self.person_2_locs = list(
+            zip(np.where(self.board == 2)[0], np.where(self.board == 2)[1])
+        )
+        self.all_locs = self.person_1_locs + self.person_2_locs
+
+
+class PersonScores:
+    &quot;&quot;&quot;Class that keeps track of the scores of the players&quot;&quot;&quot;
+
+    def __init__(self, game_board):
+
+        self.vertical_scores = list(
+            zip(
+                np.count_nonzero(game_board == 1, axis=0),
+                np.count_nonzero(game_board == 2, axis=0),
+            )
+        )
+        self.horizontal_scores = list(
+            zip(
+                np.count_nonzero(game_board == 1, axis=1),
+                np.count_nonzero(game_board == 2, axis=1),
+            )
+        )
+        self.diagonal_scores1 = [
+            (
+                np.count_nonzero(np.diag(game_board) == 1),
+                np.count_nonzero(np.diag(game_board) == 2),
+            )
+        ]
+        self.diagonal_scores2 = [
+            (
+                np.count_nonzero(np.diag(np.fliplr(game_board)) == 1),
+                np.count_nonzero(np.diag(np.fliplr(game_board)) == 2),
+            )
+        ]
+        self.all_scores = (
+            self.vertical_scores
+            + self.horizontal_scores
+            + self.diagonal_scores1
+            + self.diagonal_scores2
+        )
+
+
+def assign_scores(values, config):
+    &quot;&quot;&quot;Function that assigns scores to the players based on the highest score&quot;&quot;&quot;
+    if 3 in values:
+        score = config.reward_scores[&quot;three_score&quot;]
+    elif 2 in values:
+        score = config.reward_scores[&quot;two_score&quot;]
+    elif 1 in values:
+        score = config.reward_scores[&quot;one_score&quot;]
+    return score
+
+
+def calculate_scores(scores_metrics, player):
+    &quot;&quot;&quot;Function that calculates the scores for the players given a proposed move and the state of the board&quot;&quot;&quot;
+
+    # Get the scores for player 1 and player 2
+    player_1_scores = [t[0] for t in scores_metrics]
+    player_2_scores = [t[1] for t in scores_metrics]
+
+    if player == &quot;player_1&quot;:
+        reward = assign_scores(player_1_scores, config)
+    if player == &quot;player_2&quot;:
+        reward = assign_scores(player_2_scores, config)
+
+    return reward
+</code></pre><h3 id="3-approximating-the-value-function-with-a-neural-network">3. Approximating the value function with a neural network<a hidden class="anchor" aria-hidden="true" href="#3-approximating-the-value-function-with-a-neural-network">#</a></h3>
+<p>In certain restricted situations it is possible to prove that the iteration process described in Section 1 will converge to the actual value function. In practice it is only possible to obtain analytical solutions this way in a limited number of situations and one typically needs to compute an approximation to the value function instead.</p>
+<p>Here we use a neural network to estimate an approximate value function. The neural network takes as an input the state of the board encoded as a 9 dimensional tensor which can take integer values 0, 1 and 2. These represent the location of empty spaces and the pieces of players 1 and 2 respectively.</p>
+<p>This input passes to an embedding layer of dimensionality 100 and then a series of fully connected layers. In the final layer the values are mapped back to a layer with 9 dimensions representing the value function over the 9 possible moves a player can make.</p>
+<p>The network output is aiming to represent the value function for a given move when the environment is in a particular state. We then choose the action corresponding to the network output with the maximum payoff as, if we have the true value function (or something close to it) the move output with the highest value represents the move that should maximise our payoff. As the network better and better approximates the value function the moves it suggests should provide better game outcomes.</p>
+<p>After the first move some of the 9 board locations will represent illegal moves as a player has already placed a piece on them. We do not directly prevent the network from making illegal moves, but penalise it when it plays them by making it lose the game so that it learns to avoid them.</p>
+<pre tabindex="0"><code>import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from config import *
+
+# Define the network
+
+
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super(SimpleNet, self).__init__()
+        # Embedding layer: 3 possible values, embedding size 100 
+        self.embedding = nn.Embedding(num_embeddings=3, embedding_dim=100)
+        # Example first layer after embedding
+        # Flattening the 3x3 grid (which after embedding will be 3x3x4) to a vector of size 3*3*4 = 36
+        self.fc1 = nn.Linear(3 * 3 * 100, 75)
+        self.fc2 = nn.Linear(75, 75)  # Fully connected layer
+        self.fc3 = nn.Linear(75, 9)
+
+    def forward(self, x):
+        # Assuming x is a 3x3 tensor with values 0, 1, or 2
+        x = self.embedding(x)  # Shape: (3, 3, 4)
+        x = x.view(-1, 3 * 3 * 100)  
+        x = self.fc1(x)
+        x = self.fc2(x)
+        x = self.fc3(x)
+        return x
+
+
+# Set up the networks on the device
+policy_net = SimpleNet().to(device)
+target_net = SimpleNet().to(device)
+
+model_state = torch.load(&quot;crosser_trained&quot;)
+
+# Loads the model
+policy_net.load_state_dict(model_state[&quot;model_state_dict&quot;])
+# Copy the weights of the policy_net to the target_net
+target_net.load_state_dict(policy_net.state_dict())
+
+
+def save_checkpoint(model, optimizer, save_path):
+    &quot;&quot;&quot;function to save checkpoints on the model weights, the optimiser state and epoch&quot;&quot;&quot;
+    torch.save(
+        {
+            &quot;model_state_dict&quot;: model.state_dict(),
+            &quot;optimizer_state_dict&quot;: optimizer.state_dict(),
+        },
+        save_path,
+    )
+
+</code></pre><h3 id="4-game-play">4. Game play<a hidden class="anchor" aria-hidden="true" href="#4-game-play">#</a></h3>
+<p>We train the model to take the role of Player 1. In training we let it switch between two modes of playing:</p>
+<p>Mode 1. Completely random play<br>
+Mode 2. Play based on choosing a move that maximises the value function we are training</p>
+<p>In training Player 1 we start with most of its plays being random (effectively exploring the space of moves and seeing what happens as a result). The proportion of times we play using the moves suggested by the network increases as more is learnt about the game. The starting  and end proportion of moves played by network and rate of transition between the two are specified by the EPS parameters in the <strong>config.py</strong> file.</p>
+<p>Player 2 behaves randomly subject to the restriction that it does not make illegal moves (this is specified by the function <strong>select_random_zero_coordinate</strong>). Effectively Player 2 represents a stochastic environment that Player 1 is playing against.
+The move behaviour is specified in the file <strong>game_moves.py</strong> shown below.</p>
+<pre tabindex="0"><code>import numpy as np
+import random
+import torch
+import logging
+import math
+
+from game_network import policy_net, device
+
+import config as config
+from game_network import SimpleNet
+
+
+steps_done = 0
+
+
+def select_random_zero_coordinate(array):
+    &quot;&quot;&quot;Function that selects a random zero coordinate from a 3x3 array&quot;&quot;&quot;
+    if isinstance(array, torch.Tensor):
+        array = array.squeeze(0)  # Unsqueeze to remove the extra empty dimension
+        array = array.cpu().numpy()
+    else:
+        assert array.shape == (3, 3)  # &quot;Input must be a 3x3 array&quot;
+    zero_coordinates = list(zip(*np.where(array == 0)))
+    if zero_coordinates:
+        #  return zero_coordinates
+        return random.choice(zero_coordinates)
+    else:
+        return None
+
+
+def generate_random_tuple():
+    &quot;&quot;&quot;Function that generates a random move represented as a tuple&quot;&quot;&quot;
+    x = random.randint(0, 2)
+    y = random.randint(0, 2)
+    return (x, y)
+
+
+def map_tensor_to_index(tensor):
+    &quot;&quot;&quot;Function that maps the output of the network back to a tuple&quot;&quot;&quot;
+    tensor = tensor.cpu().squeeze(0)
+    #   assert tensor.dim() == 1 and 0 &lt;= tensor.item() &lt;= 8, &quot;Input must be a 1-dimensional tensor with values between 0 and 8&quot;
+    index = tensor.item()
+    return index // 3, index % 3
+
+
+def create_tensor_with_value_at_index(x):
+    &quot;&quot;&quot;Function that maps the tuples corresponding to a move into a 9 dimensional tensor&quot;&quot;&quot;
+    index = x[0] * 3 + x[1]
+    tensor_action = torch.zeros(9)
+    tensor_action[index] = 1
+    return tensor_action
+
+
+def select_action(state, config):
+    &quot;&quot;&quot;Function that selects an action based on the state. Initially randomly, but later based on the maximum value from policy net&quot;&quot;&quot;
+    global steps_done
+    sample = random.random()
+    # The eps threhold for using the network declines over time
+    eps_threshold = config.EPS_END + (config.EPS_START - config.EPS_END) * math.exp(
+        -1.0 * steps_done / config.EPS_DECAY
+    )
+    steps_done += 1
+    if sample &gt; eps_threshold:
+        # play a network move
+        logging.info(&quot;using network&quot;)
+        #  tensor = torch.from_numpy(state)
+        if (state == 0).all():
+            state = state.to(device)
+        else:
+            state = state.long()
+
+        # Convert the tensor to long integers
+        with torch.no_grad():
+            # pick the action with the larger expected reward.
+            return map_tensor_to_index(policy_net(state).max(1).indices.view(1, 1))
+    else:  # play a random move
+        logging.info(&quot;using random&quot;)
+        return generate_random_tuple()
+
+</code></pre><h3 id="5--the-optimisation-problem-to-estimate-the-approximate-value-function">5.  The optimisation problem to estimate the approximate value function<a hidden class="anchor" aria-hidden="true" href="#5--the-optimisation-problem-to-estimate-the-approximate-value-function">#</a></h3>
+<p>We want to update the network based on the data so that it approximates the value function as well as possible. To do this we want the function to satisfy the recursive property that equation 3 has.</p>
+<p>In training there are two neural networks. A target network (<strong>target_net</strong>) and a policy network (<strong>policy_net</strong>).</p>
+<ol>
+<li>
+<p><strong>policy_net</strong> is used to estimate the value function given the state and the action that the agent took in response (The left side of equation 3).</p>
+</li>
+<li>
+<p><strong>target_net</strong> is used to estimate the payoff to the player in the next stage from the present, given the reward in the current stage, the next state and the action that would maximise the payoff (The value function on the right side of equation 3).</p>
+</li>
+</ol>
+<p>If we have a good approximation to the value function then the payoff from target_net should be similar to the reward that person got in the next period + the discounted payoff for target_net.</p>
+<p>At the start of training both networks have random weights so this will not be true. Given the collected information from the game, we adjust the weights of <strong>policy_net</strong> to reduce the gap between the two sides of the equation. We then update the <strong>target_net</strong> weights with the <strong>policy_net</strong> weights, chose the optimal action again, adjust the <strong>policy_net</strong> weights again to close the gap, update the <strong>target_net</strong> weights again. Continuing this process to get a better approximation to the value function and optimal decision making. This is covered in the <strong>optimising_network.py</strong> script imported by <strong>learn_game.py</strong>.</p>
+<pre tabindex="0"><code>import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import random
+from collections import namedtuple, deque
+import logging
+
+from config import *
+
+# Importing the network used to play the game
+from game_network import policy_net, target_net, device, save_checkpoint
+
+optimizer = optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
+
+# Sets up Transition that will be used to save the previous values
+Transition = namedtuple(&quot;Transition&quot;, (&quot;state&quot;, &quot;action&quot;, &quot;next_state&quot;, &quot;reward&quot;))
+
+
+class ReplayMemory(object):
+    def __init__(self, capacity):
+        self.memory = deque([], maxlen=capacity)
+
+    def push(self, *args):
+        &quot;&quot;&quot;Save a transition&quot;&quot;&quot;
+        self.memory.append(Transition(*args))
+
+    def sample(self, batch_size):
+        return random.sample(self.memory, batch_size)
+
+    def __len__(self):
+        return len(self.memory)
+
+
+# Sets up a list to save the loss scores
+loss_scores = []
+
+
+def optimize_model(memory, BATCH_SIZE, target_net, policy_net, GAMMA, LR):
+    &quot;&quot;&quot;For the batch of returns, actions and values compute an estimated value function and see if it converges&quot;&quot;&quot;
+    if len(memory) &lt; BATCH_SIZE:
+        logging.info(len(memory))
+        return
+    # Sample a batch_size of the memory
+    transitions = memory.sample(BATCH_SIZE)
+
+    # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
+    # detailed explanation). This converts batch-array of Transitions
+    # to Transition of batch-arrays.
+    batch = Transition(*zip(*transitions))
+
+    # Compute a mask of non-final states and concatenate the batch elements
+    # (a final state would've been the one after which simulation ended)
+    non_final_mask = torch.tensor(
+        tuple(map(lambda s: s is not None, batch.next_state)),
+        device=device,
+        dtype=torch.bool,
+    )
+    non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
+
+    # concatenate the batched state, action and rewards
+    state_batch = torch.cat(batch.state)
+    action_batch = torch.cat(batch.action)
+    reward_batch = torch.cat(batch.reward)
+
+    non_final_next_states = non_final_next_states.long()
+
+    ## Compute the estimated value function results (at time t) for the state and corresponding actions in the batch (using policy_net) 
+  
+    # Transfers the action_batch information to the device where state_batch is
+    action_batch = action_batch.to(state_batch.device).long()
+
+    # Identify which action was taken in the batch
+    action_batch = action_batch.max(1, keepdim=True)[1]
+
+    # Get the estimated value function results at ti from policy_net for the state_batch and corresponding action_batch actions
+    state_action_values = policy_net(state_batch).gather(1, action_batch.long())
+
+    ## Compute the reward and estimated value function results (at time t+1) using the reward_batch, the next_state and corresponding value function maximising actions (using target_net) 
+
+    next_state_values = torch.zeros(BATCH_SIZE, device=device)
+
+    with torch.no_grad():
+        next_state_values[non_final_mask] = (
+            target_net(non_final_next_states).max(1).values
+        )
+
+    next_state_values = next_state_values.unsqueeze(1)
+   
+    # Add the reward and the discounted next_state_values together to get the expected state_action_values
+    expected_state_action_values = reward_batch + (next_state_values * GAMMA)
+
+    # Compute Huber loss between the next_state_values and the expected_state_action_values
+    criterion = nn.SmoothL1Loss()
+  
+    # Seeing how far apart the two state_action_values and the expected_state_action_values are
+    loss = criterion(state_action_values, expected_state_action_values)
+
+    # Append the loss to the loss_scores list
+    loss_scores.append(loss)
+
+    # Optimize the model minimising the loss between the state_action values and the expected state action values
+    optimizer.zero_grad()
+    loss.backward()
+
+    # In-place gradient clipping
+    torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
+    optimizer.step()
+</code></pre><p><strong>5.1 The data we collect on move outcomes as the game develops</strong></p>
+<p>To train the value function for Player 1, we collect a set of information as the game develops. This information is the:</p>
+<p>  1.  <code>state</code>: state before the player moved<br>
+  2.  <code>action</code>: action the player took in response<br>
+  3.  <code>return</code>: return that the player got<br>
+  4.  <code>next_state</code>: next state in the game</p>
+<p>If Player 1 wins, loses or draws with its move 3. and 4. can be calculated immediately otherwise they are calculated after Player 2 moves. After we have generated a pre-specified amount of this game play information we use it to estimate the value function. We save this information using the <strong>Transition</strong> specification and the <strong>ReplayMemory</strong> class shown below. In each training iteration we randomly the sample for batch_size sets of tuples to be used together to evaluation the degree to which the approximate value function satisfies the recursion relationship.</p>
+<pre tabindex="0"><code>Transition = namedtuple(&quot;Transition&quot;, (&quot;state&quot;, &quot;action&quot;, &quot;next_state&quot;, &quot;reward&quot;))
+
+
+class ReplayMemory(object):
+    def __init__(self, capacity):
+        self.memory = deque([], maxlen=capacity)
+
+    def push(self, *args):
+        &quot;&quot;&quot;Save a transition&quot;&quot;&quot;
+        self.memory.append(Transition(*args))
+
+    def sample(self, batch_size):
+        return random.sample(self.memory, batch_size)
+
+    def __len__(self):
+        return len(self.memory)
+</code></pre><p><strong>5.2 State action values (which is based on policy_net and the current states)</strong></p>
+<p>The <strong>policy_net</strong> is used to compute the <code>state_action_values</code>. It takes as its input the states as a batch. Prior to this processing the actions are copied to the device.</p>
+<pre tabindex="0"><code>action_batch = action_batch.to(state_batch.device).long()
+</code></pre><p>The index of the actions corresponding to the specific action that was taken is extracted across the batch.</p>
+<pre tabindex="0"><code>action_batch = action_batch.max(1, keepdim=True)[1]
+</code></pre><p>The batch of states is then fed into the <strong>policy_net</strong> and the corresponding values for the actions chosen are extracted from the network outputs i.e. the network had a 9 dimensional output (one dimension for each action) and we obtain the value corresponding to the action that was chosen:</p>
+<pre tabindex="0"><code>state_action_values = policy_net(state_batch).gather(1, action_batch.long())
+</code></pre><p><strong>5.3 Expected state action values (which is based on target_net and rewards and the future states)</strong></p>
+<p>With the <code>expected_state_action_values</code> we need to get the current reward of a given action and then choose the action, based on the next state, that gives the maximum of our approximate value function <strong>target_net</strong>.</p>
+<p>The <code>next_state</code> and <code>reward</code> values that are input need to correspond to the values that are on the left-hand side of the equation which is based on the original state and the corresponding action that the agent took. On the right-hand side we therefore use the  corresponding<code>next_state</code> and <code>reward</code> in the batch. We then calculate the action which, given <code>next_state</code> maximises the value from <strong>target_net</strong> and add the corresponding value function maximising value multiplied by the discount factor and the reward that relates to <code>next_state</code>.</p>
+<p>We start by processing the batch of next_states to get those where the game is continuing:</p>
+<pre tabindex="0"><code>  non_final_mask = torch.tensor(
+      tuple(map(lambda s: s is not None, batch.next_state)),
+      device=device,
+      dtype=torch.bool,
+  )
+  non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
+</code></pre><p>For states where there is no end state as the game is in play, choose the action that maximises the return and return the values. To do this <code>max(1).values</code> extracts the maximum values from the estimated value functions i.e. the payoff from the value function when the optimal action is chosen:</p>
+<pre tabindex="0"><code>  with torch.no_grad():
+        next_state_values[non_final_mask] = (
+            target_net(non_final_next_states).max(1).values
+        )
+
+  next_state_values = next_state_values.unsqueeze(1)
+</code></pre><p>From the pre-existing data we have collected we can get the reward information:</p>
+<pre tabindex="0"><code>reward_batch = torch.cat(batch.reward)
+</code></pre><p>We then put this all together to calculate the <code>expected_state_action_values</code> for the batch.</p>
+<pre tabindex="0"><code>expected_state_action_values = reward_batch + (next_state_values * GAMMA) 
+</code></pre><p><strong>4.3 Updating the loss to minimise the weights</strong><br>
+After each training pass the weights of <strong>policy_net</strong> are updated to reduce the loss metric of the difference between the <code>expected_state_actions_values</code> and the <code>state_action_value</code>.
+The loss compares the <code>state_action_values</code> to the <code>expected_state_action_values</code> for a sample of the batch that we have collected.</p>
+<pre tabindex="0"><code>loss = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
+</code></pre><p>The loss metric is based on SmoothL1Loss() where smaller errors are effectively squared and larger errors are treated in absolute terms making the loss metric less sensitive to outliers. The <strong>target_net</strong> weights after each training pass are updated as a weighted average of the weights of the <strong>policy_net</strong> and the <strong>target_net</strong>.</p>
+<h3 id="6--training-the-model">6.  Training the model<a hidden class="anchor" aria-hidden="true" href="#6--training-the-model">#</a></h3>
+<p>In the model training the game play is as follows:</p>
+<p>When Player 1 plays there are four possibilities, Player 1:</p>
+<ul>
+<li>plays an illegal move and loses the game</li>
+<li>gets a three after their move and wins</li>
+<li>has played the 9th (and last) move without creating a three and we have a draw</li>
+<li>has neither lost, won or drawn and play passes to Player 2</li>
+</ul>
+<p>In all but the last case we calculate the return for Player 1 after they have played.</p>
+<p>When Player 2 plays there are two possibilities, Player 2:</p>
+<ul>
+<li>gets a three after their move and wins (It is impossible for Player 2 to lose after moving as Player 2’s move cannot produce a three for Player 1)</li>
+<li>does not lose or win and play passes to Player 2</li>
+</ul>
+<p>In both cases we calculate the return for Player 1 after Player 2 has moved. After a Player 1 move and a Player 2 move the function <strong>optimize_model()</strong> is run to optimise the <strong>policy_net</strong> weights as discussed in the previous section. The <strong>target_net</strong> weights are then updated using a weighted average of the <strong>policy_net</strong> weights and the <strong>target_net</strong> weights. This form of updating is known as a soft update.</p>
+<pre tabindex="0"><code>  target_net_state_dict[key] = policy_net_state_dict[key] * config.TAU + target_net_state_dict[key] * (1 - config.TAU)
+</code></pre><p>The share of each networks' weights in the updating is given by the parameter TAC specified in the config file.</p>
+<pre tabindex="0"><code>import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import logging
+
+import config as config
+
+# Importing the game board, player scores and moves
+from game import GameBoard, PersonScores, calculate_scores, contains_three
+
+# Importing the network used to play the game
+from game_network import policy_net, target_net, device, save_checkpoint
+
+# Importing the functions used to create game moves
+from game_moves import select_random_zero_coordinate, select_action, create_tensor_with_value_at_index
+
+# Importing the network optimisation functions
+from optimising_network import optimize_model, ReplayMemory, loss_scores, optimizer
+
+# Importing charting functions
+from chart_funcs import plot_wins, plot_wins_stacked, plot_errors, cumulative_wins
+
+
+file_handler = logging.FileHandler(
+    filename=&quot;/Users/johndavies/Documents/Data_work/re_learn/re_learn.log&quot;
+)
+
+# Sets up a logger
+logging.basicConfig(
+    level=logging.INFO,
+    format=&quot;%(asctime)s - %(levelname)s - %(message)s&quot;,
+    datefmt=&quot;%Y-%m-%d %H:%M:%S&quot;,
+    handlers=[file_handler],
+)
+
+# Sets up the replay memory
+memory = ReplayMemory(20000)
+
+
+# If cuda is available use more games for training
+if torch.cuda.is_available() or torch.backends.mps.is_available():
+    num_games = 5000
+else:
+    num_games = 50
+
+
+# Sets up a list to register the game outcome which has entries:
+# 1. If Player 1 wins 2. If Player 1 makes an illegal move and loses
+# 3. If the game is a draw 4. If Player 2 wins    
+game_outcome = []
+
+
+def main(config):
+    # Start the training loop
+    for i_game in range(num_games):
+        if i_game % 100 == 0:
+            print(i_game)
+        # Create a new game
+        game = GameBoard()
+
+        logging.info(&quot;game starts&quot;)
+        for i in range(1, 10):
+
+            logging.info(game.board)
+            if i % 2 != 0:
+                # Player 1's turn
+                illegal_player_1_move = False
+                state = game.board
+                state = (
+                    torch.tensor(game.board, dtype=torch.int8, device=device)
+                    .unsqueeze(0)
+                    .int()
+                )
+                logging.info(&quot;Player 1 moves&quot;)
+
+                # Get the player 1 action given the state
+                player_1_action = select_action(state, config)
+
+                logging.info(player_1_action)
+
+                # converts the player 1 action to a tensor so that it can be fed into the network
+                player1_action = torch.tensor(
+                    create_tensor_with_value_at_index(player_1_action),
+                    dtype=torch.int8,
+                    device=device,
+                ).unsqueeze(0)
+
+                # If player 1 makes an illegal move end the game
+                if player_1_action in game.all_locs:
+  
+                    logging.info(&quot;player 1 makes an illegal move&quot;)
+                    reward = torch.tensor([config.reward_scores[&quot;illegal_move_loss&quot;]], device=device).unsqueeze(0)
+                    logging.info(f&quot; Reward {reward}&quot;)
+                    next_state = None
+                    game_outcome.append(2)
+
+                    memory.push(state, player1_action, next_state, reward)
+                    # End the game. There is no next state and the reward is the losing reward
+                    break
+                else:
+                    # Player 1 makes the move and the game updates
+                    game.update(player_1_action, &quot;player_1&quot;)
+
+                    # If after Player 1 has moved there is a three, Player 1 wins and game ends
+                    if contains_three(PersonScores(game.board).all_scores) == True:
+                        logging.info(&quot;Player 1 wins&quot;)
+
+                        # Append a 1 to the game_outcone list indicating a Player 1 win
+                        game_outcome.append(1)
+                        logging.info(game.board)
+
+                        # Games ends so the next state is the board at the end of the game
+                        next_state = (
+                            torch.tensor(game.board, dtype=torch.int8, device=device)
+                            .unsqueeze(0)
+                            .int()
+                        )
+                        memory.push(state, player1_action, next_state, reward)
+                        logging.info(&quot;game ends&quot;)
+                        break
+                    # If 9 moves have been played and still no winnr, the game is a draw
+                    elif (
+                        i == 9
+                        and contains_three(PersonScores(game.board).all_scores) == False
+                    ):
+                        # Append a 3 to the game_outcone list indicating a draw
+                        game_outcome.append(3)
+                        reward = calculate_scores(
+                            PersonScores(game.board).all_scores, &quot;player_1&quot;
+                        )
+                        next_state = (
+                            torch.tensor(game.board, dtype=torch.int8, device=device)
+                            .unsqueeze(0)
+                            .int()
+                        )
+                        reward = torch.tensor([reward], device=device).unsqueeze(0)
+                        logging.info(f&quot;Reward {reward}&quot;)
+                        memory.push(state, player1_action, next_state, reward)
+                        logging.info(&quot;last move - game is drawn&quot;)
+                        break
+
+            elif i % 2 == 0:
+
+                # Player 1 did not win the last move and so it is player 2's turn
+                logging.info(&quot;Player 2 moves&quot;)
+
+                # Player chooses a random moves
+                player_2_action = select_random_zero_coordinate(game.board)
+
+                # Update the game's board
+                game.update(player_2_action, &quot;player_2&quot;)
+
+                # Convert the board to a tensor to feed it into the network
+                next_state = (
+                    torch.tensor(game.board, dtype=torch.int8, device=device)
+                    .unsqueeze(0)
+                    .int()
+                )
+                # Checks if Player 2 won after the move
+                if contains_three(PersonScores(game.board).all_scores) == True:
+                    logging.info(&quot;Player 2 moves and wins&quot;)
+                    # Append a 4 to the game_outcome list indicating a Player 2 win
+                    game_outcome.append(4)
+                    reward = torch.tensor([config.reward_scores[&quot;loss&quot;]], device=device).unsqueeze(0)
+                    logging.info(f&quot;Reward {reward}&quot;)
+                    logging.info(game.board)
+                    memory.push(state, player1_action, next_state, reward)
+                    break
+
+                # Player 2 did not win the last move and we calculate Player 1's payoff 
+                elif contains_three(PersonScores(game.board).all_scores) == False:
+                    # Player 1 made a legal move and the game is still in play. This should be the most common scenario
+                    logging.info(
+                        &quot;Player 1 made legal move, player 2 has moved, but not won&quot;
+                    )
+                    reward = calculate_scores(
+                        PersonScores(game.board).all_scores, &quot;player_1&quot;
+                    )
+                    reward = torch.tensor([reward], device=device).unsqueeze(0)
+                    logging.info(f&quot; Reward {reward}&quot;)
+                    memory.push(state, player1_action, next_state, reward)
+
+            # Perform one step of the optimization (on the policy network) after player 2 moves
+            optimize_model(memory, config.BATCH_SIZE, target_net, policy_net, config.GAMMA, config.LR)
+
+            # Soft update of the target network's weights. New weights are mostly taken from  target_net_state_dict
+            # θ′ ← τ θ + (1 −τ )θ′
+            target_net_state_dict = target_net.state_dict()
+            policy_net_state_dict = policy_net.state_dict()
+            for key in policy_net_state_dict:
+                target_net_state_dict[key] = policy_net_state_dict[
+                    key
+                ] * config.TAU + target_net_state_dict[key] * (1 - config.TAU)
+                target_net.load_state_dict(target_net_state_dict)
+
+    # Save the model at the end of the training
+    save_checkpoint(target_net, optimizer, &quot;crosser&quot;)
+
+    # Generate the plot for the number of errors
+    plot_errors(loss_scores)
+
+    # Generate the plot for the number of wins
+    plot_wins(cumulative_wins(game_outcome))
+
+    # Plot a stacked bar chart of how the games are going
+    plot_wins_stacked(cumulative_wins(game_outcome))
+
+    print(&quot;Training complete&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main(config)
+</code></pre><p>The figure below shows the decline in the gap between the two sides of the value equation as we iterate on it.
+<img loading="lazy" src="https://johnardavies.github.io/re_learn_5.png" alt="r_learn_5"  />
+</p>
+<h3 id="7--the-models-performance-at-playing-the-game">7.  The model’s performance at playing the game.<a hidden class="anchor" aria-hidden="true" href="#7--the-models-performance-at-playing-the-game">#</a></h3>
+<p>The figure below shows the cumulative number of Player 1 wins, draws and losses (as Player 2 wins or Player 1 makes an illegal move) as the model trains (calculated using the function <strong>cumulative_wins()</strong> above). Initially as Player 1 plays randomly it makes many illegal moves, gradually though as the network learns it starts to play better and the wins total starts growing faster than the illegal moves total.
+<img loading="lazy" src="https://johnardavies.github.io/re_learn_6.png" alt="r_learn_6"  />
+
+In the second figure we can see how the share of games that the network is winning rises
+as we look at the games in batches of 200. The network does still sometimes make a wrong move, but it has been able to play correctly and win most of the time.
+<img loading="lazy" src="https://johnardavies.github.io/re_learn_7.png" alt="r_learn_7"  />
+
+An example game of the network is shown below. This shows that the network as it is facing a random opponent keeps building its line of pieces on the basis that if it gets to two in a row it probably won&rsquo;t be stopped in the way that it would be with a normal opponent. Replacing the random opponent with the trained network may help address this.</p>
+<pre tabindex="0"><code>game begins
+[[0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 0.]]
+Player 1 (The network) moves
+[[0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 1.]]
+Player 2 moves
+[[2. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 1.]]
+Player 1 (The network) moves
+[[2. 0. 0.]
+ [0. 0. 0.]
+ [1. 0. 1.]]
+Player 2 moves
+[[2. 0. 0.]
+ [2. 0. 0.]
+ [1. 0. 1.]]
+Player 1 (The network) moves
+[[2. 0. 0.]
+ [2. 0. 0.]
+ [1. 1. 1.]]
+Player 1 (The network) wins
+</code></pre><h3 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h3>
+<p>Paszke and Towers  <a href="https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html#reinforcement-learning-dqn-tutorial">&lsquo;Reinforcement Learning (DQN) Tutorial&rsquo;</a> and <a href="https://github.com/pytorch/tutorials/blob/main/intermediate_source/reinforcement_q_learning.py">the repo</a>.</p>
+<p>Géron, &lsquo;Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow&rsquo;, 2nd Edition</p>
+<p>Ljungqvist and Sargent, &lsquo;Recursive Macroeconomic Theory&rsquo;</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://johnardavies.github.io/tags/technical/">technical</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+    menu.onscroll = function () {
+        localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
