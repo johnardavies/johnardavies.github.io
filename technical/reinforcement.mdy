@@ -1,0 +1,665 @@
+---
+author: "John Davies"
+title: "Reinforcement learning"
+date: "2024-09-14"
+tags: [ "technical" ]
+categories: [ "technical" ]
+cover:
+    image: "/reinforcement.png"
+---
+Gallerie d'Italia - Palazzo Leoni Montanari di Vicenza
+
+
+In reinforcement learning we have an optimisation problem where an agent is operating in an environment e.g. a person consuming and saving, a car 
+driving through a street, a player playing a game etc. The agent takes an action which affects the state of the environment and there is a 
+corresponding payoff to the agent over time. Decisions the agent makes at a given point in time can affect the future environment and the 
+decisions and payoffs it can get in future. We want to work out how to optimise an agent’s payoffs over time given the environment. Reinforcement 
+learning can learn out what the optimal strategy for the situation might be.
+  
+To learn more about reinforcement learning I decided to work through a simple example of this using game noughts and crosses (or tic-tac-toe as it 
+is called in the US). In the unlikely event this is unfamiliar this is a two-player game where each player takes consecutive turns and places 
+their piece (a nought or a cross on a 3 x 3 grid. There are two players: player 1 and player 2. Player 1 plays first followed by Player 2. The 
+winner is the first to get 3 of their pieces ‘a three’ in a horizontal, vertical or diagonal line.  This game has the advantage that it is both 
+very simple, and not that computationally intensive, while involving many of the standard components of reinforcement learning making it easier to 
+see how the techniques fit together.\
+
+**1.  The value function**\
+**2.  The game set up**\
+**3.  Approximating the value function with a neural network**\
+**4.  The optimisation problem**\
+**5.  The model’s performance at playing the game.**
+
+## 1. The value function
+
+If we have an agent choosing a series of actions over time: action_1, action_2,….action_n, affecting the environment for the agent and leading to 
+a set of payoffs to the agent over time
+reward_1, reward_2. reward_3, etc. Some actions  that the agent could have higher returns than others and we assume that the agent wants to 
+maximise its payoff over time. This has a complication though if the agent chooses a given action then this has an effect that might affect the 
+environment and the payoff in a future period that this takes into account. There is a central technique in reinforcement learning knowns as 
+dynamic programming, developed by Richard Bellman in the 1950s which provides a different way to  approach the problem, which sometimes makes it 
+easier to solve. 
+
+Assuming that the total reward can be written as a discounted sum of future rewards. Where Beta is a discount factor that is less than 1 and 
+weighting payoffs in the future less than the present.
+![r_learn_1](/re_learn_1.png)
+Here there there is no uncertainty, a finite number of future periods and discrete time periods, but versions of what follows can also applied 
+when these conditions are relaxed.To maximise an agent’s total reward we take an action a, in each time period, from the set of feasible actions 
+to maximise the total reward. Where the reward depends on the action chosen and the environment. Suppose there is a function called a ‘value 
+function’ that gives the payoff at at time t of a given action assuming all future actions afterwards are chosen optimally to maximise the payoff. 
+Then we can write the payoff to a person choosing an action at time t as If we have a value function then this multiple stage optimisation becomes 
+just choosing a single value now that maximises the total reward.
+
+![r_learn_2](/re_learn_2.png)   
+Looking at the total reward when rewritten in terms of the value function we can see that the value function is recursive in that from the 
+perspective of the present, if we choose the action that maximises the reward + discounted value function then the total reward is itself the 
+value function.
+![r_learn_3](/re_learn_3.png)
+With the value function we have taken a  multiple stage decision problem and changed into:   
+1.   Find the value function\
+2.   Given the value function choose the action that maximises the total current payoff and the value function adjusting for discounting 
+
+The objective is to choose the action that gives the highest payoff now and the maximum possible value function given the move. This also gives us 
+a strategy to find the value function. The value function is a function that satisfies the equation above. The above is a bit abstract, so let’s 
+implement it with some machine learning and see it in action.
+
+
+## 2. The game set up
+
+    The game consists of a set of:
+·      States: The positions of the pieces on the board
+·      Actions: Placing pieces on the board changing the state
+·      Returns from the actions: the return to the player after the other player responds to his move
+
+Rather than talking about noughts and crosses, from now on we’ll express everything in terms of Player 1 and Player 2. Player 1 plays first 
+followed by Player 2. 
+
+In game.py we have two classes:
+
+GameBoard: which holds the positions on the board as players move and an update method which changes the positions as a specified player moves its 
+piece.\
+Personscore: which tracks how many threes, twos and ones scores each player has given the state of the game board.
+
+
+```
+import numpy as np
+
+class Gameboard:
+    """Class that keeps track of board positions"""
+
+    def __init__(self):
+        self.board = np.zeros((3, 3))
+        self.person_1_locs = []
+        self.person_2_locs = []
+        self.all_locs = []
+
+    def update(self, x, player):
+        assert (x[0] < 3) and (x[1] < 3)
+        if player == "player_1":
+            self.board[x[0], x[1]] = 1
+        if player == "player_2":
+            self.board[x[0], x[1]] = 2
+        self.person_1_locs = list(
+            zip(np.where(self.board == 1)[0], np.where(self.board == 1)[1])
+        )
+        self.person_2_locs = list(
+            zip(np.where(self.board == 2)[0], np.where(self.board == 2)[1])
+        )
+        self.all_locs = self.person_1_locs + self.person_2_locs
+
+
+class Person_scores:
+    """Class that keeps track of the scores of the players"""
+
+    def __init__(self, game_board):
+
+        self.vertical_scores = list(
+            zip(
+                np.count_nonzero(game_board == 1, axis=0),
+                np.count_nonzero(game_board == 2, axis=0),
+            )
+        )
+        self.horizontal_scores = list(
+            zip(
+                np.count_nonzero(game_board == 1, axis=1),
+                np.count_nonzero(game_board == 2, axis=1),
+            )
+        )
+        self.diagonal_scores1 = [
+            (
+                np.count_nonzero(np.diag(game_board) == 1),
+                np.count_nonzero(np.diag(game_board) == 2),
+            )
+        ]
+        self.diagonal_scores2 = [
+            (
+                np.count_nonzero(np.diag(np.fliplr(game_board)) == 1),
+                np.count_nonzero(np.diag(np.fliplr(game_board)) == 2),
+            )
+        ]
+        self.all_scores = (
+            self.vertical_scores
+            + self.horizontal_scores
+            + self.diagonal_scores1
+            + self.diagonal_scores2
+        )
+
+
+def assign_scores(values):
+    """Function that assigns scores to the players based on the highest score"""
+    if 3 in values:
+        score = 1000
+    elif 2 in values:
+        score = 200
+    elif 1 in values:
+        score = 10
+    return score
+
+def calculate_scores(scores_metrics, player):
+    """Function that calculates the scores for the players given a proposed move and the state of the board"""
+
+    # Get the scores for player 1 and player 2
+    player_1_scores = [t[0] for t in scores_metrics]
+    player_2_scores = [t[1] for t in scores_metrics]
+
+    if player == "player_1":
+        reward = assign_scores(player_1_scores)
+    if player == "player_2":
+        reward = assign_scores(player_2_scores)
+
+    return reward
+```
+
+
+
+## 2. Approximating the value function with a neural network
+
+```
+import torch
+import torch.nn as nn
+
+
+# if GPU is to be used
+device = torch.device(
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+
+# Define the network
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super(SimpleNet, self).__init__()
+        # Embedding layer: 3 possible values, embedding size 4 (or any size you prefer)
+        self.embedding = nn.Embedding(num_embeddings=3, embedding_dim=4)
+
+        # Example first layer after embedding
+        # Flattening the 3x3 grid (which after embedding will be 3x3x4) to a vector of size 3*3*4 = 36
+        self.fc1 = nn.Linear(3 * 3 * 4, 75)
+        self.fc2 = nn.Linear(75, 75)  # Fully connected layer
+        self.fc3 = nn.Linear(75, 9)
+
+    def forward(self, x):
+        # Assuming x is a 3x3 tensor with values 0, 1, or 2
+        x = self.embedding(x)  # Shape: (3, 3, 4)
+        x = x.view(-1, 3 * 3 * 4)  # Flatten to (1, 36) if batch size is 1
+        x = self.fc1(x)
+        x = self.fc2(x)
+        x = self.fc2(x)
+        x = self.fc3(x)
+        return x
+
+
+# Set up the networks on the device
+policy_net = SimpleNet().to(device)
+target_net = SimpleNet().to(device)
+target_net.load_state_dict(policy_net.state_dict())
+
+
+def save_checkpoint(model, optimizer, save_path):
+    """function to save checkpoints on the model weights, the optimiser state and epoch"""
+    torch.save(
+        {
+            "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
+        },
+        save_path,
+    )
+```
+
+3.       Approximating the value function with a neural network
+
+
+
+4.       The optimisation problem
+```
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import random
+from collections import namedtuple, deque
+import math
+from itertools import count
+import matplotlib
+import matplotlib.pyplot as plt
+#from matplotlib.animation import FuncAnimation
+import logging
+
+# Importing the game board, player scores and moves
+from game import Gameboard, Person_scores, calculate_scores
+# Importing the network used to play the game
+from game_network import policy_net, target_net, device, save_checkpoint
+# Importing the functions used to create game moves
+from game_moves import select_random_zero_coordinate, select_action
+
+file_handler = logging.FileHandler(
+    filename="/Users/johndavies/Documents/Data_work/re_learn/re_learn.log"
+)
+
+# Sets up a logger
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[file_handler],
+)
+
+# The parameters
+GAMMA = 0.9
+dim_embedding = 128
+BATCH_SIZE = 128
+TAU = 0.005
+LR = 1e-4
+
+# set up matplotlib
+#is_ipython = "inline" in matplotlib.get_backend()
+#if is_ipython:
+#    from IPython import display
+
+# Sets up Transition that will be used to save the previous values
+Transition = namedtuple("Transition", ("state", "action", "next_state", "reward"))
+
+
+
+class ReplayMemory(object):
+    def __init__(self, capacity):
+        self.memory = deque([], maxlen=capacity)
+
+    def push(self, *args):
+        """Save a transition"""
+        self.memory.append(Transition(*args))
+
+    def sample(self, batch_size):
+        return random.sample(self.memory, batch_size)
+
+    def __len__(self):
+        return len(self.memory)
+
+
+optimizer = optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
+memory = ReplayMemory(20000)
+
+
+
+# if GPU is to be used
+device = torch.device(
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+
+
+episode_durations = []
+
+
+def contains_three(tuples):
+    """Function that checks if a tuple contains a 3"""
+    return any(3 in t for t in tuples)
+
+
+def create_tensor_with_value_at_index(x):
+    index = x[0] * 3 + x[1]
+    tensor_action = torch.zeros(9)
+    tensor_action[index] = 1
+    return tensor_action
+
+
+
+def optimize_model():
+    """For the batch of returns, actions and values compute an estimated value function and see if it converges"""
+    if len(memory) < BATCH_SIZE:
+        logging.info(len(memory))
+        return
+    # Sample a batch_size of the memory
+    transitions = memory.sample(BATCH_SIZE)
+    # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
+    # detailed explanation). This converts batch-array of Transitions
+    # to Transition of batch-arrays.
+    batch = Transition(*zip(*transitions))
+
+    # Compute a mask of non-final states and concatenate the batch elements
+    # (a final state would've been the one after which simulation ended)
+    non_final_mask = torch.tensor(
+        tuple(map(lambda s: s is not None, batch.next_state)),
+        device=device,
+        dtype=torch.bool,
+    )
+    non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
+
+    #   logging.info(batch.action)
+    state_batch = torch.cat(batch.state)
+    action_batch = torch.cat(batch.action)
+    reward_batch = torch.cat(batch.reward)
+
+    non_final_next_states = non_final_next_states.long()
+
+    # Compute Q(s_t, a) - the model computes Q(s_t), then we select the
+    # columns of actions taken. These are the actions which would've been taken
+    # for each batch state according to policy_net
+    # logging.info(action_batch.size())
+    # The action_batch is (128,9). The values are integer which look wrong
+    action_batch = action_batch.to(state_batch.device).long()
+
+    # Get the location that has the highest value in action_batch
+    # The dimension of this is (128,1)
+    action_batch = action_batch.max(1, keepdim=True)[1]
+
+    #   logging.info(action_batch.size())
+    #   logging.info(policy_net(state_batch).size())
+    # Get the estimated value function results for the highest return policies
+    state_action_values = policy_net(state_batch).gather(1, action_batch.long())
+
+    # Compute V(s_{t+1}) for all next states.
+    # Expected values of actions for non_final_next_states are computed based
+    # on the "older" target_net; selecting their best reward with max(1).values
+    # This is merged based on the mask, such that we'll have either the expected
+    # state value or 0 in case the state was final.
+    next_state_values = torch.zeros(BATCH_SIZE, device=device)
+    with torch.no_grad():
+        next_state_values[non_final_mask] = (
+            target_net(non_final_next_states).max(1).values
+        )
+
+    next_state_values = next_state_values.unsqueeze(1)
+    # logging.info("next state values")
+    # logging.info(next_state_values.size())
+    # logging.info("next_state_values")
+
+    #  logging.info("reward")
+    #  logging.info(reward_batch.size())
+    # Compute the expected Q values
+    expected_state_action_values = reward_batch + (next_state_values * GAMMA)
+    #  logging.info("expected state action size")
+    #   logging.info(expected_state_action_values.size())
+    #   logging.info("expected_state action")
+
+    # Compute Huber loss between the next_state_values and the expected_state_action_values
+    criterion = nn.SmoothL1Loss()
+    #   logging.info("state action values")
+    #   logging.info(state_action_values.shape)
+    #   logging.info(expected_state_action_values.shape)
+
+    # Seeing how far apart the value function is from what we want
+    loss = criterion(state_action_values, expected_state_action_values)
+    loss_scores.append(loss)
+    # Optimize the model minimising the loss between the state_action values and the expected state action values
+    optimizer.zero_grad()
+    loss.backward()
+    # In-place gradient clipping
+    torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
+    optimizer.step()
+
+
+
+def plot_values(values):
+    # Generate x values as a range from 0 to len(values) - 1
+    plt.figure()
+    x_values = range(len(values))
+
+    # Create the plot
+    plt.plot(x_values, values, marker="o")
+
+    # Add title and labels
+    plt.title("Plot of Values")
+    plt.xlabel("Index")
+    plt.ylabel("Value")
+
+    # Show the plot
+    plt.show()
+    plt.savefig("/Users/johndavies/Documents/Data_work/re_learn/illegal_moves.png")
+
+
+
+def plot_errors():
+    plt.figure()
+    losses = torch.tensor(loss_scores, dtype=torch.float)
+    plt.xlabel("Episode")
+    plt.ylabel("Loss")
+    plt.plot(losses.numpy())
+    # Take 100 episode averages and plot them too
+    if len(losses) >= 100:
+        means = losses.unfold(0, 100, 1).mean(1).view(-1)
+        means = torch.cat((torch.zeros(99), means))
+        plt.plot(means.numpy())
+    plt.savefig("/Users/johndavies/Documents/Data_work/re_learn/errors.png")
+
+
+    # Function to calculate cumulative wins for player 1
+
+
+def cumulative_wins():
+    wins = [0]
+    benchmark = [0]
+    for i, winner in enumerate(winners):
+        benchmark.append(i * 0.5)
+        if winner == 1:
+            wins.append(wins[-1] + 1)
+        else:
+            wins.append(wins[-1])
+    return wins, benchmark
+
+    # Function to update the chart
+
+
+def plot_wins():
+    plt.figure()
+    wins, bench = cumulative_wins()
+    plt.plot(wins)
+    plt.plot(bench)
+    plt.xlabel("Game Number")
+    # Insert a line where we start using the batched information
+    plt.vlines(x=128, ymin=0, ymax=3000)
+    plt.ylabel("Cumulative Wins for Player 1")
+    plt.title("Cumulative Wins for Player 1 Over Time")
+    plt.axis("equal")
+    plt.xlim(0, 3000)
+    plt.ylim(0, 3000)
+    plt.savefig("/Users/johndavies/Documents/Data_work/re_learn/winning_count.png")
+
+
+if torch.cuda.is_available() or torch.backends.mps.is_available():
+    num_episodes = 3000
+else:
+    num_episodes = 50
+
+
+# Sets up a list to count the loss scores
+loss_scores = []
+
+# Sets up a list to count who is winning
+winners = []
+
+# Sets up a counter for illegal moves
+illegal_moves = [0]
+
+
+def main():
+    # Start the training loop
+    for i_episode in range(num_episodes):
+        if i_episode % 100 == 0:
+            print(i_episode)
+        # Create a new game and set the end of the game to False
+        #  print('game begins')
+        game = Gameboard()
+
+        #  Set terminated to false as game in play and the illegal_player_1_move to false
+        terminated = False
+
+        logging.info("game starts")
+        logging.info(game)
+        for i in range(1, 10):
+
+            logging.info(game.board)
+            if i % 2 != 0:
+                # Player 1's turn
+                illegal_player_1_move = False
+                state = game.board
+                state = (
+                    torch.tensor(game.board, dtype=torch.int8, device=device)
+                    .unsqueeze(0)
+                    .int()
+                )
+                logging.info("Player 1 moves")
+                #   print('player 1 moves')
+
+                # Get the player 1 action given the state
+                player_1_action = select_action(state)
+
+                logging.info(player_1_action)
+
+                # converts the player 1 action to a tensor so that it can be fed into the network
+                player1_action = torch.tensor(
+                    create_tensor_with_value_at_index(player_1_action),
+                    dtype=torch.int8,
+                    device=device,
+                ).unsqueeze(0)
+
+                # If player 1 makes an illegal move set the illegal move status to penalise them and end the game
+                if player_1_action in game.all_locs:
+                    illegal_player_1_move = True
+                    illegal_moves.append(illegal_moves[-1] + 1)
+                    logging.info("player 1 makes an illegal move")
+                    reward = torch.tensor([-2000], device=device).unsqueeze(0)
+                    illegal_player_1_move = False
+                    logging.info(f" Reward {reward}")
+                    next_state = None
+                    terminated = True
+                    memory.push(state, player1_action, next_state, reward)
+                    # End the game. There is no next state and the reward is the losing reward
+                    break
+                else:
+                    # Move was legal keep the illegal moves counter fixed
+                    illegal_moves.append(illegal_moves[-1])
+
+                    # Player 1 makes the move and the game updates
+                    game.update(player_1_action, "player_1")
+
+                # If after Player 1 has moved there is a three, Player 1 wins set the game to terminated
+                    if contains_three(Person_scores(game.board).all_scores) == True:
+                        #       print('player 1 wins and game ends')
+                        terminated = True
+                        logging.info("Player 1 wins")
+                        winners.append(1)
+                        logging.info(game.board)
+                        # Games ends so the next state is the board at the end of the game
+                        next_state = (
+                            torch.tensor(game.board, dtype=torch.int8, device=device)
+                            .unsqueeze(0)
+                            .int()
+                        )
+                        memory.push(state, player1_action, next_state, reward)
+                        logging.info("game ends")
+                        break
+                # if 9 moves have been played append (and no 3) append a 3 to the winners list indicating a draw
+                    elif (i == 9 and contains_three(Person_scores(game.board).all_scores) == False ):
+                      winners.append(3)
+                      reward = calculate_scores(Person_scores(game.board).all_scores , "player_1")
+                      next_state = (
+                        torch.tensor(game.board, dtype=torch.int8, device=device)
+                        .unsqueeze(0)
+                        .int())
+                      reward = torch.tensor([reward], device=device).unsqueeze(0)
+                      logging.info(f"Reward {reward}")
+                      memory.push(state, player1_action, next_state, reward)
+                      logging.info("last move - game is drawn")
+                      terminated = True
+                      break
+
+            elif i % 2 == 0:
+                #  print('player 2 moves')
+                # Player 1 did not win the last move and so terminated is False and it is player 2's turn
+                    logging.info("Player 2 moves")
+                    # Player chooses a random moves
+                    player_2_action = select_random_zero_coordinate(game.board)
+
+                    # Update the game's board
+                    game.update(player_2_action, "player_2")
+                    # Convert the board to a tensor to feed it into the network
+                    next_state = (
+                        torch.tensor(game.board, dtype=torch.int8, device=device)
+                        .unsqueeze(0)
+                        .int()
+                    )
+                    # Checks if Player 2 won after the move
+                    if contains_three(Person_scores(game.board).all_scores) == True:
+                        logging.info("Player 2 moves and wins")
+                        winners.append(2)
+                        reward = torch.tensor([-2000], device=device).unsqueeze(0)
+                        logging.info(f"Reward {reward}")
+                        logging.info(game.board)
+                        memory.push(state, player1_action, next_state, reward)
+                        terminated = True
+                        break
+                    # Player 2 did not win the last move and we calculate Player 1's payoff depending on whether they made an illegal move or not
+                  
+                    elif (illegal_player_1_move == False) and (
+                        contains_three(Person_scores(game.board).all_scores) == False
+                    ):
+                        # Player 1 made a legal move and the game is still in play. This should be the most common scenario
+                        logging.info(
+                            "player 1 made legal move, player 2 has moved, but not won"
+                        )
+                        reward = calculate_scores(Person_scores(game.board).all_scores, "player_1")
+                        reward = torch.tensor([reward], device=device).unsqueeze(0)
+                        logging.info(f" Reward {reward}")
+                        memory.push(state, player1_action, next_state, reward)
+            
+            # Perform one step of the optimization (on the policy network) after player 2 moves
+            #   print("optimise")
+
+            optimize_model()
+
+            # Soft update of the target network's weights. New weights are mostly taken from  target_net_state_dict
+            # θ′ ← τ θ + (1 −τ )θ′
+            target_net_state_dict = target_net.state_dict()
+            policy_net_state_dict = policy_net.state_dict()
+            for key in policy_net_state_dict:
+                target_net_state_dict[key] = policy_net_state_dict[
+                    key
+                ] * TAU + target_net_state_dict[key] * (1 - TAU)
+                target_net.load_state_dict(target_net_state_dict)
+
+    # Save the model at the end of the training
+    save_checkpoint(target_net, optimizer, "crosser")
+    
+    # Generate the plot for illegal moves
+    plot_values(illegal_moves)
+
+    # Generate the plot for the number of errors
+    plot_errors()
+  
+    # Generate the plot for the number of wins 
+    plot_wins()
+
+
+    print("Complete")
+if __name__ == "__main__":
+    main()
+```
+
+5.       The model’s performance at playing the game.
