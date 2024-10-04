@@ -14,7 +14,7 @@
       
       <guid>https://johnardavies.github.io/technical/reinforcement/</guid>
       <description>View from the Palazzo Leoni Montanari di Vicenza
-Reinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes an action which affects the state of the environment and there is a corresponding payoff. Decisions made at a given point in time can also affect the future environment, decisions and payoffs.</description>
+Reinforcement learning In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes actions which affect the state of the environment and gives it corresponding payoffs. Actions at a given point in time can also affect the future environment, actions and payoffs.</description>
     </item>
     
     <item>
