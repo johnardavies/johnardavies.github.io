@@ -32,6 +32,96 @@ I recently used a serverless approach to build an API for a project I was workin
 
     </style>
 </noscript>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-YJ821LVT08');
+        }
+      </script><meta property="og:url" content="https://johnardavies.github.io/technical/api_lambda/">
+  <meta property="og:site_name" content="John&#39;s Site">
+  <meta property="og:title" content="Cloud 7: Building an API with Lambda, Docker and CloudFormation">
+  <meta property="og:description" content="Cloud 7: Building an API with Lambda, Docker and CloudFormation Antony Gormley’s ‘Bind’ at White Cube
+Managing Python dependencies with lambda functions in AWS
+I recently used a serverless approach to build an API for a project I was working on. Each API call triggered a lambda function to process the data from the call and the returned a response. This had the advantage of not having to maintain a constantly running server costing money when unused. However, the Python dependencies I used in this case pandas, numpy (and associated C complier) were not completely straightforward to include in the Amazon Web Services (AWS) lambda framework I was using.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="technical">
+    <meta property="article:published_time" content="2024-12-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-12-27T00:00:00+00:00">
+    <meta property="article:tag" content="Technical">
+    <meta property="article:tag" content="Digital">
+    <meta property="article:tag" content="Cloud">
+    <meta property="og:image" content="https://johnardavies.github.io/API_image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://johnardavies.github.io/API_image.png">
+<meta name="twitter:title" content="Cloud 7: Building an API with Lambda, Docker and CloudFormation">
+<meta name="twitter:description" content="Cloud 7: Building an API with Lambda, Docker and CloudFormation
+Antony Gormley&rsquo;s &lsquo;Bind&rsquo; at White Cube
+Managing Python dependencies with lambda functions in AWS
+I recently used a serverless approach to build an API for a project I was working on. Each API call triggered a lambda function to process the data from the call and the returned a response. This had the advantage of not having to maintain a constantly running server costing money when unused. However, the Python dependencies I used in this case pandas, numpy (and associated C complier) were not completely straightforward to include in the Amazon Web Services (AWS) lambda framework I was using.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Cloud 7: Building an API with Lambda, Docker and CloudFormation",
+      "item": "https://johnardavies.github.io/technical/api_lambda/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Cloud 7: Building an API with Lambda, Docker and CloudFormation",
+  "name": "Cloud 7: Building an API with Lambda, Docker and CloudFormation",
+  "description": "Cloud 7: Building an API with Lambda, Docker and CloudFormation Antony Gormley\u0026rsquo;s \u0026lsquo;Bind\u0026rsquo; at White Cube\nManaging Python dependencies with lambda functions in AWS\nI recently used a serverless approach to build an API for a project I was working on. Each API call triggered a lambda function to process the data from the call and the returned a response. This had the advantage of not having to maintain a constantly running server costing money when unused. However, the Python dependencies I used in this case pandas, numpy (and associated C complier) were not completely straightforward to include in the Amazon Web Services (AWS) lambda framework I was using.\n",
+  "keywords": [
+    "technical", "digital", "cloud"
+  ],
+  "articleBody": "Cloud 7: Building an API with Lambda, Docker and CloudFormation Antony Gormley’s ‘Bind’ at White Cube\nManaging Python dependencies with lambda functions in AWS\nI recently used a serverless approach to build an API for a project I was working on. Each API call triggered a lambda function to process the data from the call and the returned a response. This had the advantage of not having to maintain a constantly running server costing money when unused. However, the Python dependencies I used in this case pandas, numpy (and associated C complier) were not completely straightforward to include in the Amazon Web Services (AWS) lambda framework I was using.\nThere are approaches to deal with this where you install the dependencies in a virtual environment, zip the environment and upload it to S3 (This is described in the first reference below). However, there are size limits on what can be packaged at one go necessitating doing this multiple times, it also involved more AWS specific techniques. I therefore ended up using a Docker container to install the packages with the lambda function triggering the container. For future reference I am writing this up here with a simple example of installing dependencies for an API that triggers a lambda function when it is called.\nThe following assumes that the AWS command line interface (CLI) is set up with the permissions to launch the various services. It also assumes some understanding of Docker and AWS.\nThe project setup is that the Dockerfile and lambda function (included in lambda_handler.py) shown below are included in a folder called container_folder with the requirements.txt file specifying the dependencies one wants to use. The CloudFormation yaml file api-lambda-example.yml is used to generate the API. The files are available from https://github.com/johnardavies/lambda_api_example.\nStructure of the post:\n1. Creating the Docker container with the dependencies\n2. The lambda function the API uses\n3. The CloudFormation template that creates the API Stack\n4. Generating an API key that rate limits the API\n5. Launching the API\n6. Calling the API\n1. Creating the Docker container with the dependencies The first stage is to create a Docker container with the packaged dependencies we want to install. This Dockerfile copies the function we want the lambda to run (here lambda_handler described in the next section) to a folder called function on the container. It then copies the requirements in the requirements.txt file to the folder in the image and installs them. The Dockerfile then copies the folder to a smaller Python image and runs the Python function. In this image it installs a C and C++ compiler. As we are not using an AWS image we have to install the awslambdaric package to run the lambda in AWS. The Dockerfile is described in more detail in the second reference of this post.\n# Define custom function directory ARG FUNCTION_DIR=\"/function\" FROM python:3.10 AS build-image # Include global arg in this stage of the build ARG FUNCTION_DIR # Copy function code RUN mkdir -p ${FUNCTION_DIR} COPY . ${FUNCTION_DIR} COPY requirements.txt . # Install the function's dependencies RUN pip install \\ --target ${FUNCTION_DIR} \\ -r requirements.txt # Use a slim version of the base Python image to reduce the final image size FROM python:3.10-slim # Include global arg in this stage of the build ARG FUNCTION_DIR # Set working directory to function root directory WORKDIR ${FUNCTION_DIR} # Copy in the built dependencies COPY --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR} # Install a C AND C++ compiler RUN apt-get update \u0026\u0026 \\ apt-get install -y zip gcc g++ \u0026\u0026 \\ rm -rf /var/lib/apt/lists/* # Set runtime interface client as default command for the container runtime ENTRYPOINT [ \"/usr/local/bin/python\", \"-m\", \"awslambdaric\" ] # Pass the name of the function handler as an argument to the runtime CMD [ \"lambda_function.handler\" ] To build the image associated with the container, run the command outside the container_folder. Here we tag it as api_stack.\ndocker build --tag api_stack container_folder/ To obtain the id of the created Docker image we then run:\ndocker images Having built the container we then authenticate with the AWS Elastic Container Registry (ECR) to store it. To do this we run the following where xxxxxx is the AWS Account ID. We also specify the region we are working in (here eu-west-2) which also appears in the container registry file path.\naws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin xxxxxx.dkr.ecr.eu-west-2.amazonaws.com If this is successful, thenLogin Succeeded will be returned. We then tag the container to give it a name. Here the image is identified by the id 7d990bc03f26 and given the name api_example_container.\ndocker tag 7d990bc03f26 xxxxxxx.dkr.ecr.eu-west-2.amazonaws.com/api_example_container We then create a repository in ECR to hold the container image. This is a private repository as default.\naws ecr create-repository \\ --repository-name api_example_container \\ --image-scanning-configuration scanOnPush=true \\ --region eu-west-2 We then push the image to the container registry so that CloudFormation can access it\ndocker push xxxxxxx.dkr.ecr.eu-west-2.amazonaws.com/api_example_container:latest 2. The lambda function the API uses In this example the lambda function used has a simple form which takes an input text string from the API call. It then imports the pandas and numpy packages and prints the text input with the pandas and numpy versions in a json format. The function is called handler and is saved in the Python module lambda_function.py which is copied into the image when it is built.\nimport sys import numpy as np import pandas as pd import json def handler(event, context): \"\"\"Function that takes input string and imports numpy and pandas returning their versions as a json\"\"\" query_params = event.get(\"queryStringParameters\", {}) input = query_params.get(\"input\", \"world\") # Return the result as JSON return { \"statusCode\": 200, \"body\": json.dumps( { \"hello\": str(input), \"numpy version\": str(np.__version__), \"pandas version\": str(pd.__version__), } ), } 3. The CloudFormation template that creates the API Stack The API is launched from the CloudFormation template which we label as api-lambda-example.yml. We pass two parameters to the template when launching the stack to generate the API. The first is the Uniform Resource identifier (URI) of the container that we are running the second is the StageName.\nDescription: A CloudFormation template that creates an API that runs a container. The API is rate limited with an API key. Parameters: ECRRepositoryUri: Type: String Description: The URI of the Docker image in Amazon ECR (e.g., .dkr.ecr..amazonaws.com/:). StageName: Type: String Description: Name of API stage. Resources: # API Gateway ApiGateway: Type: 'AWS::ApiGateway::RestApi' Properties: Name: 'ApiExample' ApiKeySourceType: HEADER # API Resource ApiResource: Type: 'AWS::ApiGateway::Resource' Properties: ParentId: !GetAtt ApiGateway.RootResourceId PathPart: 'installer' RestApiId: !Ref ApiGateway ExampleAPIDependencies: Type: \"AWS::Lambda::Function\" Properties: FunctionName: 'ExampleAPIDependencies' Role: !GetAtt LambdaExecutionRole.Arn Code: ImageUri: !Ref ECRRepositoryUri PackageType: \"Image\" Architectures: - 'arm64' Timeout: 30 MemorySize: 500 # Gives the API Gateway permission to call the lambda function ExampleAPIDependencies LambdaApiGatewayPermission: Type: 'AWS::Lambda::Permission' Properties: Action: 'lambda:InvokeFunction' FunctionName: !Ref ExampleAPIDependencies Principal: 'apigateway.amazonaws.com' # Lambda Execution Role LambdaExecutionRole: Type: 'AWS::IAM::Role' Properties: AssumeRolePolicyDocument: Version: '2012-10-17' Statement: - Effect: 'Allow' Principal: Service: 'lambda.amazonaws.com' Action: 'sts:AssumeRole' Policies: - PolicyName: 'LambdaBasicExecution' PolicyDocument: Version: '2012-10-17' Statement: - Effect: 'Allow' Action: - 'logs:CreateLogGroup' - 'logs:CreateLogStream' - 'logs:PutLogEvents' Resource: '*' # API Method ApiMethod: Type: 'AWS::ApiGateway::Method' Properties: HttpMethod: 'GET' ResourceId: !Ref ApiResource RestApiId: !Ref ApiGateway AuthorizationType: 'NONE' ApiKeyRequired: true Integration: Type: AWS_PROXY IntegrationHttpMethod: 'POST' Uri: !Sub 'arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/${ExampleAPIDependencies.Arn}/invocations' ApiDeployment: Type: 'AWS::ApiGateway::Deployment' DependsOn: ApiMethod # Ensures the deployment happens after the method is created Properties: RestApiId: !Ref ApiGateway StageName: 'prod' # Usage Plan UsagePlan: Type: 'AWS::ApiGateway::UsagePlan' DependsOn: ApiDeployment # Ensures the usage plan is created after the deployment Properties: UsagePlanName: 'MyUsagePlan' ApiStages: - ApiId: !Ref ApiGateway Stage: 'prod' Throttle: BurstLimit: 100 RateLimit: 50 Quota: Limit: 1000 Period: MONTH # API Key ApiKey: Type: 'AWS::ApiGateway::ApiKey' Properties: Enabled: true Name: 'APIExampleKey' # Usage Plan Key UsagePlanKey: Type: 'AWS::ApiGateway::UsagePlanKey' Properties: KeyId: !Ref ApiKey KeyType: 'API_KEY' UsagePlanId: !Ref UsagePlan The section below creates the Api path installer. It then creates the lambda function which links it to the image URI passed to the CloudFormation stack. As the container was built on an Apple Silicon Mac the architecture is specified as arm64. The lambda function times out after 30 seconds and has a maximum memory of 500 Megabytes. The API gateway is then given permission to invoke the lambda function.\n# API Resource ApiResource: Type: 'AWS::ApiGateway::Resource' Properties: ParentId: !GetAtt ApiGateway.RootResourceId PathPart: 'installer' RestApiId: !Ref ApiGateway ExampleAPIDependencies: Type: \"AWS::Lambda::Function\" Properties: FunctionName: 'ExampleAPIDependencies' Role: !GetAtt LambdaExecutionRole.Arn Code: ImageUri: !Ref ECRRepositoryUri PackageType: \"Image\" Architectures: - 'arm64' Timeout: 30 MemorySize: 500 # Gives the API Gateway permission to call the lambda function ExampleAPIDependencies LambdaApiGatewayPermission: Type: 'AWS::Lambda::Permission' Properties: Action: 'lambda:InvokeFunction' FunctionName: !Ref ExampleAPIDependencies Principal: 'apigateway.amazonaws.com' The lambda function is given permission to write to logs.\n# Lambda Execution Role LambdaExecutionRole: Type: 'AWS::IAM::Role' Properties: AssumeRolePolicyDocument: Version: '2012-10-17' Statement: - Effect: 'Allow' Principal: Service: 'lambda.amazonaws.com' Action: 'sts:AssumeRole' Policies: - PolicyName: 'LambdaBasicExecution' PolicyDocument: Version: '2012-10-17' Statement: - Effect: 'Allow' Action: - 'logs:CreateLogGroup' - 'logs:CreateLogStream' - 'logs:PutLogEvents' Resource: '*' 4. Generating an API key that rate limits the API To prevent someone unwanted hitting the API endpoint a large number of times racking up a bill, the CloudFormation template includes a rate limit plan. In the template an API key is generated here called ‘APIExampleKey’ which is then attached to the plan.\n# API Key ApiKey: Type: 'AWS::ApiGateway::ApiKey' Properties: Enabled: true Name: 'APIExampleKey' # Usage Plan Key UsagePlanKey: Type: 'AWS::ApiGateway::UsagePlanKey' Properties: KeyId: !Ref ApiKey KeyType: 'API_KEY' UsagePlanId: !Ref UsagePl` 5. Launching the API To create the stack and generate the API we the following from the command line:\naws cloudformation create-stack --stack-name ExampleApiStack \\ --template-body file://api-lambda-example.yml \\ --region eu-west-2 \\ --capabilities CAPABILITY_IAM \\ --parameters \\ ParameterKey=ECRRepositoryUri,ParameterValue=xxxxxxxxxxx.dkr.ecr.eu-west-2.amazonaws.com/api_example_container \\ ParameterKey=StageName,ParameterValue=‘prod’ Here the container that the lambda runs and the StageName are passed to the template as parameters.\nGet the stack info:\naws cloudformation describe-stacks --stack-name ExampleApiStack 6. Calling the API To get the information on the API endpoint that the CloudFormation stack has henerated:\naws apigateway get-rest-apis This gives us the API id which we inset into the API endpoint that the stack generates below to call the API\nhttps://{api_id}.execute-api.eu-west-2.amazonaws.com/prod/installer?input={text_passed_to_api} In this example the api_id is 5dchmz0kt9. To test the API works we curl the endpoint passing the API key in the header -H \"x-api-key: and the input text in the endpoint (Some formatting issues initially threw this command on a Mac: Having curl quotes “ rather than straight quotes \" and having whitespace after the \\.) :\ncurl -X GET \"https://5dchmz0kt9.execute-api.eu-west-2.amazonaws.com/prod/installer?input=world\" \\ -H \"x-api-key: G15jcRREDW1GBhJG0BTOu8q5K0bwnw3w3clSGnVu\" This produces the return:\n{\"hello\": \"world\", \"numpy version\": \"2.2.1\", \"pandas version\": \"2.2.3\"} To remove the stack and the API when it is no longer needed:\naws cloudformation delete-stack --stack-name ExampleApiStack A variant of the usual Cloud warning At time of writing the AWS Lambda free tier in the amazon zone eu-west-2 includes one million free requests per month and beyond that it costs $0.20 per 1M requests see https://aws.amazon.com/lambda/pricing/. This means that, in principle, serverless should cost very little as long as the number of requests is low. In the example here it is probably significantly cheaper than having a virtual machine continuously running to handle the API calls. However, in the event of large number of requests, perhaps by someone maliciously calling the API many times and/or any data processing incurring high storage costs this might not be true. Until AWS implements the budget cap that everyone wants, as always, the costs of cloud services should be monitored and services turned off when not used to avoid incurring unwanted costs.\nReferences: AWS guidance on working with .zip file archives for Python Lambda functions https://docs.aws.amazon.com/lambda/latest/dg/python-package.html\nAWS guidance on deploying Python Lambda functions with container images https://docs.aws.amazon.com/lambda/latest/dg/python-image.html#python-image-clients\nAWS guidance on creating and configuring API keys and usage plans with AWS CloudFormation https://docs.aws.amazon.com/apigateway/latest/developerguide/api-key-usage-plan-cfn.html\nPrevious Cloud posts Cloud 1: Introduction to launching a Virtual Machine in the Cloud\nCloud 2: Getting started with using a Virtual Machine in the Cloud\nCloud 3: Docker and Jupyter notebooks in the Cloud\nCloud 4: Using Serverless\nCloud 5: Introduction to deploying an app with simple CI/CD\nCloud 6: Introduction to Infrastructure as Code using CloudFormation\n",
+  "wordCount" : "1985",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/API_image.png","datePublished": "2024-12-27T00:00:00Z",
+  "dateModified": "2024-12-27T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/api_lambda/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -45,7 +135,7 @@ I recently used a serverless approach to build an API for a project I was workin
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -71,28 +161,23 @@ I recently used a serverless approach to build an API for a project I was workin
         </div>
         <ul id="menu">
             <li>
-                <a href="http://johnardavies.github.io/creative_industries" title="creative industries">
+                <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
                     <span>creative industries</span>
                 </a>
             </li>
             <li>
-                <a href="http://johnardavies.github.io/other_data_projects" title="other data projects">
+                <a href="https://johnardavies.github.io/other_data_projects" title="other data projects">
                     <span>other data projects</span>
                 </a>
             </li>
             <li>
-                <a href="http://johnardavies.github.io/talks/" title="talks">
+                <a href="https://johnardavies.github.io/talks/" title="talks">
                     <span>talks</span>
                 </a>
             </li>
             <li>
-                <a href="http://johnardavies.github.io/technical/" title="technical">
+                <a href="https://johnardavies.github.io/technical/" title="technical">
                     <span>technical</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://johnardavies.github.io/contact/" title="contact">
-                    <span>contact</span>
                 </a>
             </li>
         </ul>
@@ -106,20 +191,19 @@ I recently used a serverless approach to build an API for a project I was workin
     <h1 class="post-title entry-hint-parent">
       Cloud 7: Building an API with Lambda, Docker and CloudFormation
     </h1>
-    <div class="post-meta"><span title='2024-12-20 00:00:00 +0000 UTC'>December 20, 2024</span>&nbsp;·&nbsp;John Davies
+    <div class="post-meta"><span title='2024-12-27 00:00:00 +0000 UTC'>December 27, 2024</span>&nbsp;·&nbsp;John Davies
 
 </div>
   </header> 
-<figure class="entry-cover"><img loading="eager" src="http://johnardavies.github.io/API_image.png" alt="">
+<figure class="entry-cover"><img loading="eager" src="https://johnardavies.github.io/API_image.png" alt="">
         
 </figure>
   <div class="post-content"><h3 id="cloud-7-building-an-api-with-lambda-docker-and-cloudformation">Cloud 7: Building an API with Lambda, Docker and CloudFormation<a hidden class="anchor" aria-hidden="true" href="#cloud-7-building-an-api-with-lambda-docker-and-cloudformation">#</a></h3>
 <p><a href="https://www.whitecube.com/gallery-exhibitions/antony-gormley-body-politic">Antony Gormley&rsquo;s &lsquo;Bind&rsquo; at White Cube</a></p>
 <p><strong>Managing Python dependencies with lambda functions in AWS</strong><br>
-I recently used a serverless approach to build an API for a project I was working on. Each API call triggered a lambda function to process the data from the call and the returned a response. This had the advantage of not having to maintain a constantly running server costing money when unused. However, the Python dependencies I used in this case pandas, numpy (and associated C complier) were not completely straightforward to include in the Amazon Web Services (AWS) lambdas framework I was using.</p>
-<p>There are approaches to deal with this where you install the dependencies in a virtual environment, zip the environment and upload it to S3 (This is described in the second reference below). However, there are size limits on what can be packaged at one go necessitating doing this multiple times, it also involved more AWS specific techniques. I therefore ended up using a Docker container to install the packages at one go with the lambda function triggering the container. For future reference I am writing this up here with a simple example of installing dependencies for a lambda function.</p>
-<p>The following assumes that the AWS command line interface (CLI) is set up with the permissions to launch the various services.
-It also assumes some understanding of Docker and AWS.</p>
+I recently used a serverless approach to build an API for a project I was working on. Each API call triggered a lambda function to process the data from the call and the returned a response. This had the advantage of not having to maintain a constantly running server costing money when unused. However, the Python dependencies I used in this case pandas, numpy (and associated C complier) were not completely straightforward to include in the Amazon Web Services (AWS) lambda framework I was using.</p>
+<p>There are approaches to deal with this where you install the dependencies in a virtual environment, zip the environment and upload it to S3 (This is described in the first reference below). However, there are size limits on what can be packaged at one go necessitating doing this multiple times, it also involved more AWS specific techniques. I therefore ended up using a Docker container to install the packages with the lambda function triggering the container. For future reference I am writing this up here with a simple example of installing dependencies for an API that triggers a lambda function when it is called.</p>
+<p>The following assumes that the AWS command line interface (CLI) is set up with the permissions to launch the various services. It also assumes some understanding of Docker and AWS.</p>
 <p>The project setup is that the <code>Dockerfile</code> and lambda function (included in <code>lambda_handler.py</code>) shown below are included in a folder called <code>container_folder</code> with the <code>requirements.txt</code> file specifying the dependencies one wants to use. The CloudFormation yaml file <code>api-lambda-example.yml</code> is used to generate the API. The files are available from <a href="https://github.com/johnardavies/lambda_api_example">https://github.com/johnardavies/lambda_api_example</a>.</p>
 <p>Structure of the post:</p>
 <p><strong>1. Creating the Docker container with the dependencies</strong><br>
@@ -129,7 +213,7 @@ It also assumes some understanding of Docker and AWS.</p>
 <strong>5. Launching the API</strong><br>
 <strong>6. Calling the API</strong></p>
 <h3 id="1-creating-the-docker-container-with-the-dependencies">1. Creating the Docker container with the dependencies<a hidden class="anchor" aria-hidden="true" href="#1-creating-the-docker-container-with-the-dependencies">#</a></h3>
-<p>The first stage is to create a Docker container with the packaged dependencies we want to install. This Dockerfile copies the function we want the lambda to run (here <code>lambda_handler</code> described in the next section) to a folder called <code>function</code> on the container. It then copies the requirements in the requirements.txt file to the folder in the image and installs them. The Dockerfile then copies the folder to a smaller Python image and runs the Python function. As we are not using an AWS image we have to install the awslambdaric package to run the lambda in AWS. The Dockerfile is described in more detail in the second reference of this post.</p>
+<p>The first stage is to create a Docker container with the packaged dependencies we want to install. This Dockerfile copies the function we want the lambda to run (here <code>lambda_handler</code> described in the next section) to a folder called <code>function</code> on the container. It then copies the requirements in the requirements.txt file to the folder in the image and installs them. The Dockerfile then copies the folder to a smaller Python image and runs the Python function. In this image it installs a C and C++ compiler. As we are not using an AWS image we have to install the awslambdaric package to run the lambda in AWS. The Dockerfile is described in more detail in the second reference of this post.</p>
 <pre tabindex="0"><code># Define custom function directory
 ARG FUNCTION_DIR=&#34;/function&#34;
 
@@ -170,8 +254,23 @@ RUN apt-get update &amp;&amp; \
 ENTRYPOINT [ &#34;/usr/local/bin/python&#34;, &#34;-m&#34;, &#34;awslambdaric&#34; ]
 # Pass the name of the function handler as an argument to the runtime
 CMD [ &#34;lambda_function.handler&#34; ]
+</code></pre><p>To build the image associated with the container, run the command outside the container_folder. Here we tag it as api_stack.</p>
+<pre tabindex="0"><code> docker build --tag api_stack container_folder/
+</code></pre><p>To obtain the id of the created Docker image we then run:</p>
+<pre tabindex="0"><code>docker images
+</code></pre><p>Having built the container we then authenticate with the AWS Elastic Container Registry (ECR) to store it. To do this we run the following where xxxxxx is the AWS Account ID. We also specify the region we are working in (here eu-west-2) which also appears in the container registry file path.</p>
+<pre tabindex="0"><code>aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin xxxxxx.dkr.ecr.eu-west-2.amazonaws.com
+</code></pre><p>If this is successful, then<code>Login Succeeded</code> will be returned. We then tag the container to give it a name. Here the image is identified by the id 7d990bc03f26 and given the name <code>api_example_container</code>.</p>
+<pre tabindex="0"><code>docker tag 7d990bc03f26 xxxxxxx.dkr.ecr.eu-west-2.amazonaws.com/api_example_container
+</code></pre><p>We then create a repository in ECR to hold the container image. This is a private repository as default.</p>
+<pre tabindex="0"><code>aws ecr create-repository \
+   --repository-name api_example_container \
+   --image-scanning-configuration scanOnPush=true \
+   --region eu-west-2
+</code></pre><p>We then push the image to the container registry so that CloudFormation can access it</p>
+<pre tabindex="0"><code>docker push xxxxxxx.dkr.ecr.eu-west-2.amazonaws.com/api_example_container:latest
 </code></pre><h3 id="2-the-lambda-function-the-api-uses">2. The lambda function the API uses<a hidden class="anchor" aria-hidden="true" href="#2-the-lambda-function-the-api-uses">#</a></h3>
-<p>In this example the lambda function used has a simple form which takes an input text string from the API call. It then imports the pandas and numpy packages and prints the text input with the pandas and numpy versions in a json format. The function is called handler and is saved in the Python module <code>lambda_function.py</code> which is copied to the container when the image is built.</p>
+<p>In this example the lambda function used has a simple form which takes an input text string from the API call. It then imports the pandas and numpy packages and prints the text input with the pandas and numpy versions in a json format. The function is called handler and is saved in the Python module <code>lambda_function.py</code> which is copied into the image when it is built.</p>
 <pre tabindex="0"><code>import sys
 import numpy as np
 import pandas as pd
@@ -194,26 +293,9 @@ def handler(event, context):
             }
         ),
     }
-</code></pre><p>To build the image associated with the container, run the command outside the container_folder. Here we tag it as api_stack.</p>
-<pre tabindex="0"><code> docker build --tag api_stack container_folder/
-</code></pre><p>To obtain the id of the created Docker image we then run:</p>
-<pre tabindex="0"><code>docker images
-</code></pre><p>Having built the container we then authenticate with the AWS Elastic Container Registry (ECR) to store it.
-To do this we run the following where xxxxxx is the AWS Account ID. Specifying the region we are working in (here eu-west-2) which also appears in the container registry file path.</p>
-<pre tabindex="0"><code>aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin xxxxxx.dkr.ecr.eu-west-2.amazonaws.com
-</code></pre><p>If this is successful, then<code>Login Succeeded</code> will be returned. We then tag the container to give it a name.
-Here the image is identified by the id 7d990bc03f26 and given the name <code>api_example_container</code>.</p>
-<pre tabindex="0"><code>docker tag 7d990bc03f26 xxxxxxx.dkr.ecr.eu-west-2.amazonaws.com/api_example_container
-</code></pre><p>We then create a repository in ECR to hold the container image. This is a private repository as default.</p>
-<pre tabindex="0"><code>aws ecr create-repository \
-   --repository-name api_example_container \
-   --image-scanning-configuration scanOnPush=true \
-   --region eu-west-2
-</code></pre><p>We then push the image to the container registry so that CloudFormation can access it</p>
-<pre tabindex="0"><code>docker push xxxxxxx.dkr.ecr.eu-west-2.amazonaws.com/api_example_container:latest
 </code></pre><h3 id="3--the-cloudformation-template-that-creates-the-api-stack">3.  The CloudFormation template that creates the API Stack<a hidden class="anchor" aria-hidden="true" href="#3--the-cloudformation-template-that-creates-the-api-stack">#</a></h3>
 <p>The API is launched from the CloudFormation template which we label as <code>api-lambda-example.yml</code>. We pass two parameters to the template when launching the stack to generate the API. The first is the Uniform Resource identifier (URI) of the container that we are running the second is the StageName.</p>
-<pre tabindex="0"><code>Description: A CloudFormation template that creates an API that runs a container. The API is rate limited API with an API key. 
+<pre tabindex="0"><code>Description: A CloudFormation template that creates an API that runs a container. The API is rate limited with an API key. 
 
 Parameters:
   ECRRepositoryUri:
@@ -340,7 +422,7 @@ Resources:
       KeyType: &#39;API_KEY&#39;
       UsagePlanId: !Ref UsagePlan
 </code></pre><p>The section below creates the Api path <code>installer</code>. It then creates the lambda function which links it to the image URI passed to the CloudFormation stack.
-As the container was built on an Apple Silicon Mac the architecture is specified as arm64. The lambda function times out after 30 seconds and as a maxium memory of 500 Megabytes. The API gateway is then given permission to invoke the lambda function.</p>
+As the container was built on an Apple Silicon Mac the architecture is specified as arm64. The lambda function times out after 30 seconds and has a maximum memory of 500 Megabytes. The API gateway is then given permission to invoke the lambda function.</p>
 <pre tabindex="0"><code>  # API Resource
   ApiResource:
     Type: &#39;AWS::ApiGateway::Resource&#39;
@@ -421,17 +503,18 @@ As the container was built on an Apple Silicon Mac the architecture is specified
 <p>Get the stack info:</p>
 <pre tabindex="0"><code>aws cloudformation describe-stacks --stack-name ExampleApiStack
 </code></pre><h3 id="6-calling-the-api">6. Calling the API<a hidden class="anchor" aria-hidden="true" href="#6-calling-the-api">#</a></h3>
-<p>Get the information on the endpoint:</p>
-<pre tabindex="0"><code>aws apigateway get-rest-apis`
-</code></pre><p>To test it works we curl the endpoint passing the API key in the header <code>-H &quot;x-api-key:</code> and the input text in the endpoint:</p>
+<p>To get the information on the API endpoint that the CloudFormation stack has henerated:</p>
+<pre tabindex="0"><code>aws apigateway get-rest-apis
+</code></pre><p>This gives us the API id which we inset into the API endpoint that the stack generates below to call the API</p>
+<pre tabindex="0"><code>https://{api_id}.execute-api.eu-west-2.amazonaws.com/prod/installer?input={text_passed_to_api}
+</code></pre><p>In this example the api_id is 5dchmz0kt9. To test the API works we curl the endpoint passing the API key in the header <code>-H &quot;x-api-key:</code> and the input text in the endpoint (Some formatting issues initially threw this command on a Mac: Having curl quotes “ rather than straight quotes &quot; and having whitespace after the <code>\</code>.) :</p>
 <pre tabindex="0"><code>curl -X GET &#34;https://5dchmz0kt9.execute-api.eu-west-2.amazonaws.com/prod/installer?input=world&#34; \
  -H &#34;x-api-key: G15jcRREDW1GBhJG0BTOu8q5K0bwnw3w3clSGnVu&#34;
-</code></pre><p>Some formatting issues that initially threw the command on a Mac: Having curl quotes “ rather than straight quotes &quot; and having whitespace after the <code>\</code>.
-This produces the return:</p>
+</code></pre><p>This produces the return:</p>
 <pre tabindex="0"><code> {&#34;hello&#34;: &#34;world&#34;, &#34;numpy version&#34;: &#34;2.2.1&#34;, &#34;pandas version&#34;: &#34;2.2.3&#34;}
-</code></pre><p>Delete the stack when finished:</p>
+</code></pre><p>To remove the stack and the API when it is no longer needed:</p>
 <pre tabindex="0"><code>aws cloudformation delete-stack --stack-name ExampleApiStack
-</code></pre><p><strong>A variant of the usual Cloud warning</strong> At time of writing the AWS Lambda free tier in the amazon zone eu-west-2 includes one million free requests per month and beyond that it costs $0.20 per 1M requests see <a href="https://aws.amazon.com/lambda/pricing/">https://aws.amazon.com/lambda/pricing/</a>. This means that, in principle, serverless should cost very little as long as the number of requests is low. In the example here it is probably significantly cheaper than having a virtual machine continuously running to handle the API calls. However, in the event of large number of requests, perhaps by accidentally getting a lambda function to call itself and/or incurring high data storage costs this might not be true. Until AWS implements the budget cap that everyone wants, as always, the costs of cloud services should be  monitored and services turned off when not used to avoid incurring unwanted costs.</p>
+</code></pre><p><strong>A variant of the usual Cloud warning</strong> At time of writing the AWS Lambda free tier in the amazon zone eu-west-2 includes one million free requests per month and beyond that it costs $0.20 per 1M requests see <a href="https://aws.amazon.com/lambda/pricing/">https://aws.amazon.com/lambda/pricing/</a>. This means that, in principle, serverless should cost very little as long as the number of requests is low. In the example here it is probably significantly cheaper than having a virtual machine continuously running to handle the API calls. However, in the event of large number of requests, perhaps by someone maliciously calling the API many times and/or any data processing incurring high storage costs this might not be true. Until AWS implements the budget cap that everyone wants, as always, the costs of cloud services should be  monitored and services turned off when not used to avoid incurring unwanted costs.</p>
 <h3 id="references">References:<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h3>
 <p>AWS guidance on working with .zip file archives for Python Lambda functions
 <a href="https://docs.aws.amazon.com/lambda/latest/dg/python-package.html">https://docs.aws.amazon.com/lambda/latest/dg/python-package.html</a></p>
@@ -452,16 +535,16 @@ This produces the return:</p>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://johnardavies.github.io/tags/technical/">Technical</a></li>
-      <li><a href="http://johnardavies.github.io/tags/digital/">Digital</a></li>
-      <li><a href="http://johnardavies.github.io/tags/cloud/">Cloud</a></li>
+      <li><a href="https://johnardavies.github.io/tags/technical/">Technical</a></li>
+      <li><a href="https://johnardavies.github.io/tags/digital/">Digital</a></li>
+      <li><a href="https://johnardavies.github.io/tags/cloud/">Cloud</a></li>
     </ul>
   </footer>
 </article>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2024 <a href="http://johnardavies.github.io/">John&#39;s Site</a></span> · 
+        <span>&copy; 2024 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span> · 
 
     <span>
         Powered by
