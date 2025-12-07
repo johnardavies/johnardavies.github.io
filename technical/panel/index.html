@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Notes on panel data regression | John&#39;s Site</title>
 <meta name="keywords" content="technical">
 <meta name="description" content="The Yasuyo building, Shinjuku, March 2025
@@ -14,16 +14,16 @@ of a group of historic buildings over time, people’s pattern of TV viewing and
 The below are some notes to refresh my knowledge of the basics of the topic. What follows assumes some knowledge of regression and linear algebra. It is based on the treatment of the topic in
 Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
 <meta name="author" content="John Davies">
-<link rel="canonical" href="http://johnardavies.github.io/technical/panel/">
+<link rel="canonical" href="https://johnardavies.github.io/technical/panel/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://johnardavies.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://johnardavies.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://johnardavies.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://johnardavies.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="http://johnardavies.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://johnardavies.github.io/technical/panel/">
+<link rel="alternate" hreflang="en" href="https://johnardavies.github.io/technical/panel/">
 <noscript>
     <style>
         #theme-toggle,
@@ -32,7 +32,83 @@ Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
         }
 
     </style>
-</noscript>
+</noscript><meta property="og:url" content="https://johnardavies.github.io/technical/panel/">
+  <meta property="og:site_name" content="John&#39;s Site">
+  <meta property="og:title" content="Notes on panel data regression">
+  <meta property="og:description" content="The Yasuyo building, Shinjuku, March 2025
+Introduction The issue of how to analyse data on repeated observations on the same units over time (i.e. panel data/longitudinal data) occurs frequently. For example, visitors returning to a website, the sale price of a group of historic buildings over time, people’s pattern of TV viewing and individuals stated well-being in response to repeated survey questions to name a few I’ve encountered.
+The below are some notes to refresh my knowledge of the basics of the topic. What follows assumes some knowledge of regression and linear algebra. It is based on the treatment of the topic in Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="technical">
+    <meta property="article:published_time" content="2025-12-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-12-07T00:00:00+00:00">
+    <meta property="article:tag" content="Technical">
+    <meta property="og:image" content="https://johnardavies.github.io/shinjuku.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://johnardavies.github.io/shinjuku.png">
+<meta name="twitter:title" content="Notes on panel data regression">
+<meta name="twitter:description" content="The Yasuyo building, Shinjuku, March 2025
+Introduction
+The issue of how to analyse data on repeated observations on the same units over time (i.e. panel data/longitudinal data) occurs frequently. For example, visitors returning to a website, the sale price
+of a group of historic buildings over time, people’s pattern of TV viewing and individuals stated well-being in response to repeated survey questions to name a few I’ve encountered.
+The below are some notes to refresh my knowledge of the basics of the topic. What follows assumes some knowledge of regression and linear algebra. It is based on the treatment of the topic in
+Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Notes on panel data regression",
+      "item": "https://johnardavies.github.io/technical/panel/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Notes on panel data regression",
+  "name": "Notes on panel data regression",
+  "description": "The Yasuyo building, Shinjuku, March 2025\nIntroduction The issue of how to analyse data on repeated observations on the same units over time (i.e. panel data/longitudinal data) occurs frequently. For example, visitors returning to a website, the sale price of a group of historic buildings over time, people’s pattern of TV viewing and individuals stated well-being in response to repeated survey questions to name a few I’ve encountered.\nThe below are some notes to refresh my knowledge of the basics of the topic. What follows assumes some knowledge of regression and linear algebra. It is based on the treatment of the topic in Davidson \u0026amp; Mackinnon and Johnston \u0026amp; DiNardo.\n",
+  "keywords": [
+    "technical"
+  ],
+  "articleBody": "The Yasuyo building, Shinjuku, March 2025\nIntroduction The issue of how to analyse data on repeated observations on the same units over time (i.e. panel data/longitudinal data) occurs frequently. For example, visitors returning to a website, the sale price of a group of historic buildings over time, people’s pattern of TV viewing and individuals stated well-being in response to repeated survey questions to name a few I’ve encountered.\nThe below are some notes to refresh my knowledge of the basics of the topic. What follows assumes some knowledge of regression and linear algebra. It is based on the treatment of the topic in Davidson \u0026 Mackinnon and Johnston \u0026 DiNardo.\nPanel data and the estimation issues it creates We assume there are T observations over time on m different units. Where y_it is the dependent variable of unit i at time t and x_it is the explanatory variable of unit i at time t.\nThe error for unit i at time t consists of a unit specific effect v_i and a time specific unit effect ε_it. The standard Ordinary Least Squares (OLS) estimator for this would be the following where the dependent variable is represented by y an (m x T, 1) vector, the n explanatory variables X are represented by a matrix of dimensions (m x T, n) and we are estimating a vector β of n coefficients. This gives y ̂ the predicted value of y for a given X. A geometric interpretation of this is that y ̂ is the projection of y onto the space spanned by vectors that are the explanatory variables X. Where y ̂ is determined by the vector of coefficients β which minimises the difference (the sum of squared errors) between y and y ̂. If we include panel data in a standard OLS estimator without taking account that the data comes from different units (i.e. we run a regression as if we have m*T independent observations, rather on T repeated observations on m different units) then this is likely to create a series of problems:\n-Biased estimators of the coefficients from omitted variable bias Running a regression without adjusting for the fact that repeated observations come from the same unit, is likely to result in a form of omitted variable bias. This is because there are likely to be unit specific effects that affect the outcome variables which won’t be captured by the explanatory variables. If these unit specific effects are correlated with variables whose influence we are trying to estimate then this will result in OLS being biased.\n-Inefficient estimators due to heteroscedasticity of errors Unit specific effects are highly likely to result in heteroscedasticity as each unit in the regression data has different kinds of errors, resulting in varying errors across the members of the panel. This is likely to result in inefficient estimates as it results in heteroscedasticity.\nTwo standard approaches to estimating panel data to address these:\nFixed effects (which helps remove the bias) Random effects (which improves the efficiency) are now described. In what follows, we refer to the units as individuals or groups.\n1. Fixed effects: Using the variation in the individual units over time (and removing the cross-sectional variation) to estimate the coefficients In the simplest form of fixed effects estimation we assume that each unit’s identity has a specified effect on the dependent variable which does not vary over time e.g. if y is spending and X is a set of data on personal characteristics then person i will always spend η_i more (or less) depending on who they are.\nWe can estimate where X are the explanatory variables over time across all time periods and observations using set of dummy variables D where η is a vector of individual specific effects which don’t vary over time. D is an (m*T, m) matrix of group/individual specific effects which is 1 for person/unit i’s data for all time periods, but which is otherwise zero. We do not necessarily need to estimate the regression using dummy variables to control for the fixed effects as there are other ways to remove these. A standard approach is to take the dependent variable y and the variables in X and for each unit subtracting the mean value for that unit of each variable.\nIf we split the regression into two sets of independent variables X_1 and X_2. We will later specialise to X_2 being the dummy variables that describe when the observation relates to a given unit.\nThis means that we first regress the measured y and the set of variables X_1 on the other variables X_2 and obtain as residuals the variation of y and X_1 that can’t be explained by variation in X_2. If we then estimate an OLS regression on this transformed y and X_1 data we can then isolate the effects of the Betas for X_1.\nIn the special case we are looking at the X_2 variables are the dummy variables in the matrix D. As the dummy variables are specified at the level of the group/individual i.e. they are 1 for individual/or group i across all time periods then this is equivalent to taking each independent and dependent variable and subtracting their mean’s. Where the following properties of M_D are used: We have shown that we can control for individual level specific effects by subtracting the difference of the means at the group level even though we may not have data on the individual level fixed effects. This means that only variation relative to an individual’s mean effects the estimate. The relative level of a unit’s data, its mean, relative to others does not matter. As a result, fixed effects estimators are often referred to as within groups estimators as it only uses the variation within the groups. The OLS estimator is a mixture of within and between group estimation as shown in Appendix 1, where the between groups estimator is based on running a regression on the mean of all each unit’s values removing any time variation.\nThe benefits of fixed effects estimation\nIn most cases it is highly likely there will be factors that affect the outcome of the dependent variable we are interested in, but which we do not have information on e.g. people may live in the same street, have similar incomes, but spend money on consumption in quite different ways. This may for example relate to say differences in wealth, genetic variation or individual’s upbringing, but we are unlikely to have complete information on this. Fixed effects offer us the promise of being able to adjust for these differences even if don’t have information on them.\nAs the errors from the fixed effects estimator are likely to vary across the different units there will be heteroscedasticity in the errors resulting in fixed-effects estimators being less efficient i.e. having a higher variance.\nConceptually, although the ability of fixed effects to remove the time-invariant unit effects is attractive. It is also more sensitive to measurement error in the explanatory variables as it uses the variation over time in the variables which is likely to be more driven by this.\n2. Random effects: Treating the unit specific effects as random variation and adjusting for the heteroscedaticity with Generalised Least Squares (GLS) In the random effects model we treat the individual level effects as random variables. We therefore estimate a form of GLS which corrects estimator for the varying error terms across units. If we make a series of assumptions about the error term: The variance parameters in the lambda are estimated by using the variance of the:\n-within groups regression errors to estimate the unit specific variance\n-between groups regression errors to estimate the general variance\nIf there is no variation in unit specific effects then lambda collapses to 0 and we revert to a standard OLS estimator. If we have a large enough set of observations over time T then we also converge on OLS as the variation in the unit specific effects tend to 0. If lambda is 1 then the random effects estimator becomes the between groups estimator, where all variable values at the unit level are set to their average for the unit (see Appendix 1) in the regression.\nWe then estimate OLS on the transformed data: Where we have used: Calculating the variance covariance matrix: 3. Choosing between fixed and random effects: In principle if the errors of the random effects model are not correlated with the explanatory variables then the estimates of the coefficients should be better than in the fixed effects model as they will be unbiased and have lower variance.\nHowever, at the same time it feels very plausible that the unit specific factor which we don’t have data on a) effect the dependent variable and b) will often be correlated with the explanatory variables biasing the coefficients that we estimate on random effects.\nA standard test to distinguish the two is the Wu Haussman test which is based on the difference between the vector of estimated coefficients for fixed and random effects estimation and the two corresponding variance-covariance matrices. Where H is distributed as a Chi squared distribution with k degrees of freedom. The null hypothesis is that the random effects estimator is right. If we do not reject the null then that implies that there is a no difference between the random effects and the fixed effects estimator, and we should use the lower variance estimator. However, if fixed effects are substantively different that suggests random effects may be biased and we should use that instead.\nIf the random effects estimator passes the test, this may indicate that it is a better estimator, but it is also consistent with there not enough being variation in the explanatory variables to distinguish the two types of estimator.\nAppendix 1: The OLS estimator is a mixture of between and within groups estimators Appendix 2: Showing that we can invert the errors variance-covariance matrix ",
+  "wordCount" : "1659",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/shinjuku.png","datePublished": "2025-12-07T00:00:00Z",
+  "dateModified": "2025-12-07T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/panel/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class=" dark" id="top">
@@ -46,7 +122,7 @@ Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -70,7 +146,7 @@ Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
                 </button>
             </div>
         </div>
-            <ul id="menu">
+       <ul id="menu">
            <li>
                 <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
                     <span>creative industries</span>
@@ -116,7 +192,7 @@ Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
 
 </div>
   </header> 
-<figure class="entry-cover"><img loading="eager" src="http://johnardavies.github.io/shinjuku.png" alt="">
+<figure class="entry-cover"><img loading="eager" src="https://johnardavies.github.io/shinjuku.png" alt="">
         
 </figure>
   <div class="post-content"><p>The Yasuyo building, Shinjuku, March 2025</p>
@@ -184,7 +260,7 @@ variation over time in the variables which is likely to be more driven by this.<
 make a series of assumptions about the error term:
 <img alt="panel_9" loading="lazy" src="/panel_9.png">
 The variance parameters in the lambda are estimated by using the variance of the:</p>
-<p>-within groups regression errors to estimate the unit specific variance
+<p>-within groups regression errors to estimate the unit specific variance<br>
 -between groups regression errors to estimate the general variance</p>
 <p>If there is no variation in unit specific effects then lambda collapses to 0 and we revert to a standard OLS estimator. If we have a large enough set of observations over time T then we also converge on
 OLS as the variation in the unit specific effects tend to 0. If lambda is 1 then the random effects estimator becomes the between groups estimator, where all variable values at the unit level are set to
@@ -211,21 +287,22 @@ distinguish the two types of estimator.</p>
 <h3 id="appendix-1-the-ols-estimator-is-a-mixture-of-between-and-within-groups-estimators">Appendix 1: The OLS estimator is a mixture of between and within groups estimators<a hidden class="anchor" aria-hidden="true" href="#appendix-1-the-ols-estimator-is-a-mixture-of-between-and-within-groups-estimators">#</a></h3>
 <p><img alt="panel_14" loading="lazy" src="/panel_14.png"></p>
 <h3 id="appendix-2-showing-that-we-can-invert-the-errors-variance-covariance-matrix">Appendix 2: Showing that we can invert the errors variance-covariance matrix<a hidden class="anchor" aria-hidden="true" href="#appendix-2-showing-that-we-can-invert-the-errors-variance-covariance-matrix">#</a></h3>
-<p><img alt="panel_15" loading="lazy" src="/panel_15.png"></p>
+<p><img alt="panel_15" loading="lazy" src="/panel_15.png">
+<img alt="panel_16" loading="lazy" src="/panel_16.png"></p>
 
 
   </div>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://johnardavies.github.io/tags/technical/">Technical</a></li>
+      <li><a href="https://johnardavies.github.io/tags/technical/">Technical</a></li>
     </ul>
   </footer>
 </article>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="http://johnardavies.github.io/">John&#39;s Site</a></span> · 
+        <span>&copy; 2025 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span> · 
 
     <span>
         Powered by
@@ -296,4 +373,5 @@ distinguish the two types of estimator.</p>
 </body>
 
 </html>
+
 
