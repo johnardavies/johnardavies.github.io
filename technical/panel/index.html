@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+
+
+        <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=51056&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
@@ -68,7 +70,7 @@ of a group of historic buildings over time, people’s pattern of TV viewing and
                 </button>
             </div>
         </div>
-       <ul id="menu">
+          <ul id="menu">
            <li>
                 <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
                     <span>creative industries</span>
@@ -100,6 +102,7 @@ of a group of historic buildings over time, people’s pattern of TV viewing and
                 </a>
             </li>
         </ul>
+
     </nav>
 </header>
 <main class="main">
@@ -133,15 +136,15 @@ explanatory variables X are represented by a matrix of dimensions (m x T, n).
 <img alt="panel_3" loading="lazy" src="/panel_3.png">
 This gives y_hat  the predicted value of y for a given X.
 <img alt="panel_4" loading="lazy" src="/panel_4.png">
-A geometric interpretation of this is that y_hat is the projection of y onto the space spanned by vectors that are the explanatory variables X. Where y_hat̂ is determined by the vector of
+A geometric interpretation of this is that y_hat is the projection of y onto the space spanned by vectors that are the explanatory variables X. Where y_hat is determined by the vector of
 coefficients β which minimises the difference (the sum of squared errors) between y and y_hat.</p>
-<p>If we estimate a regression on panel data using a standard OLS estimator without taking account that the data comes from different units (i.e. we run a regression as if we have m*T independent
+<p>If we estimate a regression on panel data using a standard OLS estimator without taking account that the data comes from different units (i.e. we run a regression as if we have m x T independent
 observations, rather than T repeated observations on m different units) then this is likely to create a series of problems:</p>
 <p>-<strong>Biased estimators of the coefficients from omitted variable bias</strong> Running a regression without adjusting for the fact that repeated observations come from the same unit, is likely to result in a
 form of omitted variable bias. This is because there are likely to be unit specific effects that affect the outcome variables which won’t be captured by the explanatory variables. If these unit specific
 effects are correlated with the variables whose influence we are trying to estimate then this will result in OLS estimates being biased.</p>
 <p>-<strong>Inefficient estimators due to heteroscedasticity of errors</strong> Unit specific effects are highly likely to result in heteroscedasticity as each unit in the regression data will probably have a
-different pattern of unit specific errors, resulting in varying errors across the members of the panel. This is likely to result in inefficient estimates as it results in heteroscedasticity.</p>
+different pattern of unit specific errors, resulting in varying errors across the members of the panel. This is likely to result in inefficient OLS estimates.</p>
 <p>Two standard approaches to estimating panel data to address these:</p>
 <ol>
 <li><strong>Fixed effects</strong> (which helps remove the bias)</li>
@@ -150,16 +153,18 @@ different pattern of unit specific errors, resulting in varying errors across th
 <p>are now described. In what follows, we refer to the units as individuals or groups.</p>
 <h3 id="1-fixed-effects-using-the-variation-in-the-individual-units-over-time-and-removing-the-cross-sectional-variation-to-estimate-the-coefficients">1. Fixed effects: Using the variation in the individual units over time (and removing the cross-sectional variation) to estimate the coefficients<a hidden class="anchor" aria-hidden="true" href="#1-fixed-effects-using-the-variation-in-the-individual-units-over-time-and-removing-the-cross-sectional-variation-to-estimate-the-coefficients">#</a></h3>
 <p>In the simplest form of fixed effects estimation we assume that each unit’s identity has a specified effect on the dependent variable which does not vary over time e.g. if y is spending and X is a set
-of data on personal characteristics then person i will always spend η_i  more (or less) depending on who they are.</p>
+of data on personal characteristics then person i will always spend η_i more (or less) depending on who they are.</p>
 <p>We can adjust for these effects by estimating the following equation where X are the explanatory variables over time across all time periods and observations using set of dummy variables D where η
-is a vector of individual specific effects which do not vary over time. D is an (m*T, m) matrix of group/individual specific effects which is 1 for person/unit i’s data for all time periods, but which is otherwise zero.
+is a vector of individual specific effects which do not vary over time. D is an (m x T, m) matrix of group/individual specific effects which is 1 for person/unit i’s data for all time periods, but
+which is otherwise zero.
 <img alt="panel_5" loading="lazy" src="/panel_5.png">
 We do not necessarily need to estimate the regression using dummy variables to control for the fixed effects as there are other ways to adjust for these. A standard approach is to take the
 dependent variable y and the variables in X and for each unit subtracting the mean value for that unit for each variable.</p>
-<p>To see why this works we split the regression explanatory variables into two sets X_1 and X_2. We will later specialise to X_2 being the dummy variables that describe when
+<p>To see why this works we split a general regression&rsquo;s explanatory variables into two sets X_1 and X_2. We will later specialise to X_2 being the dummy variables that describe when
 the observation relates to a given unit.
 <img alt="panel_6" loading="lazy" src="/panel_6.png">
-This means that we first regress the measured y and the set of variables X_1 on the other variables X_2 and obtain as residuals the variation of y and X_1 that can’t be explained by variation in X_2.
+This means that we first regress the measured y and the relationship with X_1 and X_2 on the other variables X_2 and obtain as residuals the variation of y and X_1 that can’t be explained by
+variation in X_2.
 If we then estimate an OLS regression on this transformed y and X_1 data we can then isolate the effects of the Betas for X_1.</p>
 <p>In the special case of adjusting for the unit specific effects the X_2 variables are the dummy variables in the matrix D. As the dummy variables are specified at the level of the group/individual
 i.e. they are 1 for individual/or group i across all time periods then this is equivalent to taking each independent and dependent variable and subtracting their unit level means.
@@ -167,22 +172,22 @@ i.e. they are 1 for individual/or group i across all time periods then this is e
 Where the following properties of M_D are used:
 <img alt="panel_8" loading="lazy" src="/panel_8.png"></p>
 <p>We have shown that we can control for individual level specific effects by subtracting the difference of the means at the group level even though we may not have data on the individual level fixed
-effects. This means that only variation relative to an individual’s mean effects the estimate. The relative level of a unit’s data, its mean, relative to others does not matter. As a result, fixed
-effects estimators are often referred to as within groups estimators as they are only using the variation within groups. The OLS estimator is a mixture of within and between group estimation as
-shown in Appendix 1 where the between groups estimator is based on running a regression on the mean of each unit’s values removing any time variation.</p>
+effects. This means that only variation relative to an individual’s mean affects the estimate. The level of a unit’s data, its mean, relative to others does not matter. As a result, fixed
+effects estimators are often referred to as within groups estimators as they are only using the variation within groups. The between groups estimatoris based on running a regression on the mean of
+each unit’s values removing any time variation. As shown in Appendix 1 The OLS estimator is a mixture of within and between group estimation..</p>
 <p><strong>The benefits of fixed effects estimation</strong></p>
 <p>In most cases it is highly likely there will be factors that affect the outcome of the dependent variable we are interested in, but which we do not have information on e.g. people may live in the same
-street, have similar incomes, but spend money on consumption in quite different ways. This may for example relate to say differences in wealth, genetic variation or individual’s upbringing, but we are
-unlikely to have complete information on this. Fixed effects offer us the promise of being able to adjust for these differences even if don’t have information on them.</p>
-<p>As the errors from the fixed effects estimator are likely to vary across the different units there will be heteroscedasticity in the errors resulting in fixed-effects estimators being less efficient
-i.e. having a higher variance.</p>
+street, have similar incomes, but spend money on consumption in quite different ways. This could relate to differences in wealth, genetic variation or individual’s upbringing, but we are
+unlikely to have complete information on this. Fixed effects offer us the potential to adjust for these differences even if don’t have information on them.</p>
+<p>As the errors from the fixed effects estimator are likely to vary across the different units there will though be heteroscedasticity in the errors resulting in fixed-effects estimators being less
+efficient i.e. having a higher variance.</p>
 <p>Conceptually, although the ability of fixed effects to remove the time-invariant unit effects is attractive. It is also more sensitive to measurement error in the explanatory variables as it uses the
 variation over time in the variables which is likely to be more driven by this.</p>
-<h3 id="2-random-effects-treating-the-unit-specific-effects-as-random-variation-and-adjusting-for-the-heteroscedaticity-with-generalised-least-squares-gls">2. Random effects: Treating the unit specific effects as random variation and adjusting for the heteroscedaticity with Generalised Least Squares (GLS)<a hidden class="anchor" aria-hidden="true" href="#2-random-effects-treating-the-unit-specific-effects-as-random-variation-and-adjusting-for-the-heteroscedaticity-with-generalised-least-squares-gls">#</a></h3>
-<p>In the random effects model we treat the individual level effects as random variables. We therefore estimate a form of GLS which corrects the estimator for the varying error terms across units. In
-this instance we make a series of assumptions about the error term:
+<h3 id="2-random-effects-treating-the-unit-specific-effects-as-random-variation-and-adjusting-for-the-heteroscedasticity-with-generalised-least-squares-gls">2. Random effects: Treating the unit specific effects as random variation and adjusting for the heteroscedasticity with Generalised Least Squares (GLS)<a hidden class="anchor" aria-hidden="true" href="#2-random-effects-treating-the-unit-specific-effects-as-random-variation-and-adjusting-for-the-heteroscedasticity-with-generalised-least-squares-gls">#</a></h3>
+<p>In the random effects model we treat the individual level effects as random variables. We therefore estimate a form of GLS which corrects the estimator for the varying difference in errors across
+units. In this instance we make a series of assumptions about the error term:
 <img alt="panel_9" loading="lazy" src="/panel_9.png">
-The variance parameters in the lambda are estimated by using the variance of the:</p>
+The variance parameters in the lambda are estimated using the variance of the:</p>
 <p>-within groups regression errors to estimate the unit specific variance<br>
 -between groups regression errors to estimate the variance of errors across units</p>
 <p>If there is no variation in unit specific effects then lambda collapses to 0 and we revert to a standard OLS estimator. If we have a large enough set of observations over time T then we also converge on
@@ -197,14 +202,15 @@ Calculating the variance covariance matrix:
 <h3 id="3-choosing-between-fixed-and-random-effects">3. Choosing between fixed and random effects:<a hidden class="anchor" aria-hidden="true" href="#3-choosing-between-fixed-and-random-effects">#</a></h3>
 <p>In principle if the errors of the random effects model are not correlated with the explanatory variables then the random effects estimates of the coefficients should be better than in the fixed
 effects model as they will be unbiased and have lower variance.</p>
-<p>However, at the same time it feels very plausible that the unit specific factor which we don’t have data on a) affect the dependent variable and b) will often be correlated with the explanatory
+<p>However, at the same time it feels very plausible that the unit specific factors which we don’t have data on a) affect the dependent variable and b) will often be correlated with the explanatory
 variables biasing the coefficients that we estimates using random effects.</p>
 <p>A standard test to distinguish the two is the Wu Haussman test which is based on the difference between the vector of estimated coefficients from fixed and random effects estimation and the two
 corresponding variance-covariance matrices.
 <img alt="panel_13" loading="lazy" src="/panel_13.png"></p>
 <p>Where H is distributed as a Chi squared distribution with the degrees of freedom equal to the number of coefficients being estimated. The null hypothesis is that the random effects estimator is
-right. If we do not reject the null then that implies that there is a no difference between the random effects and the fixed effects estimator, and we should use the lower variance estimator. However, if fixed effects are substantively different that suggests
-random effects may be biased and we should use that instead.</p>
+right. If we do not reject the null then this implies that there is a no difference between the random effects and the fixed effects estimator, and we should use the lower variance random
+effects estimator. However, if fixed effects are substantively different that suggests
+random effects may be biased and we should use fixed effects instead.</p>
 <p>If the random effects estimator passes the test, this may indicate that it is a better estimator, but it is also consistent with there not enough being variation in the explanatory variables to
 distinguish the two types of estimator.</p>
 <h3 id="appendix-1-the-ols-estimator-is-a-mixture-of-between-and-within-groups-estimators">Appendix 1: The OLS estimator is a mixture of between and within groups estimators<a hidden class="anchor" aria-hidden="true" href="#appendix-1-the-ols-estimator-is-a-mixture-of-between-and-within-groups-estimators">#</a></h3>
@@ -296,5 +302,4 @@ distinguish the two types of estimator.</p>
 </body>
 
 </html>
-
 
