@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="auto">
 
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
@@ -69,7 +69,7 @@ Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
                 </button>
             </div>
         </div>
-         <ul id="menu">
+            <ul id="menu">
            <li>
                 <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
                     <span>creative industries</span>
@@ -101,7 +101,6 @@ Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
                 </a>
             </li>
         </ul>
-
     </nav>
 </header>
 <main class="main">
@@ -125,12 +124,11 @@ Davidson &amp; Mackinnon and Johnston &amp; DiNardo.">
 <p>The below are some notes to refresh my knowledge of the basics of the topic. What follows assumes some knowledge of regression and linear algebra. It is based on the treatment of the topic in
 Davidson &amp; Mackinnon and Johnston &amp; DiNardo.</p>
 <h3 id="panel-data-and-the-estimation-issues-it-creates">Panel data and the estimation issues it creates<a hidden class="anchor" aria-hidden="true" href="#panel-data-and-the-estimation-issues-it-creates">#</a></h3>
-<p>We assume there are T observations over time on m different units. Where y_it is the dependent variable of unit i at time t and x_it is the explanatory variable of unit i at time t.</p>
+<p>We assume there are T observations over time on m different units. The dependent variable is represented by y an (m x T, 1) vector, the n explanatory variables X are represented by a matrix of dimensions (m x T, n) and we are estimating a vector β of n coefficients. We represent this with a corresponding error term as:</p>
 <p><img alt="panel_1" loading="lazy" src="/panel_1.png"></p>
 <p>The error for unit i at time t consists of a unit specific effect η_i and a time specific unit effect ε_it.
 <img alt="panel_2" loading="lazy" src="/panel_2.png">
-The standard Ordinary Least Squares (OLS) estimator for a vector β of n coefficients is the following equation where the dependent variable is represented by y an (m x T, 1) vector, the n
-explanatory variables X are represented by a matrix of dimensions (m x T, n).
+The standard Ordinary Least Squares (OLS) estimator for this is:
 <img alt="panel_3" loading="lazy" src="/panel_3.png">
 This gives y_hat  the predicted value of y for a given X.
 <img alt="panel_4" loading="lazy" src="/panel_4.png">
