@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=63663&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Cloud 8: Automating publishing an Android app to Google Play with GitHub Actions | John&#39;s Site</title>
 <meta name="keywords" content="technical, digital">
 <meta name="description" content="Here East, London, September 2025
@@ -17,16 +17,16 @@ The notes are based on ongoing work on the app. To deploy the app to Google Play
 3. Sign the app with my private key to authenticate it
 4. Log into Google Play and upload the app">
 <meta name="author" content="John Davies">
-<link rel="canonical" href="http://johnardavies.github.io/technical/app_upload/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://johnardavies.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://johnardavies.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://johnardavies.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://johnardavies.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="http://johnardavies.github.io/safari-pinned-tab.svg">
+<link rel="canonical" href="https://johnardavies.github.io/technical/app_upload/">
+<link crossorigin="anonymous" href="https://johnardavies.github.io/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://johnardavies.github.io/technical/app_upload/">
+<link rel="alternate" hreflang="en" href="https://johnardavies.github.io/technical/app_upload/">
 <noscript>
     <style>
         #theme-toggle,
@@ -36,12 +36,109 @@ The notes are based on ongoing work on the app. To deploy the app to Google Play
 
     </style>
 </noscript>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-YJ821LVT08');
+        }
+      </script><meta property="og:url" content="https://johnardavies.github.io/technical/app_upload/">
+  <meta property="og:site_name" content="John&#39;s Site">
+  <meta property="og:title" content="Cloud 8: Automating publishing an Android app to Google Play with GitHub Actions">
+  <meta property="og:description" content="Here East, London, September 2025
+Introduction This post describes how to automate the deployment of an Android app to Google Play from its code on GitHub using GitHub Actions. The app itself is covered in this post here. An earlier post on GitHub Actions is here. The notes are based on ongoing work on the app. To deploy the app to Google Play involves the following steps:
+1. Building an Android App Bundle (An .aab file) from the app’s Kotlin scripts on GitHub
+2. As the app is being built inject the API keys it uses rather than have them in the code on GitHub
+3. Sign the app with my private key to authenticate it
+4. Log into Google Play and upload the app">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="technical">
+    <meta property="article:published_time" content="2025-10-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-30T00:00:00+00:00">
+    <meta property="article:tag" content="Technical">
+    <meta property="article:tag" content="Digital">
+    <meta property="og:image" content="https://johnardavies.github.io/here_east.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://johnardavies.github.io/here_east.jpeg">
+<meta name="twitter:title" content="Cloud 8: Automating publishing an Android app to Google Play with GitHub Actions">
+<meta name="twitter:description" content="Here East, London, September 2025
+Introduction
+This post describes how to automate the deployment of an Android app to Google Play from its code on GitHub using GitHub Actions.
+The app itself is covered in this post here. An earlier post on GitHub Actions is here.
+The notes are based on ongoing work on the app. To deploy the app to Google Play involves the following steps:
+1. Building an Android App Bundle (An .aab file) from the app&rsquo;s Kotlin scripts on GitHub
+2. As the app is being built inject the API keys it uses rather than have them in the code on GitHub
+3. Sign the app with my private key to authenticate it
+4. Log into Google Play and upload the app">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Cloud 8: Automating publishing an Android app to Google Play with GitHub Actions",
+      "item": "https://johnardavies.github.io/technical/app_upload/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Cloud 8: Automating publishing an Android app to Google Play with GitHub Actions",
+  "name": "Cloud 8: Automating publishing an Android app to Google Play with GitHub Actions",
+  "description": "Here East, London, September 2025\nIntroduction This post describes how to automate the deployment of an Android app to Google Play from its code on GitHub using GitHub Actions. The app itself is covered in this post here. An earlier post on GitHub Actions is here. The notes are based on ongoing work on the app. To deploy the app to Google Play involves the following steps:\n1. Building an Android App Bundle (An .aab file) from the app\u0026rsquo;s Kotlin scripts on GitHub\n2. As the app is being built inject the API keys it uses rather than have them in the code on GitHub\n3. Sign the app with my private key to authenticate it\n4. Log into Google Play and upload the app\n",
+  "keywords": [
+    "technical", "digital"
+  ],
+  "articleBody": "Here East, London, September 2025\nIntroduction This post describes how to automate the deployment of an Android app to Google Play from its code on GitHub using GitHub Actions. The app itself is covered in this post here. An earlier post on GitHub Actions is here. The notes are based on ongoing work on the app. To deploy the app to Google Play involves the following steps:\n1. Building an Android App Bundle (An .aab file) from the app’s Kotlin scripts on GitHub\n2. As the app is being built inject the API keys it uses rather than have them in the code on GitHub\n3. Sign the app with my private key to authenticate it\n4. Log into Google Play and upload the app\nThese can be done using Android Studio, but this involves manually signing and uploading the app to Google Play whenever a change is made to it. Automating this process with a GitHub Action makes deploying updates quicker and integrates them more directly with version control.\nThis post covers implementing a GitHub Action that automates this process by:\n1. Specifying the event that triggers the Action\n2. Specifying where the Action is run and the secrets that are used to build and sign the app\n3. Setting up the actions that are needed to clone the repo and build the app\n4. Publishing the app on Google Play\nThe script of the GitHub Action which does this is below. It is saved in the app repo as a yaml file at the location /.github/workflows/app_launch_to_play.yml. This post covers the parts of the action in turn.\nname: Deploy to Google Play on: push: branches: - main jobs: deploy: runs-on: ubuntu-latest permissions: contents: read env: MODULE: app MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }} LISTED_API_KEY: ${{ secrets.LISTED_API_KEY }} ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }} ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }} ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }} steps: - name: Checkout uses: actions/checkout@v4 - name: Set up JDK uses: actions/setup-java@v4 with: distribution: temurin java-version: '17' - name: Set up Gradle uses: gradle/actions/setup-gradle@v4 - name: Give permissions to the gradle wrapper (gradlew) run: chmod +x ./gradlew - name: Restore keystore run: | ANDROID_KEYSTORE=\"$RUNNER_TEMP/upload.jks\" echo \"${{ secrets.ANDROID_KEYSTORE_BASE64 }}\" | base64 -d \u003e \"$ANDROID_KEYSTORE\" echo \"ANDROID_KEYSTORE=$ANDROID_KEYSTORE\" \u003e\u003e \"$GITHUB_ENV\" - name: Create placeholder local.properties (optional) run: '[ -f local.properties ] || echo \"# generated by CI\" \u003e local.properties' - name: Set version code run: echo \"VERSION_CODE=${{ github.run_number }}\" \u003e\u003e $GITHUB_ENV - name: Build a Release Bundle and publish to Internal testing env: ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }} # raw JSON run: | ./gradlew :${{ env.MODULE }}:publishReleaseBundle \\ -PversionCode=${{ env.VERSION_CODE }} \\ -Pplay.track=internal \\ -Pplay.releaseStatus=draft \\ -Pplay.changesNotSentForReview=true \\ --info --no-daemon --rerun-tasks --no-configuration-cache 1. Specifying the event that triggers the Action In this case the action is triggered by a commit to the main branch of the app repo on GitHub. For example if we push a branch to the app’s GitHub repo and then merge it into main then this starts the action to build the app from its Kotlin scripts.\nname: Deploy to Google Play on: push: branches: - main 2. Specifying where the Action is run and the secrets that are used to build and sign the app The action is run on an ubuntu-latest instance with read permissions. The name of the module that will be built and published is specified by the MODULE environment variable. The default module name for most Kotlin apps is ‘app’. The module name can be found from the include statement in the settings.gradle.kts e.g. include(\":app\").\njobs: deploy: runs-on: ubuntu-latest permissions: contents: read env: # App module path (change if your module isn’t named `app`) MODULE: app MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }} LISTED_API_KEY: ${{ secrets.LISTED_API_KEY }} ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }} ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }} ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }} The app requires two API keys and the private key information to sign the app (The Android KEYSTORE_PASSWORD to get access to the keystore, KEY_ALIAS to identify the key and the KEY_PASSWORD). We don’t want to add these in the repo code so they are added as GitHub secrets. These can be added by going to the Settings tab followed by Secrets and variables and Actions as shown in the example below.\nThis information is then accessed by the action using ${{secrets.xxxxxx}}. Here it is read into the environment of the GitHub Action so that the API keys and signing key are available to Gradle. The information is then extracted from the environment when the Kotlin app is built by the app’s Build.gradle.kts script to insert the API keys into the app and then sign it with the private key. The Kotlin code in the app used to extract the action’s environment variables (shown here for the example of ANDROID_KEYSTORE) has the form:\nval ksPath: String? = System.getenv(\"ANDROID_KEYSTORE\")\n3. Setting up the actions that are needed to clone the repo and build the app The action uses a number of other actions. The action checkout@v4 clones the GitHub repo. The two subsequent actions setup-java@v4 and setup-gradle@v4 sets up Java and Gradle to allow the app to be build. Gradle is a tool that compiles projects in Java-related languages like Kotlin. The chmod +x ./gradlew allows the Gradle wrapper (which enables Gradle to be run from the command line) to be run by the action to build the app bundle.\nsteps: - name: Checkout uses: actions/checkout@v4 - name: Set up JDK uses: actions/setup-java@v4 with: distribution: temurin java-version: '17' - name: Set up Gradle uses: gradle/actions/setup-gradle@v4 - name: Give permissions to the Gradle wrapper (gradlew) run: chmod +x ./gradlew - name: Restore keystore from base64 run: | ANDROID_KEYSTORE=\"$RUNNER_TEMP/upload.jks\" echo \"${{ secrets.ANDROID_KEYSTORE_BASE64 }}\" | base64 -d \u003e \"$ANDROID_KEYSTORE\" echo \"ANDROID_KEYSTORE=$ANDROID_KEYSTORE\" \u003e\u003e \"$GITHUB_ENV\" - name: Create placeholder local.properties run: '[ -f local.properties ] || echo \"# generated by CI\" \u003e local.properties' To give access to the signing key in the Android keystore in ANDROID_KEYSTORE=\"$RUNNER_TEMP/upload.jks\" the variable ANDROID_KEYSTORE is defined which will be saved in the temporary location upload.jks by the action. The command echo \"${{ secrets.ANDROID_KEYSTORE_BASE64 }}\" | base64 -d \u003e \"$ANDROID_KEYSTORE\" decodes the keystore secret value from base64 to the variable. The reason for this is that GitHub Actions can’t store binary information in a secret. We therefore store it in base64 (an encoding from binary to 64 characters) and get the action to convert it to a binary and then write it back to the GitHub environment GITHUB_ENV). The GitHub environment is used as, unlike the action environment env where the values are static, it allows us to create new variables while the action runs (here the decoded keystore value).\nWhen testing the app locally we have the API keys in a local properties file that is not committed to Git. The local.properties file is therefore not in the remote and if available the app uses the API and signing key information from the action’s environments in the first instance. However, the local properties file is used in the build process so we get the GitHub Action to create it.\n4. Publishing the app on Google Play To update the version number each time the app is rebuilt we write the action’s github.run_number to the GITHUB_ENV as the VERSION_CODE. The action then uses the credentials ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON } which has also been added to the secrets to login to Google Play.\nThere are different release tracks on Google Play: Production (The app is fully available), Open testing (The app is publicly available for testing on Google Play) and Closed and Internal testing (the app is released to a larger and smaller group of private testers respectively). There is also a release status.\nHaving logged into Google Play the action then uses gradlew command publishReleaseBundle to publish a release bundle with the specified version_code. Here the track is the internal one with the draft status. As the app is still being worked on in the internal track the changes are not sent for review.\nrun: echo \"VERSION_CODE=${{ github.run_number }}\" \u003e\u003e $GITHUB_ENV - name: Build a Release Bundle and publish to Internal testing env: ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }} # raw JSON run: | ./gradlew :${{ env.MODULE }}:publishReleaseBundle \\ -PversionCode=${{ env.VERSION_CODE }} \\ -Pplay.track=internal \\ -Pplay.releaseStatus=draft \\ -Pplay.changesNotSentForReview=true \\ --info --no-daemon --rerun-tasks --no-configuration-cache When a change is made to the main branch the action runs through the specified stages. Here a previous run is shown in the app repo’s GitHub Actions tab: The latest version of the app is then visible on Google Play on the internal testing track. Previous cloud posts: Cloud 1: Introduction to launching a Virtual Machine in the Cloud\nCloud 2: Getting started with using a Virtual Machine in the Cloud\nCloud 3: Docker and Jupyter notebooks in the Cloud\nCloud 4: Using Serverless\nCloud 5: Introduction to deploying an app with simple CI/CD\nCloud 6: Introduction to Infrastructure as Code using CloudFormation\nCloud 7: Building an API with Lambda, Docker and CloudFormation\nReferences: Using secrets in GitHub Actions\nThe Gradle command line guide\nAndroid developer publishing guidance\nGoogle Play console guidance\n",
+  "wordCount" : "1492",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/here_east.jpeg","datePublished": "2025-10-30T00:00:00Z",
+  "dateModified": "2025-10-30T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/app_upload/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
-<body class=" dark" id="top">
+<body class="" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
     }
 
 </script>
@@ -49,7 +146,7 @@ The notes are based on ongoing work on the app. To deploy the app to Google Play
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -74,7 +171,7 @@ The notes are based on ongoing work on the app. To deploy the app to Google Play
             </div>
         </div>
         <ul id="menu">
-           <li>
+            <li>
                 <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
                     <span>creative industries</span>
                 </a>
@@ -90,8 +187,13 @@ The notes are based on ongoing work on the app. To deploy the app to Google Play
                 </a>
             </li>
             <li>
-                <a href="https://johnardavies.github.io/technical/" title="technical posts">
-                    <span>technical posts</span>
+                <a href="https://johnardavies.github.io/technical/" title="technical">
+                    <span>technical</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/contact/" title="contact">
+                    <span>contact</span>
                 </a>
             </li>
             <li>
@@ -119,7 +221,7 @@ The notes are based on ongoing work on the app. To deploy the app to Google Play
 
 </div>
   </header> 
-<figure class="entry-cover"><img loading="eager" src="http://johnardavies.github.io/here_east.jpeg" alt="">
+<figure class="entry-cover"><img loading="eager" src="https://johnardavies.github.io/here_east.jpeg" alt="">
         
 </figure>
   <div class="post-content"><p>Here East, London, September 2025</p>
@@ -231,7 +333,7 @@ jobs:
 </code></pre><p>The app requires two API keys and the private key information to sign the app (The Android <code>KEYSTORE_PASSWORD</code> to get access to the keystore, <code>KEY_ALIAS</code> to identify the key and the <code>KEY_PASSWORD</code>). We
 don&rsquo;t want to add these in the repo code so they are added as GitHub secrets. These can be added by going to the <code>Settings</code> tab followed by <code>Secrets and variables</code> and <code>Actions</code> as shown in the example
 below.</p>
-<p><img alt="secrets" loading="lazy" src="/secrets.png"></p>
+<p><img alt="secrets" loading="lazy" src="https://johnardavies.github.io/secrets.png"></p>
 <p>This information is then accessed by the action using <code>${{secrets.xxxxxx}}</code>. Here it is read into the environment of the GitHub Action so that the API keys and signing key are available
 to Gradle. The information is then extracted from the environment when the Kotlin app is built by the app&rsquo;s <code>Build.gradle.kts</code> script to insert the API keys into the app and then sign it with the private
 key. The Kotlin code in the app used to extract the action&rsquo;s environment variables (shown here for the example of ANDROID_KEYSTORE) has the form:</p>
@@ -292,9 +394,9 @@ track is the internal one with the draft status. As the app is still being worke
          -Pplay.changesNotSentForReview=true \
          --info --no-daemon --rerun-tasks --no-configuration-cache
 </code></pre><p>When a change is made to the main branch the action runs through the specified stages. Here a previous run is shown in the app repo&rsquo;s GitHub Actions tab:
-<img alt="action_example" loading="lazy" src="/action_example.png">
+<img alt="action_example" loading="lazy" src="https://johnardavies.github.io/action_example.png">
 The latest version of the app is then visible on Google Play on the internal testing track.
-<img alt="play_example" loading="lazy" src="/play_example.png"></p>
+<img alt="play_example" loading="lazy" src="https://johnardavies.github.io/play_example.png"></p>
 <h3 id="previous-cloud-posts">Previous cloud posts:<a hidden class="anchor" aria-hidden="true" href="#previous-cloud-posts">#</a></h3>
 <p><a href="https://johnardavies.github.io/technical/cloud_intro/">Cloud 1: Introduction to launching a Virtual Machine in the Cloud</a><br>
 <a href="https://johnardavies.github.io/technical/cloud_use/">Cloud 2: Getting started with using a Virtual Machine in the Cloud</a><br>
@@ -314,15 +416,15 @@ The latest version of the app is then visible on Google Play on the internal tes
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://johnardavies.github.io/tags/technical/">Technical</a></li>
-      <li><a href="http://johnardavies.github.io/tags/digital/">Digital</a></li>
+      <li><a href="https://johnardavies.github.io/tags/technical/">Technical</a></li>
+      <li><a href="https://johnardavies.github.io/tags/digital/">Digital</a></li>
     </ul>
   </footer>
 </article>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="http://johnardavies.github.io/">John&#39;s Site</a></span> · 
+        <span>&copy; 2026 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span> · 
 
     <span>
         Powered by
