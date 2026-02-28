@@ -276,7 +276,7 @@ fed into the Encoder are sentences written in German, while at the same time the
 translated into English is fed into the Decoder. For example, if we feed in the German text ‘Geh’ then the
 English text we feed in at the same time is [start] ‘Go’ [end]. The Outputs (shifted right) offset means that
 when the Transformer receives ‘Geh’ and tries to predict the next word in the translation, then that word is
-‘Get’ as the sentence has been shifted right by one token.</p>
+‘Go’ as the sentence has been shifted right by one token.</p>
 <p><strong>2.2  The positional encoding which is applied to both the inputs</strong></p>
 <p>As discussed in the first post the words fed into the Transformer are converted into vectors using
 embeddings. In addition to the information about the words in the text there is information about their
