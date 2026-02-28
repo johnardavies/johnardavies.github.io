@@ -308,7 +308,7 @@ the Transformer shown below.
 To do this we take the key and value vectors that are generated from the  output of the encoder for the language we are
 translating from and pass them to the decoder where we calculate the attention of these vectors with the
 corresponding query vectors that the decoder generates for the language we are translating into. As here we
-are doing a translation from English to German, writing it in matrix form where the indices G and E represent
+are doing a translation from German to English, writing it in matrix form where the indices G and E represent
 that the key and values vectors come from German and the query vectors come from English we calculate the
 attention as: <img loading="lazy" src="https://johnardavies.github.io/translate_attention.png" alt="matrix_translate"  />
 </p>
