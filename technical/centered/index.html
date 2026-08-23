@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Centred: Notes on the ubiquitous topic of data normalisation | John&#39;s Site</title>
+<meta name="keywords" content="technical">
+<meta name="description" content="Crossrail Place Footbridge, October 2020
+Data normalisation, transforming the variables in a regression to be mean zero with variance one (sometimes called standardisation), comes up frequently in work so it felt worth writing some notes on it.
+Variables in regressions are often on different scales (e.g. if we are predicting shops’ revenue using inputs of the local population count in 1000s and the shop’s online rating between 1 and 5) the regression coefficients on the larger scale variables will generally be smaller as they have more variation. A direct comparison of the coefficients will suggest the variable on the smaller scale is more important, when in practice it may vary relatively little e.g online ratings can cluster at certain levels like four.">
+<meta name="author" content="John Davies">
+<link rel="canonical" href="https://johnardavies.github.io/technical/centered/">
+<link crossorigin="anonymous" href="https://johnardavies.github.io/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://johnardavies.github.io/technical/centered/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-YJ821LVT08');
+        }
+      </script><meta property="og:url" content="https://johnardavies.github.io/technical/centered/">
+  <meta property="og:site_name" content="John&#39;s Site">
+  <meta property="og:title" content="Centred: Notes on the ubiquitous topic of data normalisation">
+  <meta property="og:description" content="Crossrail Place Footbridge, October 2020
+Data normalisation, transforming the variables in a regression to be mean zero with variance one (sometimes called standardisation), comes up frequently in work so it felt worth writing some notes on it.
+Variables in regressions are often on different scales (e.g. if we are predicting shops’ revenue using inputs of the local population count in 1000s and the shop’s online rating between 1 and 5) the regression coefficients on the larger scale variables will generally be smaller as they have more variation. A direct comparison of the coefficients will suggest the variable on the smaller scale is more important, when in practice it may vary relatively little e.g online ratings can cluster at certain levels like four.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="technical">
+    <meta property="article:published_time" content="2026-08-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-08-23T00:00:00+00:00">
+    <meta property="article:tag" content="Technical">
+    <meta property="og:image" content="https://johnardavies.github.io/centered.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://johnardavies.github.io/centered.jpg">
+<meta name="twitter:title" content="Centred: Notes on the ubiquitous topic of data normalisation">
+<meta name="twitter:description" content="Crossrail Place Footbridge, October 2020
+Data normalisation, transforming the variables in a regression to be mean zero with variance one (sometimes called standardisation), comes up frequently in work so it felt worth writing some notes on it.
+Variables in regressions are often on different scales (e.g. if we are predicting shops’ revenue using inputs of the local population count in 1000s and the shop’s online rating between 1 and 5) the regression coefficients on the larger scale variables will generally be smaller as they have more variation. A direct comparison of the coefficients will suggest the variable on the smaller scale is more important, when in practice it may vary relatively little e.g online ratings can cluster at certain levels like four.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Centred: Notes on the ubiquitous topic of data normalisation",
+      "item": "https://johnardavies.github.io/technical/centered/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Centred: Notes on the ubiquitous topic of data normalisation",
+  "name": "Centred: Notes on the ubiquitous topic of data normalisation",
+  "description": "Crossrail Place Footbridge, October 2020\nData normalisation, transforming the variables in a regression to be mean zero with variance one (sometimes called standardisation), comes up frequently in work so it felt worth writing some notes on it.\nVariables in regressions are often on different scales (e.g. if we are predicting shops’ revenue using inputs of the local population count in 1000s and the shop’s online rating between 1 and 5) the regression coefficients on the larger scale variables will generally be smaller as they have more variation. A direct comparison of the coefficients will suggest the variable on the smaller scale is more important, when in practice it may vary relatively little e.g online ratings can cluster at certain levels like four.\n",
+  "keywords": [
+    "technical"
+  ],
+  "articleBody": "Crossrail Place Footbridge, October 2020\nData normalisation, transforming the variables in a regression to be mean zero with variance one (sometimes called standardisation), comes up frequently in work so it felt worth writing some notes on it.\nVariables in regressions are often on different scales (e.g. if we are predicting shops’ revenue using inputs of the local population count in 1000s and the shop’s online rating between 1 and 5) the regression coefficients on the larger scale variables will generally be smaller as they have more variation. A direct comparison of the coefficients will suggest the variable on the smaller scale is more important, when in practice it may vary relatively little e.g online ratings can cluster at certain levels like four.\nWe therefore often standardise the data by subtracting each variable’s mean and dividing by its variance to get a sense of what the effect of a typical change in the variable might be. There are though other, but often related, motivations for data normalisation such as in the context of a:\n•\tridge regression as you do not want it to penalise the variables according to whichever has the biggest scale\n•\tprincipal component analysis, for similar reasons, to ensure it does not prioritise dimensions based on scale\n•\tBayesian regression as you want the simulation to converge better\n•\tpanel data regression as you want to remove individual unit specific effects without using dummy variables\nIn these notes we work through the effects of normalisation’s two standard components where data is scaled by:\ndividing by the variance subtracting the mean This is done in the context of a linear model of the form: where we have k variables on n observations and y is a (n x 1) vector, X an (n x k) matrix and an (n x 1) vector which is assumed to be random noise. My assumption is that it is typically not possible to make general statements of the effects of normalisation outside this basic case, or at least not easily.\n1. Scaling the data by dividing by the variance Scaling the X variables\nIf we have a transform that is scaling the X variables by a variable specific factor e.g. dividing each variable by its own variance with n observations on k variables this corresponds to multiplying the X matrix by a (k x k) diagonal matrix where each diagonal element is the inverse of the variable’s variance e.g. with 3 variables the transformation would be:\nThis is assuming that all the variables have a variance which in the case of the column representing a constant will not be true. We will come back to the role of the constant later. Calling this matrix D we obtain the Ordinary Least Squares (OLS) estimator on the transformed variables XD as: Using the relationship of an inverse of a product of square matrices: We see that scaling the X variables changes the beta estimates by the inverse of the scaling factor. In the case of normalising by the variance, this multiplies the estimates of beta by the variance.\nGeometrically as the transformation is a diagonal matrix it scales the basis vectors that the X data represents but does not change their orientation and the space spanned by them. As the original y vector remains unchanged this means that the coefficients that define the corresponding projection of the y data we are trying to represent in this basis scales up accordingly if the transform shrinks the size of the basis vectors (as normalising by the variance does) while the original y vector remains unchanged.\nScaling the y variables\nIf we scale the y vector by a factor alpha e.g. dividing by the variance of y then this scalar commutes with everything in the equation and we obtain: Geometrically if the transformation is dividing by the variance then the y vector shrinks and so correspondingly does the magnitude of the coefficients that are needed to describe it.\nIn general the scaling of the y variable is not done for ridge regression, but does happen in some Bayesian regression applications to assist convergence. If we have transformed the y data then, if we want to predict or evaluate the model’s y values we will have to reverse the y transformation to get the y values back in their original scale, something that is not necessary if only the X data is transformed.\nThe effect on the variance and test statistics\nCalculating the effect on the variance of beta: The variance therefore changes by the square of the scaling factors. However in hypothesis tests we also normalise the test statistic to allow us to use standard distributions by dividing the coefficient estimate by the square root of variance, so the value of the test statistic is unchanged. Specialising to one of the variable’s test statistics shows that the effects of the scaling factors cancel out. 2.\tScaling the data by subtracting the mean If we transform a matrix by subtracting the corresponding column from each mean then this corresponds to the OLS regression of each column of the matrix on a constant vector (represented by a vector of ones). The transformation on the X variables to subtract the mean is therefore:\nIf we scale the X variables we obtain: centered6b If we de-mean the X and the y variables we obtain the same beta estimates as if we ran the regression with just the X variables de-meaned. centered6c This hides an important implication relating the values of the betas to the constant term in the regression. The constant is different from all the other variables in the model as it has zero variance.\nWe unpack this by looking at the effect of subtracting the means in a more general way. The Frisch - Waugh - Lovell theorem says that in a linear regression if you regress the:\ndependent variable y on a subset of the independent variables remaining independent variables on the first set the residuals of the first regression on the residuals of the second regression then you obtain the effects of the second set of independent variables. The projection matrix is: Effects on the betas, variance and test statistics (and the constant)\nHaving looked at the transformation in a more general way, the implications of subtracting the mean become clear. When X_1 is just the vector of 1s then the regression of y and X_2 on it corresponds to the transformation of subtracting the means of the y and X variables. As a result we obtain the same estimate of beta_2 as we do without subtracting the means. The betas and variance are therefore unchanged by de-meaning and test statistics are as before.\nGeometrically the residual of the first regression is orthogonal to the space spanned by the X_1 vectors. Mathematically that the residual is orthogonal corresponds to the fact that the sum of the deviations from a mean are zero.\nIf we include a constant in the regression then if the mean is subtracted it cannot have a meaningful coefficient as its effect will always be zero. From the previous discussion we can see that in the transformed regression we do not need to include the constant to obtain unbiased estimates of the variables’ coefficients. In a ridge regression the constant is typically not included in estimation as it cannot be normalised on a consistent basis as it has zero variance and so will always have a different scale. However, in both cases we still want to estimate a constant if we want to make any predictions. If we have estimated beta_2 we can substitute this in to the untransformed data and calculate the residual.\nIf we then regress the residuals on the i vector (which is a fancy way of saying average the residuals then we get an unbiased estimate of the constant back. References Davidson and Mackinnon ‘Econometric Theory and Methods’\n",
+  "wordCount" : "1318",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/centered.jpg","datePublished": "2026-08-23T00:00:00Z",
+  "dateModified": "2026-08-23T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/centered/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
+                    <span>creative industries</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/other_data_projects" title="other data projects">
+                    <span>other data projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/talks/" title="talks">
+                    <span>talks</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/technical/" title="technical">
+                    <span>technical</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/contact/" title="contact">
+                    <span>contact</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Centred: Notes on the ubiquitous topic of data normalisation
+    </h1>
+    <div class="post-meta"><span title='2026-08-23 00:00:00 +0000 UTC'>August 23, 2026</span>&nbsp;·&nbsp;John Davies
+
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="eager" src="https://johnardavies.github.io/centered.jpg" alt="">
+        
+</figure>
+  <div class="post-content"><p><em>Crossrail Place Footbridge, October 2020</em></p>
+<p>Data normalisation, transforming the variables in a regression to be mean zero with variance one (sometimes called standardisation), comes up frequently in work so it felt worth writing some notes on it.</p>
+<p>Variables in regressions are often on different scales (e.g. if we are predicting shops’ revenue using inputs of the local population count in 1000s and the shop’s online rating between 1 and 5) the regression coefficients on the larger scale variables will generally be smaller as they have more variation. A direct comparison of the coefficients will suggest the variable on the smaller scale is more important, when in practice it may vary relatively little e.g online ratings can cluster at certain levels like four.</p>
+<p>We therefore often standardise the data by subtracting each variable’s mean and dividing by its variance to get a sense of what the effect of a typical change in the variable might be. There are though other, but often related, motivations for data normalisation such as in the context of a:</p>
+<p>•	ridge regression as you do not want it to penalise the variables according to whichever has the biggest scale<br>
+•	principal component analysis, for similar reasons, to ensure it does not prioritise dimensions based on scale<br>
+•	Bayesian regression as you want the simulation to converge better<br>
+•	panel data regression as you want to remove individual unit specific effects without using dummy variables</p>
+<p>In these notes we work through the effects of normalisation’s two standard components <strong>where data is scaled by:</strong></p>
+<ol>
+<li><strong>dividing by the variance</strong></li>
+<li><strong>subtracting the mean</strong></li>
+</ol>
+<p>This is done in the context of a linear model of the form:
+<img alt="centered1" loading="lazy" src="https://johnardavies.github.io/centered1.png">
+where we have k variables on n observations and y is a (n x 1) vector, X an (n x k) matrix and an (n x 1) vector which is assumed to be random noise. My assumption is that it is typically not possible to make general statements of the effects of normalisation outside this basic case, or at least not easily.</p>
+<h3 id="1-scaling-the-data-by-dividing-by-the-variance">1. Scaling the data by dividing by the variance<a hidden class="anchor" aria-hidden="true" href="#1-scaling-the-data-by-dividing-by-the-variance">#</a></h3>
+<p><strong>Scaling the X variables</strong></p>
+<p>If we have a transform that is scaling the X variables by a variable specific factor e.g. dividing each variable by its own variance with n observations on k variables this corresponds to multiplying the X matrix by a (k x k) diagonal matrix where each diagonal element is the inverse of the variable’s variance e.g. with 3 variables the transformation would be:</p>
+<p><img alt="centered2" loading="lazy" src="https://johnardavies.github.io/centered2a.png">
+This is assuming that all the variables have a variance which in the case of the column representing a constant will not be true. We will come back to the role of the constant later. Calling this matrix D we obtain the Ordinary Least Squares (OLS) estimator on the transformed variables XD as:
+<img alt="centered2" loading="lazy" src="https://johnardavies.github.io/centered2b.png">
+Using the relationship of an inverse of a product of square matrices:
+<img alt="centered2" loading="lazy" src="https://johnardavies.github.io/centered2c.png"></p>
+<p>We see that scaling the X variables changes the beta estimates by the inverse of the scaling factor. In the case of normalising by the variance, this multiplies the estimates of beta by the variance.</p>
+<p>Geometrically as the transformation is a diagonal matrix it scales the basis vectors that the X data represents but does not change their orientation and the space spanned by them. As the original y vector remains unchanged this means that the coefficients that define the corresponding projection of the y data we are trying to represent in this basis scales up accordingly if the transform shrinks the size of the basis vectors (as normalising by the variance does) while the original y vector remains unchanged.</p>
+<p><strong>Scaling the y variables</strong></p>
+<p>If we scale the y vector by a factor alpha e.g. dividing by the variance of y then this scalar commutes with everything in the equation and we obtain:
+<img alt="centered3" loading="lazy" src="https://johnardavies.github.io/centered3.png"></p>
+<p>Geometrically if the transformation is dividing by the variance then the y vector shrinks and so correspondingly does the magnitude of the coefficients that are needed to describe it.</p>
+<p>In general the scaling of the y variable is not done for ridge regression, but does happen in some Bayesian regression applications to assist convergence. If we have transformed the y data then, if we want to predict or evaluate the model’s y values we will have to reverse the y transformation to get the y values back in their original scale, something that is not necessary if only the X data is transformed.</p>
+<p><strong>The effect on the variance and test statistics</strong></p>
+<p>Calculating the effect on the variance of beta:
+<img alt="centered4" loading="lazy" src="https://johnardavies.github.io/centered4.png">
+The variance therefore changes by the square of the scaling factors. However in hypothesis tests we also normalise the test statistic to allow us to use standard distributions by dividing the coefficient estimate by the square root of variance, so the value of the test statistic is unchanged. Specialising to one of the variable’s test statistics shows that the effects of the scaling factors cancel out.
+<img alt="centered5" loading="lazy" src="https://johnardavies.github.io/centered5.png"></p>
+<h3 id="2scaling-the-data-by-subtracting-the-mean">2.	Scaling the data by subtracting the mean<a hidden class="anchor" aria-hidden="true" href="#2scaling-the-data-by-subtracting-the-mean">#</a></h3>
+<p>If we transform a matrix by subtracting the corresponding column from each mean then this corresponds to the OLS regression of each column of the matrix on a constant vector (represented by a vector of ones). The transformation on the X variables to subtract the mean is therefore:</p>
+<p><img alt="centered6a" loading="lazy" src="https://johnardavies.github.io/centered6a.png">
+If we scale the X variables we obtain:
+<a href="https://johnardavies.github.io/centered6b.png">centered6b</a>
+If we de-mean the X and the y variables we obtain the same beta estimates as if we ran the regression with just the X variables de-meaned.
+<a href="https://johnardavies.github.io/centered6c.png">centered6c</a>
+This hides an important implication relating the values of the betas to the constant term in the regression. The constant is different from all the other variables in the model as it has zero variance.</p>
+<p>We unpack this by looking at the effect of subtracting the means in a more general way. The Frisch - Waugh - Lovell theorem says that in a linear regression if you regress the:</p>
+<ol>
+<li>dependent variable y on a subset of the independent variables</li>
+<li>remaining independent variables on the first set</li>
+<li>the residuals of the first regression on the residuals of the second regression</li>
+</ol>
+<p>then you obtain the effects of the second set of independent variables.
+<img alt="centered6d" loading="lazy" src="https://johnardavies.github.io/centered6d.png">
+The projection matrix is:
+<img alt="centered6e" loading="lazy" src="https://johnardavies.github.io/centered6e.png"></p>
+<p><strong>Effects on the betas, variance and test statistics (and the constant)</strong></p>
+<p>Having looked at the transformation in a more general way, the implications of subtracting the mean become clear. When X_1 is just the vector of 1s then the regression of y and X_2 on it corresponds to the transformation of subtracting the means of the y and X variables. As a result we obtain the same estimate of beta_2 as we do without subtracting the means. The betas and variance are therefore unchanged by de-meaning and test statistics are as before.</p>
+<p>Geometrically the residual of the first regression is orthogonal to the space spanned by the X_1 vectors. Mathematically that the residual is orthogonal corresponds to the fact that the sum of the deviations from a mean are zero.</p>
+<p>If we include a constant in the regression then if the mean is subtracted it cannot have a meaningful coefficient as its effect will always be zero. From the previous discussion we can see that in the transformed regression we do not need to include the constant to obtain unbiased estimates of the variables’ coefficients. In a ridge regression the constant is typically not included in estimation as it cannot be normalised on a consistent basis as it has zero variance and so will always have a different scale. However, in both cases we still want to estimate a constant if we want to make any predictions. If we have estimated beta_2 we can substitute this in to the untransformed data and calculate the residual.</p>
+<p><img alt="centered8a" loading="lazy" src="https://johnardavies.github.io/centered7a.png">
+If we then regress the residuals on the i vector (which is a fancy way of saying average the residuals then we get an unbiased estimate of the constant back.
+<img alt="centered8b" loading="lazy" src="https://johnardavies.github.io/centered7b.png"></p>
+<h3 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h3>
+<p>Davidson and Mackinnon ‘Econometric Theory and Methods’</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://johnardavies.github.io/tags/technical/">Technical</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
