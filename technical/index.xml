@@ -13,6 +13,84 @@ Site</description>
 href="https://johnardavies.github.io/technical/index.xml" rel="self" 
 type="application/rss+xml" />
     <item>
+      <title>Notes on the Bias Variance trade-off and Ridge regression</title>
+      <link>https://johnardavies.github.io/technical/bias_var/</link>
+      <pubDate>Sat, 19 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://johnardavies.github.io/technical/bias_var/</guid>
+      <description>&lt;p&gt;Old Millfun, Shanghai, March 2026&lt;/p&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;It felt useful to revisit some of the basics of the bias variance trade-off and ridge regression covering:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1.	The relationship between a model’s forecast errors and its bias and variance&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;2.	The trade-off between bias and variance&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;3.	Ridge regression&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;4.	An example of the bias and variance trade-off&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The theory parts of these notes are based on Stanley H. Chan&amp;rsquo;s, &lt;a href=&#34;https://probability4datascience.com/&#34;&gt;‘Introduction to Probability for Data Science’&lt;/a&gt; and Wessel N. van Wieringen&amp;rsquo;s, &lt;a href=&#34;https://arxiv.org/abs/1509.09169&#34;&gt;&amp;lsquo;Lecture notes on ridge regression&amp;rsquo;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Centered: Notes on the ubiquitous topic of data normalisation</title>
+      <link>https://johnardavies.github.io/technical/centered/</link>
+      <pubDate>Sun, 23 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://johnardavies.github.io/technical/centered/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Crossrail Place Footbridge, October 2020&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Data normalisation of variables in regressions i.e. transforming them to be mean zero with variance/standard deviation one (sometimes called standardisation) comes up frequently in work so it felt worth writing some notes on it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Regression variables are often on different scales e.g. if we are predicting shops’ revenue using inputs of the local population count in 1000s and their online rating between 1 and 5. In this context:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Command and Control? Notes on getting started with OpenClaw</title>
+      <link>https://johnardavies.github.io/technical/openclaw/</link>
+      <pubDate>Fri, 22 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://johnardavies.github.io/technical/openclaw/</guid>
+      <description>&lt;p&gt;Bird&amp;rsquo;s Nest Stadium, Beijing, March 2026&lt;/p&gt;
+&lt;p&gt;OpenClaw allows its users to have their own personalised AI agents. It has quickly become one of the most discussed software projects in the world. To learn more about it I have written these (work in progress) notes on using it. This is partly to understand the technology and the ideas that underly it better. It is also to engage with the workflow OpenClaw creates as it is highly likely to become common. More practically it provides a second pair of hands (or claws) on an ongoing personal project.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Notes on panel data regression</title>
+      <link>https://johnardavies.github.io/technical/panel/</link>
+      <pubDate>Mon, 29 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://johnardavies.github.io/technical/panel/</guid>
+      <description>&lt;p&gt;The Yasuyo building, Shinjuku, March 2025&lt;/p&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;The issue of how to analyse data on repeated observations on the same units over time (i.e. panel data/longitudinal data) occurs frequently. For example, visitors returning to a website, the prices of a group of houses over time, people’s pattern of TV viewing and survey respondents answers to repeated questions on their self-assessed well-being (scored between 1 and 10) to name just a few examples I’ve encountered.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Cloud 8: Automating publishing an Android app to Google Play with GitHub Actions</title>
+      <link>https://johnardavies.github.io/technical/app_upload/</link>
+      <pubDate>Thu, 30 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://johnardavies.github.io/technical/app_upload/</guid>
+      <description>&lt;p&gt;Here East, London, September 2025&lt;/p&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;This post describes how to automate the deployment of an Android app to Google Play from its code on GitHub using GitHub Actions.
+The app itself is covered in this post &lt;a href=&#34;https://johnardavies.github.io/technical/mobile&#34;&gt;here&lt;/a&gt;. An earlier post on GitHub Actions is &lt;a href=&#34;https://johnardavies.github.io/technical/front_end/&#34;&gt;here&lt;/a&gt;.
+The notes are based on ongoing work on the app. To deploy the app to Google Play involves the following steps:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. Building an Android App Bundle (An .aab file) from the app&amp;rsquo;s Kotlin scripts on GitHub&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;2. As the app is being built inject the API keys it uses rather than have them in the code on GitHub&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;3. Sign the app with my private key to authenticate it&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;4. Log into Google Play and upload the app&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Listed Buildings mobile app</title>
+      <link>https://johnardavies.github.io/technical/mobile/</link>
+      <pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://johnardavies.github.io/technical/mobile/</guid>
+      <description>&lt;p&gt;Goldsmiths Laurie Grove baths Grade II listed&lt;/p&gt;
+&lt;h3 id=&#34;listed-buildings-mobile-app&#34;&gt;Listed Buildings mobile app&lt;/h3&gt;
+&lt;p&gt;I recently built a simple Android app that shows the location of the nearest historic building to the phone. This was partly to learn more about mobile development, but
+I&amp;rsquo;ve also always been interested in architecture and old buildings. Historic here being defined in the technical sense of &lt;a href=&#34;https://historicengland.org.uk/listing/what-is-designation/&#34;&gt;a building officially ‘listed’ as of
+architectural or historic significanc&lt;/a&gt;e. The
+geographic coverage, at least initially, is England as listing is done separately across the nations of the UK. As far as I know this has not been done before.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Reinforcement learning</title>
+      <link>https://johnardavies.github.io/technical/reinforcement/</link>
+      <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://johnardavies.github.io/technical/reinforcement/</guid>
+      <description>&lt;p&gt;View from the &lt;a href=&#34;https://gallerieditalia.com/it/vicenza/&#34;&gt;Palazzo Leoni Montanari di Vicenza&lt;/a&gt;&lt;br&gt;
+Crocodile by the Cracking Art collective&lt;/p&gt;
+&lt;h3 id=&#34;reinforcement-learning&#34;&gt;Reinforcement learning&lt;/h3&gt;
+&lt;p&gt;In reinforcement learning we have an agent that wants to optimise its outcomes from operating in an environment e.g. a player playing a game, a person consuming and saving, a car driving through a street etc. The agent takes actions which affect the state of the environment and gives it corresponding payoffs. Actions at a given point in time can also affect the future environment, actions and payoffs. We want to work out how to optimise an agent’s outcomes over time given this. Reinforcement learning techniques can help infer what the optimal strategy might be.&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>Reinforcement learning</title>
       <link>https://johnardavies.github.io/technical/reinforcement/</link>
       <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
