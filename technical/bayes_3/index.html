@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Bayes 3: Bayesian model evaluation notes | John&#39;s Site</title>
+<meta name="keywords" content="technical">
+<meta name="description" content="The New Museum, New York, September 2023
+Introduction
+I have been using Bayesian modelling approaches in work recently. These notes review aspects of Bayesian model evaluation focussing on:
+1.	First principles evaluation based on Bayes’ formula: Bayesian factors
+2.    Analytical approximations to first principles: The Bayesian Information Criteria
+3.	Adapting cross-validation to a Bayesian context: PSIS-LOO
+The appendices cover:
+A1. The Laplace approximation
+A2. Integrating Gaussian integrals
+which are used in the first two sections of these notes.">
+<meta name="author" content="John Davies">
+<link rel="canonical" href="https://johnardavies.github.io/technical/bayes_three/">
+<link crossorigin="anonymous" href="https://johnardavies.github.io/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://johnardavies.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://johnardavies.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://johnardavies.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://johnardavies.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://johnardavies.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://johnardavies.github.io/technical/bayes_three/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+
+<script defer
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJ821LVT08"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-YJ821LVT08');
+        }
+      </script><meta property="og:url" content="https://johnardavies.github.io/technical/bayes_three/">
+  <meta property="og:site_name" content="John&#39;s Site">
+  <meta property="og:title" content="Bayes 3: Bayesian model evaluation notes">
+  <meta property="og:description" content="The New Museum, New York, September 2023
+Introduction I have been using Bayesian modelling approaches in work recently. These notes review aspects of Bayesian model evaluation focussing on:
+1.	First principles evaluation based on Bayes’ formula: Bayesian factors
+2. Analytical approximations to first principles: The Bayesian Information Criteria
+3.	Adapting cross-validation to a Bayesian context: PSIS-LOO
+The appendices cover:
+A1. The Laplace approximation
+A2. Integrating Gaussian integrals
+which are used in the first two sections of these notes.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="technical">
+    <meta property="article:published_time" content="2026-11-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-11-23T00:00:00+00:00">
+    <meta property="article:tag" content="Technical">
+    <meta property="og:image" content="https://johnardavies.github.io/new_museum.jpeg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://johnardavies.github.io/new_museum.jpeg">
+<meta name="twitter:title" content="Bayes 3: Bayesian model evaluation notes">
+<meta name="twitter:description" content="The New Museum, New York, September 2023
+Introduction
+I have been using Bayesian modelling approaches in work recently. These notes review aspects of Bayesian model evaluation focussing on:
+1.	First principles evaluation based on Bayes’ formula: Bayesian factors
+2.    Analytical approximations to first principles: The Bayesian Information Criteria
+3.	Adapting cross-validation to a Bayesian context: PSIS-LOO
+The appendices cover:
+A1. The Laplace approximation
+A2. Integrating Gaussian integrals
+which are used in the first two sections of these notes.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Technicals",
+      "item": "https://johnardavies.github.io/technical/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Bayes 3: Bayesian model evaluation notes",
+      "item": "https://johnardavies.github.io/technical/bayes_three/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Bayes 3: Bayesian model evaluation notes",
+  "name": "Bayes 3: Bayesian model evaluation notes",
+  "description": "The New Museum, New York, September 2023\nIntroduction I have been using Bayesian modelling approaches in work recently. These notes review aspects of Bayesian model evaluation focussing on:\n1.\tFirst principles evaluation based on Bayes’ formula: Bayesian factors\n2. Analytical approximations to first principles: The Bayesian Information Criteria\n3.\tAdapting cross-validation to a Bayesian context: PSIS-LOO\nThe appendices cover:\nA1. The Laplace approximation\nA2. Integrating Gaussian integrals\nwhich are used in the first two sections of these notes.\n",
+  "keywords": [
+    "technical"
+  ],
+  "articleBody": "The New Museum, New York, September 2023\nIntroduction I have been using Bayesian modelling approaches in work recently. These notes review aspects of Bayesian model evaluation focussing on:\n1.\tFirst principles evaluation based on Bayes’ formula: Bayesian factors\n2. Analytical approximations to first principles: The Bayesian Information Criteria\n3.\tAdapting cross-validation to a Bayesian context: PSIS-LOO\nThe appendices cover:\nA1. The Laplace approximation\nA2. Integrating Gaussian integrals\nwhich are used in the first two sections of these notes.\nThe notes are based on the treatment of these topics in Sivia, D.S. ‘Data Analysis A Bayesian tutorial’ (the first section), Barber, D. ‘Bayesian Reasoning and Machine Learning’ and Murphy, K. ‘Machine Learning’ (the second section) and the original PSIS-LOO paper (the third section).\n1.\tFirst principles evaluation based on Bayes’ formula: Bayesian factors The Bayesian framework has a direct way to evaluate models. Using Bayes’ formula gives an expression for the probability of a model given the data: If we have two Models: Model 1 and Model 2 then the relative probability of the models given the data is a ratio known as a Bayesian factor. If there is no reason to favour any model in terms of the prior of the different modelling approaches being correct, then the prior probabilities of both models are equal and the factor becomes the ratio of the two models’ likelihoods. If the ratio is greater than 1 this favours choosing Model 1 (and vice versa). To go from these very general conditions to calculating probabilities we use the Bayesian equation for the posterior i.e. the probability of a model’s parameters ($\\theta$) given the data and its structure (M): In finding the optimal parameters the marginal likelihood (also sometimes referred to as the evidence) is just a normalisation factor which does not affect the maximum of the posterior. However, here it gives the probability of the data given the model and the uncertainty in its parameters which is what is needed to calculate Bayesian factors. We average the likelihood over the prior distributions of the model’s parameters to obtain the probability of the data given the model. We can therefore calculate and compare the marginal likelihoods of different models to evaluate them.\nA simple analytical example of this\nThere is some noisy data on a variable where:\n•\tModel 1: one person asserts the variable’s true underlying value is zero\n•\tModel 2: another person’s view is that the data is better modelled by a parameter lambda ($\\lambda$) estimated from the data\nWe assume that in Model 2 there is a prior that is uniform between $\\lambda_{\\min}$ and $\\lambda_{\\max}$. The likelihood function for this person is assumed to be a function with a maximum at $\\lambda_0$ and a variance of $\\delta \\lambda^2$. We use the Laplace approximation (Appendix A.1.1) to get an approximation to the likelihood function that can be integrated analytically. This gives the following approximation to the likelihood where $P(\\mathrm{Data} \\mid \\lambda_0)$ is the value of the likelihood evaluated at the maximum.\nTaking the general expression for the probability of the data given the model and substituting in the uniform distribution for the prior and our approximation to the likelihood gives:\nIn the integral we assume that the almost all of the likelihood falls within the prior bounds of the lambda. This means integrating the Gaussian between -infinity and infinity (covered in Appendix A2.1) effectively gives the same answer as integrating between the maximum and the minimum values of lambda in the prior.\nHaving obtained this we calculate the Bayesian factor to compare Model 1 and Model 2.\nThe more complicated Model 2 will always achieve a higher likelihood as it will be better able to fit the data (unlike Model 1 which is not based on data). The prior for Model 1 parameters is 1 as the person is choosing it with certainty.\nIn a comparison for Model 2 the second term as the prior for the parameter lambda is much wider than the integral of the posterior and so the additional factor is less than 1. This acts as a penalty for increasing the model complexity by including the estimated model parameter. It is known as an ‘Occam factor’ as without it the model with the parameter would always be chosen as it will have a larger likelihood. The broader the prior i.e. $\\lambda_{\\max}$-$\\lambda_{\\min}$ relative to the variance in the data $\\delta \\lambda \\sqrt{2\\pi}$ the higher is the Occam factor.\n2. The analytical approximation: The Bayesian Information Criteria (BIC) In practical terms a direct analytical solution to calculate the marginal likelihood for model comparison given the data will typically not be possible as it was in the previous example. One approach is to estimate the marginal likelihood integral by calculating it using Markov Chain Monte Carlo. Another is to use a metric that approximates the marginal likelihood, but which is easier to compute. An example of this is the Bayesian Information Criteria which is the log of an approximation to the marginal likelihood’s value based on the Laplace approximation covered in the last section.\nWe start with a model that has D explanatory variables with associated parameters represented by a vector theta ($\\theta$) and use the Laplace approximation to calculate an approximation to the log of the marginal likelihood. This is similar to the first example, but here we have multiple model parameters rather than one. The Laplace approximation to the log of the marginal likelihood is the following where $\\Sigma$ is the variance-covariance matrix and $\\theta_0$ the location of the maximum of the likelihood (The derivation of this is in Appendix A1.2):\nIf we exponentiate this and do the multinomial Gaussian integral (Appendix A2.2) this gives:\nTaking the log of the approximation of the marginal likelihood:\nWe approximate the last term by the sum of matrices $H_i$ where we assume each matrix is an identical matrix $\\hat{H}$ :\nFrom the properties of a determinant when a matrix is multiplied by a scaler we have:\nSubstituting this into the log marginal likelihood approximation gives:\nDropping the constant as it will be common to all models and log(|$\\hat{H}$|) as it is smaller than the other terms gives:\nThis is calculated in terms of the likelihood function evaluated at the maximum parameter values minus half the number of parameters multiplied by the log of the sample size. This second term penalises the model complexity. As the log transform is monotonic a model with a greater approximate marginal likelihood function will get a higher BIC score than a lower one.\n3.\tAdapting cross-validation to a Bayesian context: Pareto Smooth Importance Sampling Leave One Out (PSIS-LOO) cross-validation In the previous section the model evaluation took Bayes’ formula as its starting point. Another strategy is to go in the other direction and adapt standard model evaluation techniques to a Bayesian context. The PSIS-LOO metric is an application of cross-validation to evaluating Bayesian models.\nOne reason to take this approach, rather than the Bayesian factor methodology and approximations to it described previously, is that intuitively model evaluation should be about how well the model performs the task we are interested in, for example, its forecasting performance. The marginal likelihood is a theoretically elegant measure of how well a model explains the data, but it is not typically what one directly cares about in using a model. It is also highly sensitive to the choice of priors as the first example showed. The relative preference for Model 2 relative to Model 1 in the first example depended directly on the width of the prior which can be highly subjective.\nWe examine the different components of PSIS-LOO in turn:\n3.1 Leave One Out (LOO) cross-validation\nIn cross-validation we partition the data into N groups, randomly select a hold-out group and then train a model on the remaining data assessing its performance on the hold-out group. We do this multiple times and then average the results of the chosen error metric across the hold out groups as a measure of the model’s predictive performance. This has the advantage over a single test and training data set that it maximises the data the model is estimated on reducing the risk of bias. The estimate of the error rate is also likely to be less variable than with a single test/training split.\nIn Leave One Out cross-validation we drop one set of observations from the sample (i.e. a value of the dependent variable and its associated independent variables) and estimate the model on the remaining datapoints. We then do this for all the n data points in the sample and average the resulting error metric.\nLeave One Out cross-validation is considered to have a lower level of bias than K-fold validation as each model is estimated on N -1 observations (where N is the sample size). However, K-fold cross-validation is faster to estimate as the model is estimated K times (typically 5 or 10) as opposed to N times for Leave One Out cross-validation. The K-fold cross-validation estimate of the errors is considered to have lower variance than leave one out cross-validation as many of the model runs will be more highly correlated as the data in them is very similar increasing the variance of the errors estimator. The basis for the 5 or 10 fold cross-validation measure is that these values of K have been found to optimise for low levels of bias and variance.\nBayesian Leave One Out cross-validation\nIn the case of a Bayesian model we calculate the probability of data point $y_i$ when it and its associated explanatory variables are dropped from the data the model is estimated on. We do this for all the n data points and then log the joint product of the probabilities giving a sum of the expected log predicted density from LOO (elpd).\nThe logged individual terms in the sum are the probabilities of the associated omitted observation $y_i$ given theta, where the theta has the posterior distribution calculated excluding $y_i$ (represented by $y_{-i}$) i.e.\nIn practice the posterior distribution, as it cannot be calculated analytically, is estimated by S simulation draws that we have obtained from the prior distributions. As Bayesian model estimation usually involves simulation it is not practically feasible to estimate the model n times across all data points as this would take a long time. Importance sampling is used to address this.\n3.2 Importance sampling\nIn weighting the likelihood of point i by the posterior distribution of theta excluding we are weighting a function by a probability distribution p(x). In general terms:\nIf we do not know the distribution for p(x) (as we do know the posterior distribution for theta excluding i) we can use another probability distribution that we know, say q(x), to rewrite the expectation in terms of the probabilities q(x) applied to the function weighted by the ratio of the p and q distributions.\nThis can be used to simplify the problem. In our specific use case:\nWe do not know the posterior distribution of theta if we drop data point i (or at least it would be a lot of work to find it N times for each data point), but we will estimate the posterior distribution of theta from the model simulation. If we weight the draws from the probability distribution of theta conditional on the data without $y_i$ by the ratio of the posterior distribution without point i to the ratio of the distribution with point i then the resulting weight ratio simplifies to a term proportional to the inverse of the likelihood of point $y_i$ (which we can obtain from the simulation). It is proportional as both the top and bottom of the fraction have different normalisation terms in terms of their integrals with respect to theta.\nThese weights simplify the calculation of the hold out probability. Which we can then apply to calculate the probability of a data point $y_i$ dropping that point and the information associated with it in the sample. For our S draws of theta values to estimate the posterior we calculate the probability of the predicted y (y tilde) given a draw s from theta $p(\\tilde{y} \\mid \\theta^{(s)})$. When the probability of $y_i$ is higher the weight is lower.\nThe posterior distribution simulation used to estimate the model will naturally generate estimates of the posteriors of the parameters and estimates of the likelihood at a given point. This means that rather than running one regression per data point we can run our usual posterior simulation and then use the importance sampling to reweight it to approximate the effects of leaving out individual data points. Where our reweighting distribution differs from the original distribution this process can for specific data points generate very large weights for likelihood values that are much larger the others making the outcome instable which is where the Pareto smoothing comes in.\n3.3 Pareto smoothing\nTo address the large weights the original PSIS-LOO paper recommends taking the largest 20% importance ratios $r_i$ and fitting a Pareto distribution to them and using the fitted values rather than the original numbers. Using the modelled numbers reduces the large weights making the computed metrics more stable and we replace the original weights ($w_i$) with the smoothed weights ($r_i$).\nFor each data point the resulting k from the fitted Pareto distribution is calculated. In the original paper it was found that\n•\tIf k \u003c $\\frac{1}{2}$ then the estimated distribution converges\n•\tIf $\\frac{1}{2} \\geq k \\leq 1$ the variance of the importance ratios can be infinite and distributions will converge more slowly. The authors report that good performance was found in k values up to 0.75\n•\tIf k \u003e 1 the mean and variance of the weights do not exist and the distribution will not produce robust results What the output from the metric looks like from PyMC Here we have 26,426 data points for each of which we have calculated the weighted sums using the Pareto distribution. Of these for 26,409 the fitted k values 99.9% are in the acceptable range with a small fraction outside that generating the warning message.\nAppendix 1 The Laplace approximation (The quadratic approximation) A1.1 The one-dimensional Laplace approximation If we have a probability distribution P(x) that has a maximum at the point $x_0$\nUsing the Taylor expansion of a function around a point (labelled a):\nwe expand the log of P(x) around the function’s maximum to get the expression below. The first order derivative of the expansion is zero as it is evaluated at the maximum so to second order we get:\nIf we discard the higher order terms and exponentiate this we get:\nWe can therefore approximate the function by its value at the maximum multiplied by a Normal distribution. Approximating the function with a Normal distribution that has its maximum at the same location and then calculating the constant c on this basis:\nand we obtain the Laplace transformation: The below is a simple Python example applying this approximation to a function (a Gamma distribution):\nimport matplotlib.pyplot as plt import numpy as np from scipy.stats import gamma as gammadist from scipy.optimize import minimize fig, ax = plt.subplots(1, figsize=(12, 15)) # The x values we are working over x = np.arange(0, 2, 0.01) # The function we are approximating with Laplace's method def f(x): return gammadist.pdf(x, 2, loc=0, scale=1 / 5) def maximum_finder(func_to_max): \"\"\"Get the maxmium value of the function\"\"\" # Provide an initial guess x0 x0 = [1] def minimiser(f): return lambda x: -f(x) arg_val = minimiser(func_to_max) # Run minimize res = minimize(arg_val, x0) # Extract the maximum value and location max_x = res.x[0] return max_x # Get the location of the maximum of the function max_loc = maximum_finder(f) def laplace_variance_from_curvature(func, x0, eps=1e-4): \"\"\"Estimate Laplace variance as the inverse of the second derivative of log f at the maximum.\"\"\" second_derivative = ( np.log(func(x0 + eps)) - 2 * np.log(func(x0)) + np.log(func(x0 - eps)) ) / (eps**2) return -1 / second_derivative # Get the estimate variance from the curvature at the maximum laplace_variance = laplace_variance_from_curvature(f, max_loc) def laplace_approx(x, max_point, var_orig_dist): \"\"\"The Laplace approximation to a gamma function\"\"\" peak_height = gammadist.pdf(max_point, 2, loc=0, scale=1 / 5) return peak_height * np.exp(-((x - max_point) ** 2) / (2 * var_orig_dist)) fig, ax = plt.subplots(figsize=(9, 6), dpi=150) ax.plot( x, f(x), color=\"blue\", linewidth=2, label=\"Gamma distribution\", ) ax.plot( x, laplace_approx(x, max_loc, laplace_variance), color=\"red\", linewidth=2, label=\"Laplace approximation\", ) # Title ax.set_title( \"Laplace Approximation to the Gamma Distribution\", fontsize=16, fontweight=\"bold\", pad=20 ) # Axis labels ax.set_xlabel(\"x\", fontsize=14) ax.set_ylabel(\"y\", fontsize=14) # Tick label sizes ax.tick_params(axis=\"both\", labelsize=12) # Legend ax.legend( fontsize=13, frameon=False, loc=\"best\" ) # Remove top and right spines ax.spines[[\"top\", \"right\"]].set_visible(False) plt.tight_layout() fig.savefig(\"laplace.png\") A1.2 The n-dimensional Laplace approximation We can generalise the discussion in A1.1 to multinomial distributions using the n dimensional Taylor expansion of a function:\nwhere x are the values of n variables and a is a point in that space, D is an n x n matrix of first order partial derivatives of those variables (The Jacobian) and H is an n x n matrix of second order partial derivatives (The Hessian). From now on when we write x we will always assume this to be vector valued.\nApplying the second-order Taylor expansion to a function around the location $x_0$ of its maximum value, where the function is the log of the multinomial probability distribution P(x) gives: In our probability distribution we have: We now show that if we approximate the probability distribution by a multinomial Gaussian at the maximum then the matrix H is the inverse of the variance-covariance matrix generalising the one-dimensional finding that this gave the inverse of the variance. Writing the multinomial Gaussian as:\nTaking logs:\nDifferentiating:\nand the approximation then becomes:\nIf we assume that the prior evaluated at the maximum has a much smaller value than the likelihood, which is plausible where the prior is uniform or where the maximum value of the prior differs from the likelihood, then we drop that term and get:\nExponentiating to get back to the probability distribution:\nand we have the integration of a multinomial Gaussian multiplied by a constant which is covered in Appendix A2.2.\nAppendix 2 Integrating Gaussian integrals The standard way to integrate a Gaussian function involves the non-obvious trick of extending the integration by calculating the square of the integral using an additional dimension (from integrating over x to integrating over x and y) and then transforming into spherical coordinates.\nA2.1 The one-dimensional Gaussian integral Starting with what we want to integrate I, we move to doing the integral of I squared.\nWhere we can write the second integral as being over y as it is independent of the first integral. As:\nare the coordinates of a circle so we transform the integral into the spherical coordinates and write everything in terms of r and theta as these parameterise that.\nWe then calculate the determinant of the Jacobian matrix to get the transformed value of dxdy in the new coordinate system.\nNow we have an integral we can do:\nand we can see why the normalisation factor of a Normal distribution is what it is to get the integral to sum to 1. Why does an approach to integrating the function work that, on the surface, makes the problem twice as hard? The value of the gaussian function in 2 dimensions is constant on circles so transforming it to two dimensions and switching to spherical coordinates gives an easy integral around the two pi of the circle. The coordinate change also allows us to express the integrand in a form where the remaining integral over r is straightforward.\nA2.2 The n-dimensional Gaussian integral We write the integral of the higher dimensional generalisation of a Gaussian as:\nwhere x is a vector of N variables to integrate over and A is the symmetric N x N variance-covariance matrix. We can see in the 2 x 2 example below that this interacts the x and y variables making it harder to do the integral.\nAs the matrix is real-valued and symmetric it can be diagonalised by transforming to the basis of the eigenvectors, representing the transformation with respect to that coordinate system and then transforming back to the original coordinate system. The integral can therefore be simplified by writing A as the product of a diagonal matrix D (where the on-diagonal elements are the eigenvalues), P which is formed from the n eigenvectors of the matrix A normalised to length one and its transpose which inverts P.\nIn the new coordinate system the integrals separate as the different dimensions no longer interact. Calculating the Jacobian of the transform $\\mathbf{x} = P D^{-\\frac{1}{2}} \\mathbf{y}$ means we calculate the determinant $\\det\\left(P D^{-\\frac{1}{2}}\\right)$.\nAs A is symmetric and real valued the eigenvectors will be orthogonal. If they are normalised to unit length then:\nFor completeness:\nAfter this transformation the integral separates into a product of 1-dimensional Gaussians that from A2.1 we know how to do:\nReferences Sivia, D.S. ‘Data Analysis A Bayesian tutorial’\nDavid, J.C. MacKay ‘Information Theory, Inference and Learning Algorithms’\nMurphy, Kevin, P., ‘Machine Learning A probabilistic perspective’\nBarber, D. ‘Bayesian Reasoning and Machine Learning’\nVehtari, A., Gelman, A. and Gabry, J., ‘Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC’ https://arxiv.org/pdf/1507.04544\nVehtari, A., Simpson, D., Gelman, A. and Yao, Y. ‘Pareto Smoothed Importance Sampling’\nAkhi Vehtari’s FAQ on cross validation\nOther related posts Bayes 1: Introduction to Bayesian Inference\nBayes 2: Bayesian inference with Markov Chain Monte Carlo\n",
+  "wordCount" : "3569",
+  "inLanguage": "en",
+  "image":"https://johnardavies.github.io/new_museum.jpeg","datePublished": "2026-11-23T00:00:00Z",
+  "dateModified": "2026-11-23T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "John Davies"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://johnardavies.github.io/technical/bayes_three/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "John's Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://johnardavies.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://johnardavies.github.io/" accesskey="h" title="John&#39;s Site (Alt + H)">John&#39;s Site</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://johnardavies.github.io/creative_industries" title="creative industries">
+                    <span>creative industries</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/other_data_projects" title="other data projects">
+                    <span>other data projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/talks/" title="talks">
+                    <span>talks</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/technical/" title="technical">
+                    <span>technical</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/categories/" title="categories">
+                    <span>categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://johnardavies.github.io/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Bayes 3: Bayesian model evaluation notes
+    </h1>
+    <div class="post-meta"><span title='2026-11-23 00:00:00 +0000 UTC'>November 23, 2026</span>&nbsp;·&nbsp;John Davies
+
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="eager" src="https://johnardavies.github.io/new_museum.jpeg" alt="">
+        
+</figure>
+  <div class="post-content"><p>The New Museum, New York, September 2023</p>
+<h3 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h3>
+<p>I have been using Bayesian modelling approaches in work recently. These notes review aspects of Bayesian model evaluation focussing on:</p>
+<p><strong>1.	First principles evaluation based on Bayes’ formula: Bayesian factors</strong><br>
+<strong>2.    Analytical approximations to first principles: The Bayesian Information Criteria</strong><br>
+<strong>3.	Adapting cross-validation to a Bayesian context: PSIS-LOO</strong></p>
+<p>The appendices cover:</p>
+<p><strong>A1. The Laplace approximation</strong><br>
+<strong>A2. Integrating Gaussian integrals</strong><br>
+which are used in the first two sections of these notes.</p>
+<p>The notes are based on the treatment of these topics in Sivia, D.S. ‘Data Analysis A Bayesian tutorial&rsquo; (the first section), Barber, D. ‘Bayesian Reasoning and Machine Learning’ and Murphy, K. &lsquo;Machine Learning&rsquo; (the second section) and the original PSIS-LOO paper (the third section).</p>
+<h3 id="1first-principles-evaluation-based-on-bayes-formula-bayesian-factors">1.	First principles evaluation based on Bayes’ formula: Bayesian factors<a hidden class="anchor" aria-hidden="true" href="#1first-principles-evaluation-based-on-bayes-formula-bayesian-factors">#</a></h3>
+<p>The Bayesian framework has a direct way to evaluate models. Using Bayes’ formula gives an expression for the probability of a model given the data:
+<img alt="bayese3_1" loading="lazy" src="https://johnardavies.github.io/bayes3_1.png">
+If we have two Models: Model 1 and Model 2 then the relative probability of the models given the data is a ratio known as a <strong>Bayesian factor</strong>.
+<img alt="bayese3_2" loading="lazy" src="https://johnardavies.github.io/bayes3_2.png">
+If there is no reason to favour any model in terms of the prior of the different modelling approaches being correct, then the prior probabilities of both models are equal and the factor becomes the ratio of the two models’ likelihoods. If the ratio is greater than 1 this favours choosing Model 1 (and vice versa).
+<img alt="bayese3_3" loading="lazy" src="https://johnardavies.github.io/bayes3_3.png">
+To go from these very general conditions to calculating probabilities we use the Bayesian equation for the posterior i.e. the probability of a model’s parameters ($\theta$) given the data and its structure (M):
+<img alt="bayes3_4" loading="lazy" src="https://johnardavies.github.io/bayes3_4.png">
+In finding the optimal parameters the marginal likelihood (also sometimes referred to as the evidence) is just a normalisation factor which does not affect the maximum of the posterior. However, here it gives the probability of the data given the model and the uncertainty in its parameters which is what is needed to calculate Bayesian factors. We average the likelihood over the prior distributions of the model&rsquo;s parameters to obtain the probability of the data given the model. We can therefore calculate and compare the marginal likelihoods of different models to evaluate them.</p>
+<p><strong>A simple analytical example of this</strong></p>
+<p>There is some noisy data on a variable where:</p>
+<p>•	Model 1: one person asserts the variable’s true underlying value is zero</p>
+<p>•	Model 2: another person’s view is that the data is better modelled by a parameter lambda ($\lambda$) estimated from the data</p>
+<p>We assume that in Model 2  there is a prior that is uniform between $\lambda_{\min}$ and $\lambda_{\max}$.
+The likelihood function for this person is assumed to be a function with a maximum at $\lambda_0$ and a variance of $\delta \lambda^2$. We use the Laplace approximation (Appendix A.1.1) to get an approximation to the likelihood function that can be integrated analytically. This gives the following approximation to the likelihood where $P(\mathrm{Data} \mid \lambda_0)$ is the value of the likelihood evaluated at the maximum.</p>
+<p><img alt="bayes3_5" loading="lazy" src="https://johnardavies.github.io/bayes3_5.png"></p>
+<p>Taking the general expression for the probability of the data given the model and substituting in the uniform distribution for the prior and our approximation to the likelihood gives:</p>
+<p><img alt="bayese3_6" loading="lazy" src="https://johnardavies.github.io/bayes3_6.png"></p>
+<p>In the integral we assume that the almost all of the likelihood falls within the prior bounds of the lambda. This means integrating the Gaussian between -infinity and infinity (covered in Appendix A2.1) effectively gives the same answer as integrating between the maximum and the minimum values of lambda in the prior.</p>
+<p>Having obtained this we calculate the Bayesian factor to compare Model 1 and Model 2.</p>
+<p><img alt="bayes3_7" loading="lazy" src="https://johnardavies.github.io/bayes3_7.png"></p>
+<p>The more complicated Model 2 will always achieve a higher likelihood as it will be better able to fit the data (unlike Model 1 which is not based on data). The prior for Model 1 parameters is 1 as the person is choosing it with certainty.</p>
+<p>In a comparison for Model 2 the second term as the prior for the parameter lambda is much wider than the integral of the posterior and so the additional factor is less than 1. This acts as a penalty for increasing the model complexity by including the estimated model parameter. It is known as an ‘Occam factor’ as without it the model with the parameter would always be chosen as it will have a larger likelihood. The broader the prior i.e. $\lambda_{\max}$-$\lambda_{\min}$ relative to the variance in the data $\delta \lambda \sqrt{2\pi}$ the higher is the Occam factor.</p>
+<h3 id="2-the-analytical-approximation-the-bayesian-information-criteria-bic">2. The analytical approximation: The Bayesian Information Criteria (BIC)<a hidden class="anchor" aria-hidden="true" href="#2-the-analytical-approximation-the-bayesian-information-criteria-bic">#</a></h3>
+<p>In practical terms a direct analytical solution to calculate the marginal likelihood for model comparison given the data will typically not be possible as it was in the previous example. One approach is to estimate the marginal likelihood integral by calculating it using Markov Chain Monte Carlo. Another is to use a metric that approximates the marginal likelihood, but which is easier to compute. An example of this is the <strong>Bayesian Information Criteria</strong> which is the log of an approximation to the marginal likelihood’s value based on the Laplace approximation covered in the last section.</p>
+<p>We start with a model that has D explanatory variables with associated parameters represented by a vector theta ($\theta$) and use the Laplace approximation to calculate an approximation to the log of the marginal likelihood. This is similar to the first example, but here we have multiple model parameters rather than one. The Laplace approximation to the log of the marginal likelihood is the following where $\Sigma$ is the variance-covariance matrix and $\theta_0$ the location of the maximum of the likelihood (The derivation of this is in Appendix A1.2):</p>
+<p><img alt="bayes3_8" loading="lazy" src="https://johnardavies.github.io/bayes3_8.png"></p>
+<p>If we exponentiate this and do the multinomial Gaussian integral (Appendix A2.2) this gives:</p>
+<p><img alt="bayes3_9" loading="lazy" src="https://johnardavies.github.io/bayes3_9.png"></p>
+<p>Taking the log of the approximation of the marginal likelihood:</p>
+<p><img alt="bayes3_10" loading="lazy" src="https://johnardavies.github.io/bayes3_10.png"></p>
+<p>We approximate the last term by the sum of matrices $H_i$ where we assume each matrix is an identical matrix $\hat{H}$ :</p>
+<p><img alt="bayes3_11" loading="lazy" src="https://johnardavies.github.io/bayes3_11.png"></p>
+<p>From the properties of a determinant when a matrix is multiplied by a scaler we have:</p>
+<p><img alt="bayes3_12" loading="lazy" src="https://johnardavies.github.io/bayes3_12.png"></p>
+<p>Substituting this into the log marginal likelihood approximation gives:</p>
+<p><img alt="bayes3_13" loading="lazy" src="https://johnardavies.github.io/bayes3_13.png"></p>
+<p>Dropping the constant as it will be common to all models and log(|$\hat{H}$|) as it is smaller than the other terms gives:</p>
+<p><img alt="bayes3_14" loading="lazy" src="https://johnardavies.github.io/bayes3_14.png"></p>
+<p>This is calculated in terms of the likelihood function evaluated at the maximum parameter values  minus half the number of parameters multiplied by the log of the sample size. This second term penalises the model complexity. As the log transform is monotonic a model with a greater approximate marginal likelihood function will get a higher BIC score than a lower one.</p>
+<h3 id="3adapting-cross-validation-to-a-bayesian-context-pareto-smooth-importance-sampling-leave-one-out-psis-loo-cross-validation">3.	Adapting cross-validation to a Bayesian context: Pareto Smooth Importance Sampling Leave One Out (PSIS-LOO) cross-validation<a hidden class="anchor" aria-hidden="true" href="#3adapting-cross-validation-to-a-bayesian-context-pareto-smooth-importance-sampling-leave-one-out-psis-loo-cross-validation">#</a></h3>
+<p>In the previous section the model evaluation took Bayes’ formula as its starting point. Another strategy is to go in the other direction and adapt standard model evaluation techniques to a Bayesian context. The <strong>PSIS-LOO</strong> metric is an application of cross-validation to evaluating Bayesian models.</p>
+<p>One reason to take this approach, rather than the Bayesian factor methodology and approximations to it described previously, is that intuitively model evaluation should be about how well the model performs the task we are interested in, for example, its forecasting performance. The marginal likelihood is a theoretically elegant measure of how well a model explains the data, but it is not typically what one directly cares about in using a model. It is also highly sensitive to the choice of priors as the first example showed. The relative preference for Model 2 relative to Model 1 in the first example depended directly on the width of the prior
+which can be highly subjective.</p>
+<p>We examine the different components of PSIS-LOO in turn:</p>
+<p><strong>3.1 Leave One Out (LOO) cross-validation</strong></p>
+<p>In cross-validation we partition the data into N groups, randomly select a hold-out group and then train a model on the remaining data assessing its performance on the hold-out group. We do this multiple times and then average the results of the chosen error metric across the hold out groups as a measure of the model’s predictive performance. This has the advantage over a single test and training data set that it maximises the data the model is estimated on reducing the risk of bias. The estimate of the error rate is also likely to be less variable than with a single test/training split.</p>
+<p>In Leave One Out cross-validation we drop one set of observations from the sample (i.e. a value of the dependent variable and its associated independent variables) and estimate the model on the remaining datapoints. We then do this for all the n data points in the sample and average the resulting error metric.</p>
+<p>Leave One Out cross-validation is considered to have a lower level of bias than K-fold validation as each model is estimated on N -1 observations (where N is the sample size). However, K-fold cross-validation is faster to estimate as the model is estimated K times (typically 5 or 10) as opposed to N times for Leave One Out cross-validation. The K-fold cross-validation estimate of the errors is considered to have lower variance than leave one out cross-validation as many of the model runs will be more highly correlated as the data in them is very similar increasing the variance of the errors estimator. The basis for the 5 or 10 fold cross-validation measure is that these values of K have been found to optimise for low levels of bias and variance.</p>
+<p><strong>Bayesian Leave One Out cross-validation</strong></p>
+<p>In the case of a Bayesian model we calculate the probability of data point $y_i$ when it and its associated explanatory variables are dropped from the data the model is estimated on. We do this for all the n data points and then log the joint product of the probabilities giving a sum of the expected log predicted density from LOO (elpd).</p>
+<p><img alt="bayes3_14" loading="lazy" src="https://johnardavies.github.io/bayes3_15.png"></p>
+<p>The logged individual terms in the sum are the probabilities of the associated omitted observation $y_i$ given theta, where the theta has the posterior distribution calculated excluding $y_i$ (represented by $y_{-i}$) i.e.</p>
+<p><img alt="bayes3_15" loading="lazy" src="https://johnardavies.github.io/bayes3_16.png"></p>
+<p>In practice the posterior distribution, as it cannot be calculated analytically, is estimated by S simulation draws that we have obtained from the prior distributions. As Bayesian model estimation usually involves simulation it is not practically feasible to estimate the model n times across all data points as this would take a long time. Importance sampling is used to address this.</p>
+<p><strong>3.2 Importance sampling</strong></p>
+<p>In weighting the likelihood of point i by the posterior distribution of theta excluding we are weighting a function by a probability distribution p(x). In general terms:</p>
+<p><img alt="bayes7_18" loading="lazy" src="https://johnardavies.github.io/bayes3_17.png"></p>
+<p>If we do not know the distribution for p(x) (as we do know the posterior distribution for theta excluding i) we can use another probability distribution that we know, say q(x), to rewrite the expectation in terms of the probabilities q(x) applied to the function weighted by the ratio of the p and q distributions.</p>
+<p><img alt="bayes3_19" loading="lazy" src="https://johnardavies.github.io/bayes3_19.png"></p>
+<p>This can be used to simplify the problem. In our specific use case:</p>
+<p><img alt="bayes3_20" loading="lazy" src="https://johnardavies.github.io/bayes3_20.png"></p>
+<p>We do not know the posterior distribution of theta if we drop data point i (or at least it would be a lot of work to find it N times for each data point), but we will estimate the posterior distribution of theta from the model simulation.
+If we weight the draws from the probability distribution of theta conditional on the data without $y_i$ by the ratio of the posterior distribution without point i to the ratio of the distribution with point i then the resulting weight ratio simplifies to a term proportional to the inverse of the likelihood of point $y_i$ (which we can obtain from the simulation). It is proportional as both the top and bottom of the fraction have different normalisation terms in terms of their integrals with respect to theta.</p>
+<p><img alt="bayes3_21" loading="lazy" src="https://johnardavies.github.io/bayes3_21.png"></p>
+<p>These weights simplify the calculation of the hold out probability.  Which we can then apply to calculate the probability of a data point $y_i$ dropping that point and the information associated with it in the sample. For our S draws of theta values to estimate the posterior we calculate the probability of the predicted y (y tilde) given a draw s from theta $p(\tilde{y} \mid \theta^{(s)})$. When the probability of $y_i$ is higher the weight is lower.</p>
+<p><img alt="bayes3_21" loading="lazy" src="https://johnardavies.github.io/bayes3_22.png"></p>
+<p>The posterior distribution simulation used to estimate the model will naturally generate estimates of the posteriors of the parameters and estimates of the likelihood at a given point. This means that rather than running one regression per data point we can run our usual posterior simulation and then use the importance sampling to reweight it to approximate the effects of leaving out individual data points.
+Where our reweighting distribution differs from the original distribution this process can for specific data points generate very large weights for likelihood values that are much larger the others making the outcome instable which is where the Pareto smoothing comes in.</p>
+<p><strong>3.3 Pareto smoothing</strong></p>
+<p>To address the large weights the original PSIS-LOO paper recommends taking the largest 20% importance ratios $r_i$ and fitting a Pareto distribution to them and using the fitted values rather than the original numbers. Using the modelled numbers reduces the large weights making the computed metrics more stable and we replace the original weights ($w_i$) with the smoothed weights ($r_i$).</p>
+<p><img alt="bayes3_23" loading="lazy" src="https://johnardavies.github.io/bayes3_23.png"></p>
+<p>For each data point the resulting k from the fitted Pareto distribution is calculated. In the original paper it was found that</p>
+<p>•	If  k &lt; $\frac{1}{2}$ then the estimated distribution converges<br>
+•	If  $\frac{1}{2} \geq k \leq 1$ the variance of the importance ratios can be infinite and distributions will converge more slowly. The authors report that good performance was found in k values up to 0.75<br>
+•	If  k &gt; 1 the mean and variance of the weights do not exist and the distribution will not produce robust results
+What the output from the metric looks like from PyMC
+<img alt="bayes3_24" loading="lazy" src="https://johnardavies.github.io/bayes3_24.png"></p>
+<p>Here we have 26,426 data points for each of which we have calculated the weighted sums using the Pareto distribution. Of these for 26,409 the fitted k values 99.9% are in the acceptable range with a small fraction outside that generating the warning message.</p>
+<h3 id="appendix-1-the-laplace-approximation-the-quadratic-approximation">Appendix 1 The Laplace approximation (The quadratic approximation)<a hidden class="anchor" aria-hidden="true" href="#appendix-1-the-laplace-approximation-the-quadratic-approximation">#</a></h3>
+<h4 id="a11-the-one-dimensional-laplace-approximation">A1.1 The one-dimensional Laplace approximation<a hidden class="anchor" aria-hidden="true" href="#a11-the-one-dimensional-laplace-approximation">#</a></h4>
+<p>If we have a probability distribution P(x) that has a maximum at the point $x_0$</p>
+<p><img alt="bayes3_a1" loading="lazy" src="https://johnardavies.github.io/bayes3_a1.png"></p>
+<p>Using the Taylor expansion of a function around a point (labelled a):</p>
+<p><img alt="bayes3_a2" loading="lazy" src="https://johnardavies.github.io/bayes3_a2.png"></p>
+<p>we expand the log of P(x) around the function’s maximum to get the expression below. The first order derivative of the expansion is zero as it is evaluated at the maximum so to second order we get:</p>
+<p><img alt="bayes3_a3" loading="lazy" src="https://johnardavies.github.io/bayes3_a3.png"></p>
+<p>If we discard the higher order terms and exponentiate this we get:</p>
+<p><img alt="bayes3_a4" loading="lazy" src="https://johnardavies.github.io/bayes3_a4.png"></p>
+<p>We can therefore approximate the function by its value at the maximum multiplied by a Normal distribution.
+Approximating the function with a Normal distribution that has its maximum at the same location and then calculating the constant c on this basis:</p>
+<p><img alt="bayes3_a5" loading="lazy" src="https://johnardavies.github.io/bayes3_a5.png"></p>
+<p>and we obtain the Laplace transformation:
+<img alt="bayes3_a6" loading="lazy" src="https://johnardavies.github.io/bayes3_a6.png"></p>
+<p>The below is a simple Python example applying this approximation to a function (a Gamma distribution):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ae81ff">import matplotlib.pyplot as plt</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">import numpy as np</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">from scipy.stats import gamma as gammadist</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">from scipy.optimize import minimize</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">fig, ax = plt.subplots(1, figsize=(12, 15))</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The x values we are working over</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">x = np.arange(0, 2, 0.01)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The function we are approximating with Laplace&#39;s method</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">def f(x)</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">return gammadist.pdf(x, 2, loc=0, scale=1 / 5)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">def maximum_finder(func_to_max)</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Get the maxmium value of the function&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Provide an initial guess x0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">x0 = [1]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">def minimiser(f)</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">return lambda x</span>: -<span style="color:#ae81ff">f(x)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">arg_val = minimiser(func_to_max)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Run minimize</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">res = minimize(arg_val, x0)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Extract the maximum value and location</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">max_x = res.x[0]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">return max_x</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Get the location of the maximum of the function</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">max_loc = maximum_finder(f)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">def laplace_variance_from_curvature(func, x0, eps=1e-4)</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Estimate Laplace variance as the inverse of the second derivative of log f at the maximum.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">second_derivative = (</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">np.log(func(x0 + eps))</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ae81ff">2</span> * <span style="color:#ae81ff">np.log(func(x0))</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">+ np.log(func(x0 - eps))</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">) / (eps**2)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">return -1 / second_derivative</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Get the estimate variance from the curvature at the maximum</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">laplace_variance = laplace_variance_from_curvature(f, max_loc)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">def laplace_approx(x, max_point, var_orig_dist)</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;The Laplace approximation to a gamma function&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">peak_height = gammadist.pdf(max_point, 2, loc=0, scale=1 / 5)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">return peak_height * np.exp(-((x - max_point) ** 2) / (2 * var_orig_dist))</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">fig, ax = plt.subplots(figsize=(9, 6), dpi=150)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.plot(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">x,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">f(x),</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">color=&#34;blue&#34;,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">linewidth=2,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">label=&#34;Gamma distribution&#34;,</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.plot(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">x,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">laplace_approx(x, max_loc, laplace_variance),</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">color=&#34;red&#34;,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">linewidth=2,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">label=&#34;Laplace approximation&#34;,</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Title</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.set_title(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;Laplace Approximation to the Gamma Distribution&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">fontsize=16,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">fontweight=&#34;bold&#34;,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">pad=20</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Axis labels</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.set_xlabel(&#34;x&#34;, fontsize=14)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.set_ylabel(&#34;y&#34;, fontsize=14)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Tick label sizes</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.tick_params(axis=&#34;both&#34;, labelsize=12)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Legend</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.legend(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">fontsize=13,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">frameon=False,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">loc=&#34;best&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Remove top and right spines</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">ax.spines[[&#34;top&#34;, &#34;right&#34;]].set_visible(False)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">plt.tight_layout()</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">fig.savefig(&#34;laplace.png&#34;)</span>
+</span></span></code></pre></div><p><img alt="bayes3_a7" loading="lazy" src="https://johnardavies.github.io/bayes3_a7.png"></p>
+<h4 id="a12-the-n-dimensional-laplace-approximation">A1.2 The n-dimensional Laplace approximation<a hidden class="anchor" aria-hidden="true" href="#a12-the-n-dimensional-laplace-approximation">#</a></h4>
+<p>We can generalise the discussion in A1.1 to multinomial distributions using the n dimensional Taylor expansion of a function:</p>
+<p><img alt="bayes3_a8" loading="lazy" src="https://johnardavies.github.io/bayes3_a8.png"></p>
+<p>where <strong>x</strong> are the values of n variables and <strong>a</strong> is a point in that space, D is an n x n matrix of first order partial derivatives of those variables (The Jacobian) and H is an n x n  matrix of second order partial derivatives (The Hessian). From now on when we write x we will always assume this to be vector valued.</p>
+<p>Applying the second-order Taylor expansion to a function around the location $x_0$ of its maximum value, where the function is the log of the multinomial probability distribution P(x) gives:
+<img alt="bayes3_a9" loading="lazy" src="https://johnardavies.github.io/bayes3_a9.png">
+In our probability distribution we have:
+<img alt="bayes3_a10" loading="lazy" src="https://johnardavies.github.io/bayes3_a10.png">
+We now show that if we approximate the probability distribution by a multinomial Gaussian at the maximum then the matrix H is the inverse of the variance-covariance matrix generalising the one-dimensional finding that this gave the inverse of the variance.
+<img alt="bayes3_a11" loading="lazy" src="https://johnardavies.github.io/bayes3_a11.png">
+Writing the multinomial Gaussian as:</p>
+<p><img alt="bayes3_a12" loading="lazy" src="https://johnardavies.github.io/bayes3_a12.png"></p>
+<p>Taking logs:</p>
+<p><img alt="bayes3_a13" loading="lazy" src="https://johnardavies.github.io/bayes3_a13.png"></p>
+<p>Differentiating:</p>
+<p><img alt="bayes3_a14" loading="lazy" src="https://johnardavies.github.io/bayes3_a14.png"></p>
+<p>and the approximation then becomes:</p>
+<p><img alt="bayes3_a15" loading="lazy" src="https://johnardavies.github.io/bayes3_a15.png"></p>
+<p>If we assume that the prior evaluated at the maximum has a much smaller value than the likelihood, which is plausible where the prior is uniform or where the maximum value of the prior differs from the likelihood, then we drop that term and get:</p>
+<p><img alt="bayes3_a16" loading="lazy" src="https://johnardavies.github.io/bayes3_a16.png"></p>
+<p>Exponentiating to get back to the probability distribution:</p>
+<p><img alt="bayes3_a17" loading="lazy" src="https://johnardavies.github.io/bayes3_a17.png"></p>
+<p>and we have the integration of a multinomial Gaussian multiplied by a constant which is covered in Appendix A2.2.</p>
+<h3 id="appendix-2-integrating-gaussian-integrals">Appendix 2 Integrating Gaussian integrals<a hidden class="anchor" aria-hidden="true" href="#appendix-2-integrating-gaussian-integrals">#</a></h3>
+<p>The standard way to integrate a Gaussian function involves the non-obvious trick of extending the integration by calculating the square of the integral using an additional dimension (from integrating over x to integrating over x and y) and then transforming into spherical coordinates.</p>
+<h4 id="a21-the-one-dimensional-gaussian-integral">A2.1 The one-dimensional Gaussian integral<a hidden class="anchor" aria-hidden="true" href="#a21-the-one-dimensional-gaussian-integral">#</a></h4>
+<p>Starting with what we want to integrate I, we move to doing the integral of I squared.</p>
+<p><img alt="bayes3_a18" loading="lazy" src="https://johnardavies.github.io/bayes3_a18.png"></p>
+<p>Where we can write the second integral as being over y as it is independent of the first integral. As:</p>
+<p><img alt="bayes3_a19" loading="lazy" src="https://johnardavies.github.io/bayes3_a19.png"></p>
+<p>are the coordinates of a circle so we transform the integral into the spherical coordinates and write everything in terms of r and theta as these parameterise that.</p>
+<p><img alt="bayes3_a20" loading="lazy" src="https://johnardavies.github.io/bayes3_a20.png"></p>
+<p>We then calculate the determinant of the Jacobian matrix to get the transformed value of dxdy in the new coordinate system.</p>
+<p><img alt="bayes3_a21" loading="lazy" src="https://johnardavies.github.io/bayes3_a21.png">
+Now we have an integral we can do:</p>
+<p><img alt="bayes3_a22" loading="lazy" src="https://johnardavies.github.io/bayes3_a22.png"></p>
+<p>and we can see why the normalisation factor of a Normal distribution is what it is to get the integral to sum to 1.
+Why does an approach to integrating the function work that, on the surface, makes the problem twice as hard? The value of the gaussian function in 2 dimensions is constant on circles so transforming it to two dimensions and switching to spherical coordinates gives an easy integral around the two pi of the circle. The coordinate change also allows us to express the integrand in a form where the remaining integral over r is straightforward.</p>
+<h4 id="a22-the-n-dimensional-gaussian-integral">A2.2 The n-dimensional Gaussian integral<a hidden class="anchor" aria-hidden="true" href="#a22-the-n-dimensional-gaussian-integral">#</a></h4>
+<p>We write the integral of the higher dimensional generalisation of a Gaussian as:</p>
+<p><img alt="bayes3_a23" loading="lazy" src="https://johnardavies.github.io/bayes3_a23.png"></p>
+<p>where x is a vector of N variables to integrate over and A is the symmetric N x N variance-covariance matrix. We can see in the 2 x 2 example below that this interacts the x and y variables making it harder to do the integral.</p>
+<p><img alt="bayes3_a24" loading="lazy" src="https://johnardavies.github.io/bayes3_a24a.png"></p>
+<p>As the matrix is real-valued and symmetric it can be diagonalised by transforming to the basis of the eigenvectors, representing the transformation with respect to that coordinate system and then transforming back to the original coordinate system.
+The integral can therefore be simplified by writing A as the product of a diagonal matrix D (where the on-diagonal elements are the eigenvalues), P which is formed from the n eigenvectors of the matrix A normalised to length one and its transpose which inverts P.</p>
+<p><img alt="bayes3_a24" loading="lazy" src="https://johnardavies.github.io/bayes3_a24.png"></p>
+<p>In the new coordinate system the integrals separate as the different dimensions no longer interact. Calculating the Jacobian of the transform $\mathbf{x} = P D^{-\frac{1}{2}} \mathbf{y}$ means we calculate the determinant $\det\left(P D^{-\frac{1}{2}}\right)$.</p>
+<p><img alt="bayes3_a25" loading="lazy" src="https://johnardavies.github.io/bayes3_a25.png"></p>
+<p>As A is symmetric and real valued the eigenvectors will be orthogonal. If they are normalised to unit length then:</p>
+<p><img alt="bayes3_a26" loading="lazy" src="https://johnardavies.github.io/bayes3_a26.png"></p>
+<p>For completeness:</p>
+<p><img alt="bayes3_a27" loading="lazy" src="https://johnardavies.github.io/bayes3_a27.png"></p>
+<p>After this transformation the integral separates into a product of 1-dimensional Gaussians that from A2.1 we know how to do:</p>
+<p><img alt="bayes3_a28" loading="lazy" src="https://johnardavies.github.io/bayes3_a28.png"></p>
+<h3 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h3>
+<p>Sivia, D.S. ‘Data Analysis A Bayesian tutorial’</p>
+<p>David, J.C. MacKay ‘Information Theory, Inference and Learning Algorithms’</p>
+<p>Murphy, Kevin, P., ‘Machine Learning A probabilistic perspective’</p>
+<p>Barber, D. ‘Bayesian Reasoning and Machine Learning’</p>
+<p>Vehtari, A., Gelman, A. and Gabry, J., &lsquo;Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC&rsquo; <a href="https://arxiv.org/pdf/1507.04544">https://arxiv.org/pdf/1507.04544</a></p>
+<p>Vehtari, A., Simpson, D., Gelman, A. and Yao, Y. ‘Pareto Smoothed Importance Sampling’</p>
+<p><a href="https://users.aalto.fi/~ave/CV-FAQ.html#LOOIC">Akhi Vehtari&rsquo;s FAQ on cross validation</a></p>
+<h3 id="other-related-posts">Other related posts<a hidden class="anchor" aria-hidden="true" href="#other-related-posts">#</a></h3>
+<p><a href="https://johnardavies.github.io/technical/bayes1/">Bayes 1: Introduction to Bayesian Inference</a></p>
+<p><a href="https://johnardavies.github.io/technical/mcmc/">Bayes 2: Bayesian inference with Markov Chain Monte Carlo</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://johnardavies.github.io/tags/technical/">Technical</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://johnardavies.github.io/">John&#39;s Site</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
